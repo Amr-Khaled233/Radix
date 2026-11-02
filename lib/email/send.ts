@@ -24,7 +24,7 @@ export function asLocale(value: string | null | undefined): Locale {
 /** Keeps Latin values (emails, names) from scrambling inside Arabic text. */
 const isolate = (value: string, locale: Locale) => (locale === "ar" ? `⁨${value}⁩` : value);
 
-type Outgoing = { to: string; subject: string; html: string; text: string };
+type Outgoing = { to: string | string[]; subject: string; html: string; text: string; replyTo?: string };
 
 /** Last outgoing email per recipient — read by integration tests only. */
 export const sentEmails: (Outgoing & { url?: string })[] = [];
@@ -36,8 +36,9 @@ async function deliver(message: Outgoing, url?: string) {
     if (process.env.NODE_ENV === "production" && process.env.EMAIL_TRANSPORT !== "console") {
       throw new Error("RESEND_API_KEY is not set — cannot send email in production.");
     }
-    sentEmails.push({ ...message, url });
-    console.info(`\n[email] to=${message.to}\n[email] subject=${message.subject}\n[email] link=${url ?? "-"}\n`);
+    const to = [message.to].flat().join(", ");
+    sentEmails.push({ ...message, to, url });
+    console.info(`\n[email] to=${to}\n[email] subject=${message.subject}\n[email] link=${url ?? "-"}\n`);
     return;
   }
   const resend = new Resend(apiKey);
@@ -47,6 +48,7 @@ async function deliver(message: Outgoing, url?: string) {
     subject: message.subject,
     html: message.html,
     text: message.text,
+    ...(message.replyTo ? { replyTo: message.replyTo } : {}),
   });
   if (error) throw new Error(`Email delivery failed: ${error.message}`);
 }
@@ -108,4 +110,47 @@ export async function sendInviteEmail(params: {
     url: resetPasswordUrl(params.token, true),
     values: { inviter: isolate(params.inviterName, params.locale), role: t(params.role) },
   });
+}
+
+const escapeHtml = (value: string) =>
+  value.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
+
+/** Internal notification to the team for a new contact form message (Reply-To: the sender). */
+export async function sendContactNotification(params: {
+  to: string[];
+  submission: {
+    name: string;
+    email: string;
+    company?: string;
+    phone?: string;
+    message: string;
+    locale: string;
+    interests: string[];
+  };
+}) {
+  const { submission: s } = params;
+  const rows = (
+    [
+      ["Name", s.name],
+      ["Email", s.email],
+      ["Company", s.company ?? ""],
+      ["Phone", s.phone ?? ""],
+      ["Interested in", s.interests.join(", ")],
+      ["Language", s.locale === "ar" ? "Arabic" : "English"],
+    ] as [string, string][]
+  ).filter(([, v]) => v);
+  const inbox = `${siteUrl()}/admin/messages`;
+  const text = [...rows.map(([k, v]) => `${k}: ${v}`), "", s.message, "", `Open the inbox: ${inbox}`].join("\n");
+  const table = rows
+    .map(
+      ([k, v]) =>
+        `<tr><td style="padding:4px 16px 4px 0;color:#5B5263">${k}</td><td style="padding:4px 0">${escapeHtml(v)}</td></tr>`,
+    )
+    .join("");
+  const html = `<div style="font-family:Arial,sans-serif;color:#1B1028;line-height:1.5">
+<p style="font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#5B5263">New message · RADIX website</p>
+<table style="border-collapse:collapse">${table}</table>
+<p style="white-space:pre-wrap;border-left:2px solid #1B1028;padding-left:12px" dir="auto">${escapeHtml(s.message)}</p>
+<p><a href="${inbox}" style="color:#1B1028">Open the inbox</a></p></div>`;
+  await deliver({ to: params.to, subject: `New message from ${s.name}`, html, text, replyTo: s.email });
 }

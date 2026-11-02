@@ -3,7 +3,11 @@ import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { fontVariables } from "@/lib/fonts";
-import { directionOf, routing } from "@/lib/i18n/routing";
+import { directionOf, routing, type Locale } from "@/lib/i18n/routing";
+import { t as localized } from "@/lib/localized";
+import { getSetting } from "@/lib/site/data";
+import { siteOrigin } from "@/lib/site/seo";
+import { SiteAnalytics } from "@/components/site/analytics";
 import { ThemeProvider } from "@/components/site/theme-provider";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -15,10 +19,15 @@ export function generateStaticParams() {
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("meta");
+  const locale = (await getLocale()) as Locale;
+  const seo = await getSetting("seo");
   return {
-    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
-    title: { default: t("defaultTitle"), template: `%s — ${t("siteName")}` },
-    description: t("defaultDescription"),
+    metadataBase: new URL(siteOrigin()),
+    title: {
+      default: localized(seo.defaultTitle, locale) || t("defaultTitle"),
+      template: seo.titleTemplate.includes("%s") ? seo.titleTemplate : `%s — ${t("siteName")}`,
+    },
+    description: localized(seo.defaultDescription, locale) || t("defaultDescription"),
     applicationName: "RADIX",
   };
 }
@@ -55,6 +64,7 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[locale]"
             </main>
             <SiteFooter />
           </ThemeProvider>
+          <SiteAnalytics />
         </NextIntlClientProvider>
       </body>
     </html>

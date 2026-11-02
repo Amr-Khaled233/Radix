@@ -360,9 +360,14 @@
     transition-duration: 1ms !important;
     scroll-behavior: auto !important;
   }
+  /* Reduced motion: content is simply visible — nothing waits for a reveal. */
   .js [data-reveal]:not([data-revealed]) .reveal-surface,
   .js [data-reveal]:not([data-revealed]) .reveal-core {
     transform: none;
+  }
+  .js [data-reveal]:not([data-revealed]) .reveal-rise,
+  .js [data-reveal]:not([data-revealed]) .reveal-settle {
+    opacity: 1;
   }
 }
 

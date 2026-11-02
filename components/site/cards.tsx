@@ -1,0 +1,83 @@
+import { Icon } from "@/components/brand/icon";
+import { Link } from "@/lib/i18n/navigation";
+import type { Locale } from "@/lib/i18n/routing";
+import { t } from "@/lib/localized";
+import type { MediaRef, PublicTeamCard } from "@/lib/site/data";
+import { localizeDigits } from "@/lib/site/digits";
+import { SiteImage } from "./site-image";
+
+type ProjectCardData = {
+  slug: string;
+  title: { en: string; ar: string };
+  clientName: { en: string; ar: string };
+  year: number | null;
+  cover: MediaRef | null;
+};
+
+export function ProjectCard({
+  project,
+  locale,
+  categoryNames = [],
+  digits,
+  priority,
+}: {
+  project: ProjectCardData;
+  locale: Locale;
+  categoryNames?: string[];
+  digits: "western" | "arabic-indic";
+  priority?: boolean;
+}) {
+  const client = t(project.clientName, locale);
+  return (
+    <Link href={`/work/${project.slug}`} className="group block">
+      <div className="bg-inverse relative aspect-[4/3] overflow-hidden">
+        {project.cover ? (
+          <SiteImage
+            image={project.cover}
+            locale={locale}
+            priority={priority}
+            sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            className="transition-transform duration-(--duration-reveal) ease-brand group-hover:scale-[1.02]"
+          />
+        ) : null}
+      </div>
+      <div className="border-line mt-fib-13 flex items-start justify-between gap-4 border-t pt-fib-13">
+        <div className="min-w-0">
+          <h3 className="type-h4 text-foreground group-hover:text-muted transition-colors">
+            {t(project.title, locale)}
+          </h3>
+          <p className="text-muted mt-1 text-sm">{[client, ...categoryNames].filter(Boolean).join(" · ")}</p>
+        </div>
+        <div className="flex shrink-0 items-center gap-3">
+          {project.year ? (
+            <span className="type-data text-muted">
+              <bdi>{localizeDigits(project.year, locale, digits)}</bdi>
+            </span>
+          ) : null}
+          <span className="text-foreground">
+            <Icon name="arrow-up-right" size={20} />
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+export function TeamCard({ member, locale }: { member: PublicTeamCard; locale: Locale }) {
+  return (
+    <Link href={`/team/${member.slug}`} className="group block">
+      <div className="bg-inverse relative aspect-square overflow-hidden">
+        {member.photo ? (
+          <SiteImage image={member.photo} locale={locale} sizes="(min-width: 1024px) 25vw, 50vw" decorative />
+        ) : null}
+      </div>
+      <h3 className="type-h4 text-foreground group-hover:text-muted mt-fib-13 transition-colors">
+        {t(member.name, locale)}
+      </h3>
+      <p className="type-label text-label mt-1">{t(member.role, locale)}</p>
+      {t(member.shortBio, locale) ? (
+        <p className="type-body text-muted mt-2 line-clamp-3">{t(member.shortBio, locale)}</p>
+      ) : null}
+    </Link>
+  );
+}

@@ -3,7 +3,8 @@ import { Logo } from "@/components/brand/logo";
 import { Icon } from "@/components/brand/icon";
 import { Link } from "@/lib/i18n/navigation";
 import type { Locale } from "@/lib/i18n/routing";
-import { seedCategories } from "@/lib/content/brand";
+import { t as localized } from "@/lib/localized";
+import { getVisibleCategories, getVisibleTeam } from "@/lib/site/data";
 import { HeaderShell } from "./header-shell";
 import { LocaleSwitcher } from "./locale-switcher";
 import { MobileMenu } from "./mobile-menu";
@@ -25,19 +26,25 @@ export async function SiteHeader() {
   const tA11y = await getTranslations("a11y");
   const locale = (await getLocale()) as Locale;
 
-  // Phase 4: visible categories with show_in_nav come from the database.
-  const categories: NavCategory[] = seedCategories.map((category, i) => ({
-    index: i + 1,
-    href: `/services/${category.slug}`,
-    label: category.name[locale],
-  }));
+  const [visible, team] = await Promise.all([getVisibleCategories(), getVisibleTeam()]);
+  // Index numbers follow the order of all visible categories, even if some are hidden from the nav.
+  const categories: NavCategory[] = visible
+    .map((category, i) => ({
+      index: i + 1,
+      href: `/services/${category.slug}`,
+      label: localized(category.name, locale),
+      nav: category.showInNav,
+    }))
+    .filter((category) => category.nav)
+    .map(({ nav: _nav, ...rest }) => rest);
+  const hasTeam = team.length > 0;
   const listCategoriesInline = categories.length <= 4;
 
   const links: NavLink[] = [
     { href: "/about", label: t("about") },
     { href: "/services", label: t("services") },
     { href: "/work", label: t("work") },
-    { href: "/team", label: t("team") },
+    ...(hasTeam ? [{ href: "/team", label: t("team") }] : []),
   ];
   const cta: NavLink = { href: "/contact", label: t("cta") };
 
@@ -90,9 +97,11 @@ export async function SiteHeader() {
         <Link href="/work" className={navLinkClass}>
           {t("work")}
         </Link>
-        <Link href="/team" className={navLinkClass}>
-          {t("team")}
-        </Link>
+        {hasTeam ? (
+          <Link href="/team" className={navLinkClass}>
+            {t("team")}
+          </Link>
+        ) : null}
       </nav>
       <div className="flex items-center gap-2">
         <LocaleSwitcher />

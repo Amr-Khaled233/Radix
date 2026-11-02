@@ -42,6 +42,11 @@ describe("hero math", () => {
     expect(beatState(beat, 61).opacity).toBe(0);
   });
 
+  it("shows beats starting at 0% on load and keeps beats ending at 100%", () => {
+    expect(beatState({ from: 0, to: 40 }, 0)).toEqual({ opacity: 1, offset: 0 });
+    expect(beatState({ from: 60, to: 100 }, 100)).toEqual({ opacity: 1, offset: 0 });
+  });
+
   it("loads frames coarse-to-fine starting with the first", () => {
     const order = frameLoadOrder(20);
     expect(order[0]).toBe(0);

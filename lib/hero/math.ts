@@ -26,7 +26,8 @@ export function smoothStep(current: number, target: number, smoothing: number) {
 
 /**
  * Visibility of a text beat at a progress (0–100 ranges): fades/rises in over
- * the first 15% of its range and out over the last 15%. Returns opacity 0–1
+ * the first 15% of its range and out over the last 15% (no fade-in at 0%, no
+ * fade-out at 100%). Returns opacity 0–1
  * and a vertical offset in px (24 → 0 → -24).
  */
 export function beatState(beat: { from: number; to: number }, progressPercent: number) {
@@ -34,11 +35,12 @@ export function beatState(beat: { from: number; to: number }, progressPercent: n
   if (to <= from || progressPercent < from || progressPercent > to) return { opacity: 0, offset: 24 };
   const span = to - from;
   const edge = Math.max(span * 0.15, 0.5);
-  if (progressPercent < from + edge) {
+  // Beats that start at 0% are visible on load; beats that end at 100% stay until the end.
+  if (from > 0 && progressPercent < from + edge) {
     const p = (progressPercent - from) / edge;
     return { opacity: p, offset: 24 * (1 - p) };
   }
-  if (progressPercent > to - edge) {
+  if (to < 100 && progressPercent > to - edge) {
     const p = (to - progressPercent) / edge;
     return { opacity: p, offset: -24 * (1 - p) };
   }

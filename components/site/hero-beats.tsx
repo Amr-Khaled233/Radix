@@ -37,6 +37,7 @@ export function HeroBeats({
   progress,
   className,
   compact = false,
+  beatRef,
 }: {
   beats: Beat[];
   locale: Locale;
@@ -44,6 +45,8 @@ export function HeroBeats({
   className?: string;
   /** Smaller type for the dashboard preview frame. */
   compact?: boolean;
+  /** Receives each beat's text element so a scroll loop can animate it without re-rendering. */
+  beatRef?: (id: string, element: HTMLElement | null) => void;
 }) {
   const visible = beats.filter((beat) => beat.visible && localized(beat.text, locale));
   return (
@@ -57,7 +60,6 @@ export function HeroBeats({
         return (
           <div
             key={beat.id}
-            aria-hidden={progress !== null && state.opacity < 0.05 ? true : undefined}
             className={cn(
               "absolute inset-0 flex p-[var(--gutter)]",
               INLINE[beat.position.inline],
@@ -65,6 +67,9 @@ export function HeroBeats({
             )}
           >
             <p
+              ref={beatRef ? (el) => beatRef(beat.id, el) : undefined}
+              data-beat-from={beat.from}
+              data-beat-to={beat.to}
               style={style}
               className={cn(
                 STYLE[beat.style],

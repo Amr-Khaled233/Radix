@@ -844,5 +844,110 @@
       "openInbox": "Open inbox",
       "viewAll": "View all"
     }
+  },
+  "site": {
+    "hero": {
+      "scroll": "Scroll",
+      "skip": "Skip intro"
+    },
+    "home": {
+      "allServices": "All services",
+      "allWork": "All work",
+      "meetTeam": "Meet the team",
+      "step": "Step"
+    },
+    "about": {
+      "label": "About",
+      "meaning": "The meaning behind RADIX",
+      "essence": "Brand essence",
+      "coreIdea": "Core idea",
+      "surface": "Surface",
+      "purpose": "Purpose",
+      "vision": "Vision",
+      "mission": "Mission",
+      "promise": "Brand promise",
+      "values": "Values",
+      "personality": "Personality",
+      "is": "RADIX is",
+      "isNot": "RADIX is not",
+      "audiences": "Who we work with",
+      "narrative": "Brand narrative",
+      "team": "Team"
+    },
+    "services": {
+      "label": "Services",
+      "title": "Four pillars. One foundation.",
+      "intro": "Strategy, research and one brand system inform every pillar. Clients can start with one and extend into the others.",
+      "servicesHeading": "Services",
+      "projectsHeading": "Selected work",
+      "explore": "Explore {name}",
+      "empty": "Services will be published here soon.",
+      "cta": "Discuss a {name} project"
+    },
+    "work": {
+      "label": "Work",
+      "title": "Work",
+      "intro": "Selected case studies across brand, digital, intelligence and growth.",
+      "all": "All",
+      "filter": "Filter by category",
+      "empty": "Case studies will be published here soon.",
+      "emptyFiltered": "No published work in this category yet.",
+      "client": "Client",
+      "year": "Year",
+      "categories": "Disciplines",
+      "services": "Services",
+      "results": "Results",
+      "credits": "Credits",
+      "gallery": "Gallery",
+      "visit": "Visit the project",
+      "next": "Next project",
+      "draft": "Draft preview — not visible to the public.",
+      "exitPreview": "Exit preview"
+    },
+    "team": {
+      "label": "Team",
+      "title": "Team",
+      "intro": "The people who connect strategy, design and technology at RADIX.",
+      "empty": "Team profiles will be published here soon.",
+      "expertise": "Expertise",
+      "work": "Work",
+      "links": "Links",
+      "email": "Email",
+      "back": "All team"
+    },
+    "contact": {
+      "label": "Contact",
+      "title": "Start a conversation",
+      "intro": "Tell us what you're building and where you are now. We'll reply with a clear next step.",
+      "name": "Name",
+      "email": "Email",
+      "company": "Company",
+      "phone": "Phone",
+      "interests": "Interested in",
+      "message": "Message",
+      "optional": "optional",
+      "submit": "Send message",
+      "sending": "Sending…",
+      "successTitle": "Thank you.",
+      "successBody": "Your message has been received. We'll be in touch soon.",
+      "another": "Send another message",
+      "details": "Details",
+      "errors": {
+        "name": "Enter your name.",
+        "email": "Enter a valid email address.",
+        "message": "Write a message of at least 10 characters.",
+        "tooLong": "This is too long.",
+        "rateLimited": "Too many messages from this connection. Try again in an hour.",
+        "server": "Something went wrong. Try again, or email us directly."
+      }
+    },
+    "privacy": {
+      "updated": "Last updated {date}",
+      "empty": "The privacy policy will be published here."
+    },
+    "footer": {
+      "follow": "Follow"
+    },
+    "draft": "Draft"
   }
 }
