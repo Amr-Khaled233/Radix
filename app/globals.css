@@ -1,0 +1,332 @@
+@import "tailwindcss";
+
+/* Theme switching uses next-themes with attribute="data-theme". */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+/* ------------------------------------------------------------------------
+ * 1. Brand palette — the only six colours. Never referenced by components;
+ *    components use the semantic tokens below.
+ * --------------------------------------------------------------------- */
+:root {
+  --palette-aubergine: #1b1028;
+  --palette-violet: #7854f6;
+  --palette-lavender: #c5b8ff;
+  --palette-ivory: #f6f3ee;
+  --palette-graphite: #292631;
+  --palette-white: #ffffff;
+}
+
+/* ------------------------------------------------------------------------
+ * 2. Semantic tokens.
+ *    Light set: page in light theme, inverse sections in dark theme, .scope-light.
+ *    Dark set:  page in dark theme, inverse sections in light theme, .scope-dark.
+ *    Mixes are opaque (srgb) so contrast is predictable; tests/contrast.test.ts
+ *    parses this block and checks every text/background pair.
+ * --------------------------------------------------------------------- */
+:root,
+[data-theme="dark"] .scope-inverse,
+.scope-light {
+  --background: var(--palette-ivory);
+  --surface: var(--palette-white);
+  --foreground: var(--palette-aubergine);
+  --muted: color-mix(in srgb, var(--palette-aubergine) 72%, var(--palette-ivory));
+  --label: color-mix(in srgb, var(--palette-aubergine) 72%, var(--palette-ivory));
+  --line: color-mix(in srgb, var(--palette-aubergine) 16%, var(--palette-ivory));
+  --line-strong: var(--palette-aubergine);
+  --accent: var(--palette-violet);
+  --on-accent: var(--palette-white);
+  --focus: var(--palette-violet);
+  --inverse: var(--palette-aubergine);
+  --on-inverse: var(--palette-ivory);
+  color-scheme: light;
+}
+
+[data-theme="dark"],
+:root:not([data-theme="dark"]) .scope-inverse,
+.scope-dark {
+  --background: var(--palette-aubergine);
+  --surface: var(--palette-graphite);
+  --foreground: var(--palette-ivory);
+  --muted: var(--palette-lavender);
+  --label: var(--palette-lavender);
+  --line: color-mix(in srgb, var(--palette-ivory) 14%, var(--palette-aubergine));
+  --line-strong: var(--palette-ivory);
+  --accent: var(--palette-violet);
+  --on-accent: var(--palette-white);
+  /* Violet fails 3:1 on Graphite surfaces, so focus rings use Lavender in dark. */
+  --focus: var(--palette-lavender);
+  --inverse: var(--palette-ivory);
+  --on-inverse: var(--palette-aubergine);
+  color-scheme: dark;
+}
+
+.scope-inverse,
+.scope-light,
+.scope-dark {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+/* ------------------------------------------------------------------------
+ * 3. Tailwind theme — default colours and radii are removed so only brand
+ *    tokens exist as utilities.
+ * --------------------------------------------------------------------- */
+@theme inline {
+  --color-*: initial;
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-label: var(--label);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-accent: var(--accent);
+  --color-on-accent: var(--on-accent);
+  --color-focus: var(--focus);
+  --color-inverse: var(--inverse);
+  --color-on-inverse: var(--on-inverse);
+
+  /* Latin faces are named directly: the next/font variables append a metric
+     fallback (local Arial) that would catch Arabic glyphs before IBM Plex
+     Sans Arabic. Font files come from lib/fonts.ts. */
+  --font-sans: "Manrope", var(--font-plex-arabic), system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", var(--font-plex-arabic), ui-monospace, monospace;
+
+  --radius-*: initial;
+  --radius-input: 2px;
+
+  /* Strata / Fibonacci spacing: p-fib-13, gap-fib-34 … */
+  --spacing-fib-8: 8px;
+  --spacing-fib-13: 13px;
+  --spacing-fib-21: 21px;
+  --spacing-fib-34: 34px;
+  --spacing-fib-55: 55px;
+  --spacing-fib-89: 89px;
+  --spacing-fib-144: 144px;
+
+  --ease-brand: cubic-bezier(0.2, 0, 0, 1);
+  --breakpoint-nav: 74rem;
+}
+
+:root {
+  --duration-ui: 160ms;
+  --duration-hover: 240ms;
+  --duration-reveal: 480ms;
+  --gutter: clamp(16px, 6.25vw, 96px);
+  --max-content: 1440px;
+  /* Typography scales that the Arabic overrides change (see section 5). */
+  --lh-scale: 1;
+  --track-scale: 1;
+}
+
+/* ------------------------------------------------------------------------
+ * 4. Type scale (web px from the guidelines, fluid between 375 and 1440 px).
+ * --------------------------------------------------------------------- */
+@utility type-display {
+  font-size: clamp(3rem, 1.944rem + 4.507vw, 6rem);
+  line-height: calc(1 * var(--lh-scale));
+  letter-spacing: calc(-0.035em * var(--track-scale));
+  font-weight: 500;
+}
+@utility type-h1 {
+  font-size: clamp(2.5rem, 1.972rem + 2.254vw, 4rem);
+  line-height: calc(1.0625 * var(--lh-scale));
+  letter-spacing: calc(-0.03em * var(--track-scale));
+  font-weight: 500;
+}
+@utility type-h2 {
+  font-size: clamp(2rem, 1.736rem + 1.127vw, 2.75rem);
+  line-height: calc(1.136 * var(--lh-scale));
+  letter-spacing: calc(-0.02em * var(--track-scale));
+  font-weight: 500;
+}
+@utility type-h3 {
+  font-size: clamp(1.5rem, 1.412rem + 0.376vw, 1.75rem);
+  line-height: calc(1.286 * var(--lh-scale));
+  letter-spacing: calc(-0.01em * var(--track-scale));
+  font-weight: 600;
+}
+@utility type-h4 {
+  font-size: 1.25rem;
+  line-height: calc(1.4 * var(--lh-scale));
+  letter-spacing: 0;
+  font-weight: 600;
+}
+@utility type-body {
+  font-size: clamp(1rem, 0.978rem + 0.094vw, 1.0625rem);
+  line-height: calc(1.647 * var(--lh-scale));
+  font-weight: 400;
+}
+@utility type-body-lg {
+  font-size: clamp(1.0625rem, 1rem + 0.282vw, 1.25rem);
+  line-height: calc(1.6 * var(--lh-scale));
+  font-weight: 400;
+}
+@utility type-button {
+  font-size: 0.9375rem;
+  line-height: 1.25rem;
+  letter-spacing: calc(0.01em * var(--track-scale));
+  font-weight: 600;
+}
+@utility type-label {
+  font-family: var(--font-mono);
+  font-size: var(--label-size, 0.75rem);
+  line-height: 1rem;
+  letter-spacing: calc(0.12em * var(--track-scale));
+  font-weight: 500;
+  text-transform: var(--label-transform, uppercase);
+}
+@utility type-data {
+  font-family: var(--font-mono);
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------------------------
+ * 5. Arabic overrides: no tracking (breaks joining), no case, more leading,
+ *    slightly larger labels.
+ * --------------------------------------------------------------------- */
+[lang="ar"] {
+  --lh-scale: 1.12;
+  --track-scale: 0;
+  --label-size: 0.875rem;
+  --label-transform: none;
+}
+[lang="ar"],
+[lang="ar"] * {
+  letter-spacing: 0;
+}
+
+/* ------------------------------------------------------------------------
+ * 6. Base
+ * --------------------------------------------------------------------- */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    overflow-x: clip;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+  }
+  ::selection {
+    background-color: var(--accent);
+    color: var(--on-accent);
+  }
+  bdi,
+  .ltr {
+    unicode-bidi: isolate;
+  }
+}
+
+/* Breaks out of any centred container to the viewport edges (body clips x-overflow). */
+@utility full-bleed {
+  margin-inline: calc(50% - 50vw);
+  width: 100vw;
+}
+
+@utility container-site {
+  width: 100%;
+  max-width: var(--max-content);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+/* ------------------------------------------------------------------------
+ * 7. Motion — "structural reveal: surface first, foundation second".
+ *    Elements start hidden only once JS marks the document (.js), so content
+ *    is visible without JS. Reduced motion removes movement entirely.
+ * --------------------------------------------------------------------- */
+@keyframes surface-draw {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes grow-down {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+@keyframes settle {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.reveal-surface {
+  transform-origin: left center;
+}
+[dir="rtl"] .reveal-surface {
+  transform-origin: right center;
+}
+.reveal-core {
+  transform-origin: top center;
+}
+
+.js [data-reveal]:not([data-revealed]) .reveal-surface {
+  transform: scaleX(0);
+}
+.js [data-reveal]:not([data-revealed]) .reveal-rise,
+.js [data-reveal]:not([data-revealed]) .reveal-settle {
+  opacity: 0;
+}
+.js [data-reveal]:not([data-revealed]) .reveal-core {
+  transform: scaleY(0);
+}
+
+[data-revealed] .reveal-surface {
+  animation: surface-draw 400ms var(--ease-brand) both;
+}
+[data-revealed] .reveal-rise {
+  animation: rise-in var(--duration-reveal) var(--ease-brand) 200ms both;
+}
+[data-revealed] .reveal-core {
+  animation: grow-down 400ms var(--ease-brand) calc(500ms + var(--stagger, 0ms)) both;
+}
+[data-revealed] .reveal-settle {
+  animation: settle 300ms var(--ease-brand) calc(800ms + var(--stagger, 0ms)) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-delay: 0ms !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+  .js [data-reveal]:not([data-revealed]) .reveal-surface,
+  .js [data-reveal]:not([data-revealed]) .reveal-core {
+    transform: none;
+  }
+}

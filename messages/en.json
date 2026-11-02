@@ -1,0 +1,59 @@
+{
+  "meta": {
+    "siteName": "RADIX",
+    "defaultTitle": "RADIX — Integrated creative & digital solutions",
+    "defaultDescription": "RADIX connects strategy, creativity, and technology to build the foundations for meaningful business growth."
+  },
+  "a11y": {
+    "skipToContent": "Skip to content",
+    "home": "RADIX home",
+    "primaryNav": "Primary",
+    "footerNav": "Footer"
+  },
+  "nav": {
+    "about": "About",
+    "services": "Services",
+    "work": "Work",
+    "team": "Team",
+    "contact": "Contact",
+    "privacy": "Privacy",
+    "cta": "Start a conversation",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "menu": "Menu"
+  },
+  "theme": {
+    "label": "Colour theme",
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark",
+    "current": "Colour theme: {theme}. Activate to change."
+  },
+  "locale": {
+    "label": "Language",
+    "en": "English",
+    "ar": "العربية",
+    "switchTo": "Switch language to {language}"
+  },
+  "footer": {
+    "categories": "Services",
+    "navigation": "Navigation",
+    "contact": "Contact",
+    "copyright": "© {year} RADIX. All rights reserved."
+  },
+  "home": {
+    "exploreServices": "Explore services"
+  },
+  "notFound": {
+    "label": "Error 404",
+    "title": "This page doesn’t exist.",
+    "body": "The page you’re looking for may have moved or never existed.",
+    "back": "Back to home"
+  },
+  "error": {
+    "label": "Error",
+    "title": "Something went wrong.",
+    "body": "Please try again. If the problem continues, come back a little later.",
+    "retry": "Try again"
+  }
+}
