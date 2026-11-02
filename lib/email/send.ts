@@ -38,6 +38,11 @@ async function deliver(message: Outgoing, url?: string) {
     }
     const to = [message.to].flat().join(", ");
     sentEmails.push({ ...message, to, url });
+    // End-to-end tests read emailed links from this file (never set in production).
+    if (process.env.EMAIL_LOG_FILE) {
+      const { appendFile } = await import("node:fs/promises");
+      await appendFile(process.env.EMAIL_LOG_FILE, JSON.stringify({ to, subject: message.subject, url }) + "\n");
+    }
     console.info(`\n[email] to=${to}\n[email] subject=${message.subject}\n[email] link=${url ?? "-"}\n`);
     return;
   }

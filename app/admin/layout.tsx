@@ -29,7 +29,7 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
   return (
     <html lang={locale} dir={directionOf(locale)} className={fontVariables} suppressHydrationWarning>
       <body className="min-h-dvh">
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider locale={locale} messages={messages} timeZone={process.env.SITE_TIME_ZONE || "UTC"}>
           <ThemeProvider>
             <TooltipProvider delayDuration={300}>{children}</TooltipProvider>
             <Toaster />

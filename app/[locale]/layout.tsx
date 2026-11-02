@@ -66,6 +66,13 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[locale]"
           </ThemeProvider>
           <SiteAnalytics />
         </NextIntlClientProvider>
+        {/* Start the reveal for blocks already in view right after parsing, before hydration (keeps LCP early). */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "document.querySelectorAll('[data-reveal]').forEach(function(e){if(e.getBoundingClientRect().top<innerHeight)e.setAttribute('data-revealed','')})",
+          }}
+        />
       </body>
     </html>
   );

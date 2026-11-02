@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { KeyRound, MoreHorizontal, Plus, UserCheck, UserX, Trash2 } from "lucide-react";
-import { useFormatter, useTranslations } from "next-intl";
+import { useFormatter, useNow, useTranslations } from "next-intl";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -56,6 +56,7 @@ type AdminRow = {
 export function AdminsTable({ admins, currentUserId }: { admins: AdminRow[]; currentUserId: string }) {
   const t = useTranslations("admin");
   const format = useFormatter();
+  const now = useNow();
   const { run } = useAction();
   const [confirm, setConfirm] = useState<{ kind: "deactivate" | "delete"; admin: AdminRow } | null>(null);
 
@@ -120,7 +121,7 @@ export function AdminsTable({ admins, currentUserId }: { admins: AdminRow[]; cur
       accessorFn: (a) => a.lastLoginAt ?? "",
       cell: ({ row: { original: a } }) => (
         <span className="type-data text-muted text-xs">
-          {a.lastLoginAt ? format.relativeTime(new Date(a.lastLoginAt)) : t("admins.never")}
+          {a.lastLoginAt ? format.relativeTime(new Date(a.lastLoginAt), now) : t("admins.never")}
         </span>
       ),
     },

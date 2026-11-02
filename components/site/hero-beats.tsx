@@ -64,6 +64,8 @@ export function HeroBeats({
               "absolute inset-0 flex p-[var(--gutter)]",
               INLINE[beat.position.inline],
               BLOCK[beat.position.block],
+              // Clear the scroll cue and skip link (bottom-fib-34, ~56px tall).
+              !compact && beat.position.block === "bottom" && "pb-[calc(var(--spacing-fib-89)+var(--spacing-fib-21))]",
             )}
           >
             <p

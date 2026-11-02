@@ -1,6 +1,7 @@
 import { count, desc, eq } from "drizzle-orm";
 import { getFormatter, getTranslations } from "next-intl/server";
 import Link from "next/link";
+import { connection } from "next/server";
 import { PageHeader } from "@/components/admin/page-header";
 import { getAdminLocale } from "@/lib/admin/locale";
 import { can } from "@/lib/auth/permissions";
@@ -44,6 +45,8 @@ export default async function OverviewPage() {
   const locale = await getAdminLocale();
   const t = await getTranslations({ locale, namespace: "admin" });
   const format = await getFormatter({ locale });
+  await connection();
+  const now = new Date();
   const showMessages = can(user, "view", "messages");
 
   const [[published], [drafts], [catCount], [teamCount], [newMessages], messages, activity, gaps] = await Promise.all([
@@ -119,7 +122,9 @@ export default async function OverviewPage() {
                         {m.message}
                       </span>
                     </span>
-                    <span className="type-data text-muted shrink-0 text-xs">{format.relativeTime(m.createdAt)}</span>
+                    <span className="type-data text-muted shrink-0 text-xs">
+                      {format.relativeTime(m.createdAt, now)}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -173,7 +178,7 @@ export default async function OverviewPage() {
                       {a.action}
                     </span>
                   </span>
-                  <span className="type-data text-muted shrink-0 text-xs">{format.relativeTime(a.createdAt)}</span>
+                  <span className="type-data text-muted shrink-0 text-xs">{format.relativeTime(a.createdAt, now)}</span>
                 </li>
               ))}
             </ul>
