@@ -27,6 +27,7 @@ const palette = Object.fromEntries(
 ) as Record<string, Rgb>;
 
 function resolve(value: string): Rgb {
+  if (/^#[0-9a-f]{3,6}$/i.test(value)) return hexToRgb(value);
   const ref = value.match(/^var\(--palette-([a-z]+)\)$/);
   if (ref) return palette[`palette-${ref[1]}`];
   const mix = value.match(/^color-mix\(in srgb, var\(--palette-([a-z]+)\) (\d+)%, var\(--palette-([a-z]+)\)\)$/);
@@ -56,6 +57,16 @@ const PAIRS: [string, string, number][] = [
   ["line-strong", "surface", UI],
   ["focus", "background", UI],
   ["focus", "surface", UI],
+  // Dashboard status colours: as text on both surfaces, and as fills under on-status text.
+  ["status-danger", "surface", TEXT],
+  ["status-danger", "background", TEXT],
+  ["status-success", "surface", TEXT],
+  ["status-success", "background", TEXT],
+  ["status-warning", "surface", TEXT],
+  ["status-warning", "background", TEXT],
+  ["on-status", "status-danger", TEXT],
+  ["on-status", "status-success", TEXT],
+  ["on-status", "status-warning", TEXT],
 ];
 
 describe.each(Object.entries(themes))("%s theme tokens", (_, tokens) => {

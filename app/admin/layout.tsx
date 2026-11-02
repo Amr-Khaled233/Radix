@@ -4,6 +4,8 @@ import { getMessages, getTranslations } from "next-intl/server";
 import { getAdminLocale } from "@/lib/admin/locale";
 import { fontVariables } from "@/lib/fonts";
 import { directionOf } from "@/lib/i18n/routing";
+import { Toaster } from "@/components/admin/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/site/theme-provider";
 import "../globals.css";
 
@@ -28,7 +30,10 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
     <html lang={locale} dir={directionOf(locale)} className={fontVariables} suppressHydrationWarning>
       <body className="min-h-dvh">
         <NextIntlClientProvider locale={locale} messages={messages}>
-          <ThemeProvider>{children}</ThemeProvider>
+          <ThemeProvider>
+            <TooltipProvider delayDuration={300}>{children}</TooltipProvider>
+            <Toaster />
+          </ThemeProvider>
         </NextIntlClientProvider>
       </body>
     </html>

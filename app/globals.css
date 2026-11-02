@@ -38,6 +38,11 @@
   --focus: var(--palette-violet);
   --inverse: var(--palette-aubergine);
   --on-inverse: var(--palette-ivory);
+  /* Dashboard-only functional status colours (never on the public site). */
+  --status-danger: #b42318;
+  --status-success: #067647;
+  --status-warning: #b54708;
+  --on-status: #ffffff;
   color-scheme: light;
 }
 
@@ -57,6 +62,10 @@
   --focus: var(--palette-lavender);
   --inverse: var(--palette-ivory);
   --on-inverse: var(--palette-aubergine);
+  --status-danger: #fda29b;
+  --status-success: #75e0a7;
+  --status-warning: #fec84b;
+  --on-status: #1b1028;
   color-scheme: dark;
 }
 
@@ -85,6 +94,27 @@
   --color-focus: var(--focus);
   --color-inverse: var(--inverse);
   --color-on-inverse: var(--on-inverse);
+  --color-danger: var(--status-danger);
+  --color-success: var(--status-success);
+  --color-warning: var(--status-warning);
+  --color-on-status: var(--on-status);
+  --color-scrim: color-mix(in srgb, var(--palette-aubergine) 64%, transparent);
+
+  /* shadcn/ui names mapped onto brand tokens (components/ui). */
+  --color-primary: var(--accent);
+  --color-primary-foreground: var(--on-accent);
+  --color-secondary: var(--background);
+  --color-secondary-foreground: var(--foreground);
+  --color-popover: var(--surface);
+  --color-popover-foreground: var(--foreground);
+  --color-card: var(--surface);
+  --color-card-foreground: var(--foreground);
+  --color-muted-foreground: var(--muted);
+  --color-border: var(--line);
+  --color-input: var(--line-strong);
+  --color-ring: var(--focus);
+  --color-destructive: var(--status-danger);
+  --color-on-destructive: var(--on-status);
 
   /* Latin faces are named directly: the next/font variables append a metric
      fallback (local Arial) that would catch Arabic glyphs before IBM Plex
@@ -215,6 +245,11 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
+  *,
+  ::before,
+  ::after {
+    border-color: var(--line);
+  }
   :focus-visible {
     outline: 2px solid var(--focus);
     outline-offset: 2px;
@@ -328,5 +363,49 @@
   .js [data-reveal]:not([data-revealed]) .reveal-surface,
   .js [data-reveal]:not([data-revealed]) .reveal-core {
     transform: none;
+  }
+}
+
+/* ------------------------------------------------------------------------
+ * 8. Rendered rich text (Tiptap output on the site and in the editor).
+ * --------------------------------------------------------------------- */
+@layer components {
+  .rich-text > * + * {
+    margin-top: 1em;
+  }
+  .rich-text h2 {
+    font-size: 1.75rem;
+    line-height: calc(1.286 * var(--lh-scale));
+    font-weight: 600;
+    letter-spacing: calc(-0.01em * var(--track-scale));
+    margin-top: 1.5em;
+  }
+  .rich-text h3 {
+    font-size: 1.25rem;
+    line-height: calc(1.4 * var(--lh-scale));
+    font-weight: 600;
+    margin-top: 1.25em;
+  }
+  .rich-text ul,
+  .rich-text ol {
+    padding-inline-start: 1.25em;
+  }
+  .rich-text ul {
+    list-style: square;
+  }
+  .rich-text ol {
+    list-style: decimal;
+  }
+  .rich-text li + li {
+    margin-top: 0.35em;
+  }
+  .rich-text blockquote {
+    border-inline-start: 2px solid var(--line-strong);
+    padding-inline-start: 1em;
+    font-size: 1.125em;
+  }
+  .rich-text a {
+    text-decoration: underline;
+    text-underline-offset: 0.2em;
   }
 }

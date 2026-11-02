@@ -1,14 +1,13 @@
 import "server-only";
 import { generateRandomString } from "better-auth/crypto";
 import { eq } from "drizzle-orm";
-import { z } from "zod";
 import { logAudit } from "@/lib/audit";
 import { db } from "@/lib/db/client";
 import { ROLES, user, type Role } from "@/lib/db/schema";
 import { asLocale, sendInviteEmail, sendResetPasswordEmail } from "@/lib/email/send";
 import { auth } from "./auth";
+import { inviteSchema, type InviteInput } from "./invite-schema";
 import { assertCan, checkAdminChange, ForbiddenError, type Actor, type AdminChange } from "./permissions";
-import { emailSchema } from "./schemas";
 import { countActiveSuperAdmins } from "./queries";
 
 /**
@@ -20,13 +19,7 @@ import { countActiveSuperAdmins } from "./queries";
 export const INVITE_TTL_SECONDS = 60 * 60 * 48;
 export const RESET_TTL_SECONDS = 60 * 60;
 
-export const inviteSchema = z.object({
-  name: z.string().trim().min(1).max(120),
-  email: emailSchema,
-  role: z.enum(ROLES),
-  locale: z.enum(["en", "ar"]).default("en"),
-});
-export type InviteInput = z.input<typeof inviteSchema>;
+export { inviteSchema, type InviteInput } from "./invite-schema";
 
 export class AdminActionError extends Error {
   constructor(readonly code: "EMAIL_TAKEN" | "NOT_FOUND" | "SELF_CHANGE" | "LAST_SUPER_ADMIN") {

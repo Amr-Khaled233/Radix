@@ -31,6 +31,8 @@ export default getRequestConfig(async ({ locale }) => {
 
   return {
     locale,
+    // One time zone for server and browser rendering (dates in the dashboard, case studies).
+    timeZone: process.env.SITE_TIME_ZONE || "UTC",
     messages: (await import(`../../messages/${locale}.json`)).default,
   };
 });

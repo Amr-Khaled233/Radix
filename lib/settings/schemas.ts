@@ -16,6 +16,7 @@ export const generalSchema = z.object({
   phone: z.string().trim().default(""),
   address: L.default(emptyL),
   socials: z.array(z.object({ type: z.string().trim().min(1), url: z.url() })).default([]),
+  analyticsEnabled: z.boolean().default(false),
   ...review,
 });
 
