@@ -1,6 +1,6 @@
 # RADIX — Implementation Plan (Phase 0)
 
-Status: **awaiting owner approval**. Companion to `docs/BUILD_SPEC.md` (functionality) and `docs/brand-guidelines.pdf` (visuals). Brand copy comes from `docs/brand-content.md`.
+Status: **approved** — Phase 1 and Phase 2 done. Companion to `docs/BUILD_SPEC.md` (functionality) and `docs/brand-guidelines.pdf` (visuals). Brand copy comes from `docs/brand-content.md`.
 
 ---
 
@@ -79,7 +79,6 @@ contact_submissions name, email, company, phone, message, category_ids uuid[], l
                 status(new|read|archived), ip_hash, user_agent, created_at
 rate_limits     key (hashed ip + bucket), count, window_start   (contact form)
 audit_log       actor_id, action, entity_type, entity_id, summary jsonb, created_at
-admin_invites   user_id, token_hash, expires_at (48 h), used_at   (see Risk R4)
 ```
 
 Indexes: unique `slug` on categories/projects/team; `status`, `sort_order`, all FKs; `contact_submissions(status, created_at)`; `audit_log(created_at)`.
@@ -147,7 +146,7 @@ Each phase ends with typecheck, lint, build, tests and a commit.
 | R1 | **iOS Safari video scrubbing** is unreliable (seeking `currentTime` stutters, autoplay rules). | Default to Frame-sequence mode on iOS when a sequence exists; `-g 1` encode guidance; poster always stays as fallback. Real-device test in Phase 5. |
 | R2 | **Frame-sequence generation in the browser** is memory- and time-heavy (e.g. 10 s × 24 fps = 240 WebP files), and `requestVideoFrameCallback` / WebP export differ by browser. | Run in a Web Worker with `OffscreenCanvas` where supported; seek-and-capture fallback; upload in parallel batches with retry; progress bar; recommend Chrome/Edge in the help panel. |
 | R3 | **Hero vs Lighthouse ≥ 95 (mobile).** | Poster is the LCP `<Image priority>`; video/frames load after `load` + idle; hero client JS kept small and lazy; Save-Data / 2g/3g → static. |
-| R4 | **48 h invite tokens vs 1 h reset tokens.** Better Auth has one global reset-token lifetime. | Own `admin_invites` table (hashed token, 48 h). Accepting an invite sets the password through Better Auth's server API / internal adapter, which gets checked against the docs in Phase 2. Reset keeps the 1 h default. |
+| R4 | **48 h invite tokens vs 1 h reset tokens.** Better Auth has one global reset-token lifetime. | Resolved in Phase 2: invites write a `verification` row in Better Auth's own reset-token format with a 48 h expiry (via `auth.$context.internalAdapter`), so the standard `/reset-password` endpoint consumes it — single use, revokes sessions. No extra table. |
 | R5 | **Custom roles in the Better Auth admin plugin** (the default is `admin` / `user`). | `createAccessControl` with `super_admin`, `admin`, `editor`; our own `can()` remains the single source for app permissions. |
 | R6 | **Next.js 16 caching API changes** (Cache Components, `revalidateTag` signature, `updateTag`). | Verify in the docs before Phase 1; isolate in `lib/revalidate.ts`. |
 | R7 | **Arabic typography** in mixed text (RADIX, emails, numbers). | `<bdi>` helper; `html[lang=ar]` overrides; styleguide shows mixed samples; Arabic copy is a draft flagged "Needs review". |

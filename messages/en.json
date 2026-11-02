@@ -55,5 +55,98 @@
     "title": "Something went wrong.",
     "body": "Please try again. If the problem continues, come back a little later.",
     "retry": "Try again"
+  },
+  "emails": {
+    "footer": "Rooted in Strategy. Built for Growth.",
+    "ignore": "If you didn’t expect this email, you can ignore it.",
+    "linkFallback": "If the button doesn’t work, paste this link into your browser:",
+    "invite": {
+      "subject": "You’ve been invited to the RADIX dashboard",
+      "preview": "Set your password to access the RADIX dashboard.",
+      "heading": "Welcome to the RADIX dashboard",
+      "body": "{inviter} added you as {role}. Set your password to sign in. This link is valid for 48 hours.",
+      "cta": "Set your password"
+    },
+    "reset": {
+      "subject": "Reset your RADIX dashboard password",
+      "preview": "Use this link to choose a new password.",
+      "heading": "Reset your password",
+      "body": "We received a request to reset the password for {email}. This link is valid for one hour and can be used once.",
+      "cta": "Choose a new password"
+    },
+    "roles": {
+      "super_admin": "a super admin",
+      "admin": "an admin",
+      "editor": "an editor"
+    }
+  },
+  "admin": {
+    "meta": {
+      "title": "RADIX dashboard"
+    },
+    "common": {
+      "email": "Email",
+      "password": "Password",
+      "submit": "Continue",
+      "backToLogin": "Back to sign in",
+      "language": "العربية",
+      "languageLabel": "Switch dashboard language to Arabic",
+      "signOut": "Sign out",
+      "loading": "Please wait…"
+    },
+    "login": {
+      "label": "Dashboard",
+      "title": "Sign in",
+      "submit": "Sign in",
+      "forgot": "Forgot your password?",
+      "invalid": "The email or password is incorrect.",
+      "rateLimited": "Too many attempts. Wait a minute and try again.",
+      "resetDone": "Your password has been updated. Sign in with your new password."
+    },
+    "forgot": {
+      "label": "Dashboard",
+      "title": "Reset your password",
+      "body": "Enter the email address of your dashboard account. If an account exists, we’ll send a link to choose a new password.",
+      "submit": "Send reset link",
+      "sent": "If an account exists for that email, we’ve sent a link. It’s valid for one hour."
+    },
+    "reset": {
+      "label": "Dashboard",
+      "title": "Choose a new password",
+      "inviteTitle": "Set your password",
+      "inviteBody": "Welcome to the RADIX dashboard. Choose a password to finish setting up your account.",
+      "newPassword": "New password",
+      "confirmPassword": "Confirm new password",
+      "submit": "Save password",
+      "invalidToken": "This link is invalid or has expired. Request a new one.",
+      "missingToken": "This page needs the link from your email.",
+      "requestNew": "Request a new link",
+      "signedOutNote": "Saving signs you out of all other sessions."
+    },
+    "validation": {
+      "email": "Enter a valid email address.",
+      "required": "This field is required.",
+      "passwordMin": "Use at least {min} characters.",
+      "passwordMax": "Use at most {max} characters.",
+      "passwordMatch": "The passwords don’t match."
+    },
+    "strength": {
+      "label": "Password strength",
+      "weak": "Weak",
+      "fair": "Fair",
+      "good": "Good",
+      "strong": "Strong"
+    },
+    "home": {
+      "label": "Overview",
+      "welcome": "Welcome, {name}",
+      "role": "Signed in as {role}",
+      "placeholder": "The dashboard sections arrive in the next phase."
+    },
+    "roles": {
+      "super_admin": "Super admin",
+      "admin": "Admin",
+      "editor": "Editor"
+    }
   }
 }
