@@ -3,7 +3,10 @@ import createNextIntlPlugin from "next-intl/plugin";
 
 const withNextIntl = createNextIntlPlugin("./lib/i18n/request.ts");
 
-const BLOB = "https://*.public.blob.vercel-storage.com";
+// This project's Blob store when its token is set at build time (Vercel), otherwise any store.
+const blobStoreId = process.env.BLOB_READ_WRITE_TOKEN?.match(/^vercel_blob_rw_([a-z0-9]+)_/i)?.[1]?.toLowerCase();
+const BLOB_HOST = blobStoreId ? `${blobStoreId}.public.blob.vercel-storage.com` : "*.public.blob.vercel-storage.com";
+const BLOB = `https://${BLOB_HOST}`;
 
 /**
  * Static pages can't carry per-request nonces, so scripts allow 'unsafe-inline'
@@ -41,10 +44,14 @@ const securityHeaders = [
 const nextConfig: NextConfig = {
   cacheComponents: true,
   partialPrefetching: true,
+  experimental: {
+    // Inline the (small) stylesheet so first paint doesn't wait for a CSS request.
+    inlineCss: true,
+  },
   poweredByHeader: false,
   images: {
     formats: ["image/avif", "image/webp"],
-    remotePatterns: [{ protocol: "https", hostname: "*.public.blob.vercel-storage.com" }],
+    remotePatterns: [{ protocol: "https", hostname: BLOB_HOST }],
     // Development uploads stored on disk (see lib/media/storage.ts).
     localPatterns: [{ pathname: "/api/media/local/**" }, { pathname: "/brand/**" }, { pathname: "/icons/**" }],
   },

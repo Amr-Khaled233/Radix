@@ -9,7 +9,7 @@ import { toast } from "sonner";
 import type { z } from "zod";
 import { ConfirmDialog } from "@/components/admin/confirm-dialog";
 import { DataTable, type AdminColumn } from "@/components/admin/data-table";
-import { StatusBadge } from "@/components/admin/empty-state";
+import { StatusBadge } from "@/components/admin/status-badge";
 import { TextInput } from "@/components/admin/fields";
 import { uiIcon } from "@/components/admin/ui-icon";
 import { useAction } from "@/components/admin/use-action";

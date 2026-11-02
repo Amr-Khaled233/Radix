@@ -9,7 +9,7 @@ import { requireAdminPage } from "@/lib/auth/session";
 import { db } from "@/lib/db/client";
 import { categories, projectCategories, projects, services } from "@/lib/db/schema";
 import { t as localized } from "@/lib/localized";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { CategoryForm } from "./category-form";
 import { CategoryProjects } from "./category-projects";
 import { ServicesManager } from "./services-manager";
@@ -46,7 +46,7 @@ export default async function CategoryEditPage({ params }: PageProps<"/admin/cat
   return (
     <>
       <PageHeader label={t("label")} title={localized(category.name, locale) || t("editTitle")} />
-      <div className="grid gap-8 xl:grid-cols-[minmax(0,1fr)_420px]">
+      <div className="grid grid-cols-1 gap-8 xl:grid-cols-[minmax(0,1fr)_420px]">
         <CategoryForm
           category={category}
           ogImage={ogImage ?? null}

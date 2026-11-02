@@ -163,7 +163,7 @@ export function ContactForm({ categories }: { categories: Option[] }) {
       </div>
 
       {/* Honeypot: hidden from people and assistive tech; bots tend to fill it. */}
-      <div aria-hidden className="absolute -start-[10000px] h-px w-px overflow-hidden">
+      <div aria-hidden className="absolute -inset-s-[10000px] h-px w-px overflow-hidden">
         <label htmlFor="contact-website">Website</label>
         <input id="contact-website" type="text" tabIndex={-1} autoComplete="off" {...register("website")} />
       </div>

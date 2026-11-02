@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { FormSection, TextInput } from "@/components/admin/fields";
 import { useAction } from "@/components/admin/use-action";
 import { useFieldError } from "@/components/admin/use-field-error";

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { ROLES } from "@/lib/db/schema/auth";
 import { emailSchema } from "./schemas";
 

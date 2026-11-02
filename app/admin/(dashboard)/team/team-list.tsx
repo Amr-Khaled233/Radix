@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { TextInput } from "@/components/admin/fields";
 import { CompletenessBadge, type Completeness } from "@/components/admin/locale-tabs";
 import { MediaThumb } from "@/components/admin/media/media-thumb";

@@ -4,7 +4,7 @@ import { Plus, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
-import { StatusBadge } from "@/components/admin/empty-state";
+import { StatusBadge } from "@/components/admin/status-badge";
 import { SortableList } from "@/components/admin/sortable-list";
 import { uiIcon } from "@/components/admin/ui-icon";
 import { useAction } from "@/components/admin/use-action";

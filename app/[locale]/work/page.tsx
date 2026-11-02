@@ -30,7 +30,8 @@ async function WorkGrid({ searchParams }: { searchParams: PageProps<"/[locale]/w
   const shown = active ? projects.filter((p) => p.categoryIds.includes(active.id)) : projects;
 
   return (
-    <>
+    // Same minimum height as the Suspense fallback, so the footer doesn't jump when this streams in.
+    <div className="min-h-96">
       {projects.length && categories.length ? (
         <nav aria-label={tW("filter")} className="border-line flex flex-wrap gap-x-fib-21 gap-y-2 border-b pb-fib-13">
           {[
@@ -72,7 +73,7 @@ async function WorkGrid({ searchParams }: { searchParams: PageProps<"/[locale]/w
           {projects.length ? tW("emptyFiltered") : tW("empty")}
         </p>
       )}
-    </>
+    </div>
   );
 }
 

@@ -1,12 +1,12 @@
 "use server";
 
-import { eq } from "drizzle-orm";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { logAudit } from "@/lib/audit";
 import { ActionFailure, adminAction } from "@/lib/admin/action";
 import { assertCan } from "@/lib/auth/permissions";
 import { db } from "@/lib/db/client";
 import { frameSequences } from "@/lib/db/schema";
+import { isOwnUploadUrl } from "@/lib/media/storage";
 import { heroConfigSchema, type HeroConfig } from "@/lib/settings/schemas";
 import { readSetting, writeSetting } from "@/lib/settings/store";
 
@@ -43,16 +43,19 @@ export async function revertHero() {
   });
 }
 
-const sequenceSchema = z.object({
-  sourceMediaId: z.uuid(),
-  variant: z.enum(["desktop", "mobile"]),
-  basePath: z.string().regex(/^hero\/frames\/[a-z0-9-]+\/$/),
-  frameCount: z.number().int().min(2).max(1200),
-  fps: z.number().int().min(12).max(30),
-  width: z.number().int().min(320).max(1920),
-  height: z.number().int().min(180).max(3840),
-  baseUrl: z.string().max(2048),
-});
+const sequenceSchema = z
+  .object({
+    sourceMediaId: z.uuid(),
+    variant: z.enum(["desktop", "mobile"]),
+    basePath: z.string().regex(/^hero\/frames\/[a-z0-9-]+\/$/),
+    frameCount: z.number().int().min(2).max(1200),
+    fps: z.number().int().min(12).max(30),
+    width: z.number().int().min(320).max(1920),
+    height: z.number().int().min(180).max(3840),
+    baseUrl: z.string().max(2048),
+  })
+  // The URL prefix must be this site's own storage and point at the declared folder.
+  .refine((d) => isOwnUploadUrl(d.baseUrl) && d.baseUrl.endsWith(d.basePath), { path: ["baseUrl"] });
 
 /** Records a frame sequence after the browser uploaded all its frames. */
 export async function registerFrameSequence(input: z.input<typeof sequenceSchema>) {
@@ -73,12 +76,5 @@ export async function registerFrameSequence(input: z.input<typeof sequenceSchema
       summary: { frames: data.frameCount },
     });
     return created;
-  });
-}
-
-export async function getFrameSequence(id: string) {
-  return adminAction(async (actor) => {
-    assertCan(actor, "view", "pages");
-    return (await db.query.frameSequences.findFirst({ where: eq(frameSequences.id, z.uuid().parse(id)) })) ?? null;
   });
 }

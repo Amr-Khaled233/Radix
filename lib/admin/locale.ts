@@ -16,3 +16,14 @@ export const getAdminLocale = cache(async (): Promise<Locale> => {
   const value = cookieValue ?? (await getAdminUser())?.preferredLocale;
   return value === "ar" ? "ar" : "en";
 });
+
+/** Remembers the dashboard language in this browser for a year. */
+export async function setAdminLocaleCookie(locale: Locale) {
+  (await cookies()).set(ADMIN_LOCALE_COOKIE, locale, {
+    path: "/admin",
+    maxAge: 60 * 60 * 24 * 365,
+    sameSite: "lax",
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+  });
+}

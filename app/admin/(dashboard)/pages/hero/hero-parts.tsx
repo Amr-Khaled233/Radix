@@ -65,7 +65,7 @@ export function FocalPicker({
         <img src={image.url} alt="" className="block w-full" />
         <span
           aria-hidden
-          className="bg-accent absolute size-3 -translate-x-1/2 -translate-y-1/2 outline-2 outline-[var(--palette-white)]"
+          className="bg-accent absolute size-3 -translate-x-1/2 -translate-y-1/2 outline-2 outline-(--palette-white)"
           style={{ left: `${value.x * 100}%`, top: `${value.y * 100}%` }}
         />
       </button>

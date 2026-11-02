@@ -61,7 +61,7 @@ export function HeroBeats({
           <div
             key={beat.id}
             className={cn(
-              "absolute inset-0 flex p-[var(--gutter)]",
+              "absolute inset-0 flex p-(--gutter)",
               INLINE[beat.position.inline],
               BLOCK[beat.position.block],
               // Clear the scroll cue and skip link (bottom-fib-34, ~56px tall).
@@ -75,8 +75,8 @@ export function HeroBeats({
               style={style}
               className={cn(
                 STYLE[beat.style],
-                "text-[var(--palette-ivory)] will-change-[opacity,transform]",
-                beat.style === "label" && "text-[var(--palette-lavender)]",
+                "text-(--palette-ivory) will-change-[opacity,transform]",
+                beat.style === "label" && "text-(--palette-lavender)",
                 compact && beat.style === "display" && "text-[clamp(1.25rem,4cqw,3rem)]",
                 compact && beat.style === "h2" && "text-[clamp(1rem,3cqw,2rem)]",
                 compact && beat.style === "body" && "text-[clamp(0.7rem,1.6cqw,1rem)]",

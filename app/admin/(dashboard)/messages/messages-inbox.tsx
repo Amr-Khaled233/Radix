@@ -4,7 +4,7 @@ import { Mail } from "lucide-react";
 import { useFormatter, useLocale, useTranslations } from "next-intl";
 import { useState } from "react";
 import { DataTable, type AdminColumn } from "@/components/admin/data-table";
-import { StatusBadge } from "@/components/admin/empty-state";
+import { StatusBadge } from "@/components/admin/status-badge";
 import { uiIcon } from "@/components/admin/ui-icon";
 import { useAction } from "@/components/admin/use-action";
 import { useSyncedState } from "@/components/admin/use-synced-state";

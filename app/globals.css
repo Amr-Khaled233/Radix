@@ -300,6 +300,15 @@
     transform: none;
   }
 }
+/* The page headline is the LCP element: it moves but is never hidden, so it paints at once. */
+@keyframes lift-in {
+  from {
+    transform: translateY(24px);
+  }
+  to {
+    transform: none;
+  }
+}
 @keyframes grow-down {
   from {
     transform: scaleY(0);
@@ -343,6 +352,9 @@
 }
 [data-revealed] .reveal-rise {
   animation: rise-in var(--duration-reveal) var(--ease-brand) 200ms both;
+}
+[data-revealed] .reveal-lift {
+  animation: lift-in var(--duration-reveal) var(--ease-brand) both;
 }
 [data-revealed] .reveal-core {
   animation: grow-down 400ms var(--ease-brand) calc(500ms + var(--stagger, 0ms)) both;

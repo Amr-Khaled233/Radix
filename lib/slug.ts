@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@/lib/zod";
 
 /** One shared Latin slug per item across both locales (spec §9). */
 export const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;

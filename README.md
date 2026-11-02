@@ -41,6 +41,7 @@ In development, emails (invites, password resets) are printed to the terminal in
 | `pnpm test` | Unit tests (Vitest) |
 | `pnpm test:e2e` | End-to-end tests (Playwright). Starts its own in-memory database and production build on port 3999. First run: `pnpm exec playwright install chromium` |
 | `node scripts/e2e/screenshots.mjs http://localhost:3000` | Review screenshots of every page (EN/AR × light/dark × mobile/desktop) into `.data/screenshots` |
+| `node scripts/qa/security.mjs` · `node scripts/qa/responsive.mjs` | Black-box security checks (headers, auth on every endpoint, open redirect, path traversal, rate limits) and horizontal-overflow checks at 320–1920 px. Run against the e2e server: `node scripts/e2e/server.mjs` in another terminal |
 | `pnpm db:generate` | New migration after a schema change in `lib/db/schema` |
 | `pnpm db:studio` | Browse the database |
 | `pnpm brand:generate` | Rebuild the logo/icon components from `public/brand` |

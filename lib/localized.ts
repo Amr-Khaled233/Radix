@@ -1,5 +1,5 @@
 /** Localized field types, schemas and helpers (safe for client and server). */
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import type { Locale } from "@/lib/i18n/routing";
 
 /** Tiptap/ProseMirror document JSON (rendered to sanitized HTML on the server). */

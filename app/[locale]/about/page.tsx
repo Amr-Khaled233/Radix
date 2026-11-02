@@ -53,7 +53,7 @@ export default async function AboutPage() {
         <div className="container-site grid gap-fib-55 py-fib-89 lg:grid-cols-12">
           <div className="lg:col-span-6">
             <p className="type-label text-label">{t(about.meaning.label, locale)}</p>
-            <p className="type-display reveal-rise mt-fib-21" lang="en" dir="ltr">
+            <p className="type-display reveal-lift mt-fib-21" lang="en" dir="ltr">
               {about.meaning.word.en || t(about.meaning.word, locale)}
             </p>
             {locale === "ar" && about.meaning.word.ar ? (

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@/lib/zod";
 
 /** Contact form (shared by the browser form and the Server Action). Messages are keys under site.contact.errors. */
 export const contactSchema = z.object({

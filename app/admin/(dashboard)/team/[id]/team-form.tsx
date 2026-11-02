@@ -79,7 +79,7 @@ export function TeamForm({
 
   return (
     <form onSubmit={submit} noValidate className="space-y-6">
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
         <div className="space-y-6">
           <FormSection title={t("team.profile")}>
             <LocaleTabs
@@ -141,7 +141,7 @@ export function TeamForm({
             <div className="space-y-2">
               <p className="text-foreground text-sm font-semibold">{t("team.links")}</p>
               {links.fields.map((field, index) => (
-                <div key={field.id} className="grid items-start gap-2 sm:grid-cols-[160px_1fr_auto]">
+                <div key={field.id} className="grid grid-cols-1 items-start gap-2 sm:grid-cols-[160px_1fr_auto]">
                   <Controller
                     control={control}
                     name={`links.${index}.type`}

@@ -4,7 +4,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 import { Controller, useFieldArray, useForm, useWatch } from "react-hook-form";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { FormSection, TextArea, TextInput, Toggle } from "@/components/admin/fields";
 import { LocaleTabs } from "@/components/admin/locale-tabs";
 import { MediaPicker } from "@/components/admin/media/media-picker";
@@ -82,7 +82,7 @@ export function SettingsForm({ initial, ogImage }: { initial: Initial; ogImage: 
         <div className="space-y-2">
           <p className="text-foreground text-sm font-semibold">{t("settings.socials")}</p>
           {socials.fields.map((field, index) => (
-            <div key={field.id} className="grid gap-2 sm:grid-cols-[160px_1fr_auto]">
+            <div key={field.id} className="grid grid-cols-1 gap-2 sm:grid-cols-[160px_1fr_auto]">
               <Controller
                 control={control}
                 name={`general.socials.${index}.type`}

@@ -3,7 +3,7 @@
 import { del } from "@vercel/blob";
 import { unlink } from "node:fs/promises";
 import { eq } from "drizzle-orm";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { logAudit } from "@/lib/audit";
 import { ActionFailure, adminAction, refreshTags } from "@/lib/admin/action";
 import { mediaUsage } from "@/lib/admin/media";
@@ -12,11 +12,11 @@ import { TAGS } from "@/lib/cache/tags";
 import { db } from "@/lib/db/client";
 import { localizedSchema } from "@/lib/db/localized";
 import { media } from "@/lib/db/schema";
-import { isOwnMediaUrl, kindOf, LOCAL_MEDIA_PREFIX, MAX_IMAGE_BYTES, MAX_VIDEO_BYTES } from "@/lib/media/config";
-import { localFilePath } from "@/lib/media/storage";
+import { kindOf, LOCAL_MEDIA_PREFIX, MAX_IMAGE_BYTES, MAX_VIDEO_BYTES } from "@/lib/media/config";
+import { isOwnUploadUrl, localFilePath } from "@/lib/media/storage";
 
 const registerSchema = z.object({
-  url: z.string().refine(isOwnMediaUrl),
+  url: z.string().refine(isOwnUploadUrl),
   pathname: z.string().min(1).max(512),
   contentType: z.string(),
   size: z.number().int().positive(),

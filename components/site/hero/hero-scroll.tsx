@@ -221,7 +221,7 @@ export function HeroScroll({ config, media, frames, locale, poster, labels, afte
       <div
         ref={stage}
         className={cn(
-          "relative overflow-hidden bg-[var(--palette-aubergine)]",
+          "relative overflow-hidden bg-(--palette-aubergine)",
           // Sits below the fixed header (64 px mobile, 72 px once compact on desktop).
           isStatic
             ? "min-h-[calc(100svh-4rem)] nav:min-h-[calc(100svh-120px)]"
@@ -268,7 +268,7 @@ export function HeroScroll({ config, media, frames, locale, poster, labels, afte
 
         <div
           aria-hidden
-          className="absolute inset-0 bg-[var(--palette-aubergine)]"
+          className="absolute inset-0 bg-(--palette-aubergine)"
           style={{ opacity: config.overlayOpacity / 100 }}
         />
 
@@ -281,10 +281,10 @@ export function HeroScroll({ config, media, frames, locale, poster, labels, afte
                 <p
                   key={b.id}
                   className={cn(
-                    b.style === "label" && "type-label text-[var(--palette-lavender)]",
-                    b.style === "display" && "type-display text-[var(--palette-ivory)]",
-                    b.style === "h2" && "type-h2 text-[var(--palette-ivory)]",
-                    b.style === "body" && "type-body-lg max-w-xl text-[var(--palette-ivory)]",
+                    b.style === "label" && "type-label text-(--palette-lavender)",
+                    b.style === "display" && "type-display text-(--palette-ivory)",
+                    b.style === "h2" && "type-h2 text-(--palette-ivory)",
+                    b.style === "body" && "type-body-lg max-w-xl text-(--palette-ivory)",
                   )}
                 >
                   {b.text[locale] || b.text.en}
@@ -305,7 +305,7 @@ export function HeroScroll({ config, media, frames, locale, poster, labels, afte
 
         {!isStatic && config.toggles.scrollHint ? (
           <div ref={hintRef} aria-hidden className="absolute inset-x-0 bottom-fib-34 flex flex-col items-center gap-2">
-            <span className="type-label text-[var(--palette-lavender)]">{labels.scroll}</span>
+            <span className="type-label text-(--palette-lavender)">{labels.scroll}</span>
             <span className="bg-accent h-fib-34 w-px" />
           </div>
         ) : null}
@@ -313,7 +313,7 @@ export function HeroScroll({ config, media, frames, locale, poster, labels, afte
         {!isStatic && config.toggles.skipLink ? (
           <a
             href={`#${afterId}`}
-            className="type-label absolute inset-e-[var(--gutter)] bottom-fib-34 text-[var(--palette-lavender)] underline-offset-4 hover:text-[var(--palette-ivory)] hover:underline"
+            className="type-label absolute inset-e-(--gutter) bottom-fib-34 text-(--palette-lavender) underline-offset-4 hover:text-(--palette-ivory) hover:underline"
           >
             {labels.skip}
           </a>
@@ -323,7 +323,7 @@ export function HeroScroll({ config, media, frames, locale, poster, labels, afte
           <div
             ref={lineRef}
             aria-hidden
-            className="absolute inset-x-0 bottom-0 h-0.5 bg-[var(--palette-ivory)] ltr:origin-left rtl:origin-right"
+            className="absolute inset-x-0 bottom-0 h-0.5 bg-(--palette-ivory) ltr:origin-left rtl:origin-right"
             style={{ transform: isStatic ? undefined : "scaleX(0)" }}
           />
         ) : null}

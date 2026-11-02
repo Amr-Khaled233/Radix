@@ -86,7 +86,7 @@ export const HeroPreview = forwardRef<PreviewHandle, HeroPreviewProps>(function 
         dir={locale === "ar" ? "rtl" : "ltr"}
         lang={locale}
         className={cn(
-          "relative mx-auto overflow-hidden bg-[var(--palette-aubergine)] [container-type:inline-size]",
+          "relative mx-auto overflow-hidden bg-(--palette-aubergine) [container-type:inline-size]",
           device === "desktop" ? "aspect-video w-full" : "aspect-[9/19.5] w-[260px]",
         )}
         style={{ ["--gutter" as string]: device === "desktop" ? "6%" : "8%" }}
@@ -123,23 +123,20 @@ export const HeroPreview = forwardRef<PreviewHandle, HeroPreviewProps>(function 
             style={{ objectPosition }}
           />
         ) : (
-          <p className="absolute inset-0 flex items-center justify-center p-6 text-center text-sm text-[var(--palette-lavender)]">
+          <p className="absolute inset-0 flex items-center justify-center p-6 text-center text-sm text-(--palette-lavender)">
             {t("previewEmpty")}
           </p>
         )}
-        <div
-          className="absolute inset-0 bg-[var(--palette-aubergine)]"
-          style={{ opacity: config.overlayOpacity / 100 }}
-        />
+        <div className="absolute inset-0 bg-(--palette-aubergine)" style={{ opacity: config.overlayOpacity / 100 }} />
         <HeroBeats beats={config.beats} locale={locale} progress={config.mode === "static" ? null : progress} compact />
         {config.toggles.exitSurfaceLine && progress > 92 ? (
           <div
-            className="absolute inset-x-0 bottom-[8%] h-0.5 bg-[var(--palette-ivory)]"
+            className="absolute inset-x-0 bottom-[8%] h-0.5 bg-(--palette-ivory)"
             style={{ transform: `scaleX(${(progress - 92) / 8})`, transformOrigin: locale === "ar" ? "right" : "left" }}
           />
         ) : null}
         {config.toggles.scrollHint && progress < 8 ? (
-          <span className="type-label absolute bottom-[4%] left-1/2 -translate-x-1/2 text-[var(--palette-lavender)]">
+          <span className="type-label absolute bottom-[4%] left-1/2 -translate-x-1/2 text-(--palette-lavender)">
             SCROLL
           </span>
         ) : null}

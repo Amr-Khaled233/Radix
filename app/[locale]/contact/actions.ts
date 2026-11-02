@@ -1,8 +1,8 @@
 "use server";
 
-import { inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import { headers } from "next/headers";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { db } from "@/lib/db/client";
 import { categories, contactSubmissions } from "@/lib/db/schema";
 import { sendContactNotification } from "@/lib/email/send";
@@ -40,7 +40,7 @@ export async function submitContact(input: ContactInput): Promise<ContactResult>
       ? await db
           .select({ id: categories.id, name: categories.name })
           .from(categories)
-          .where(inArray(categories.id, data.categoryIds))
+          .where(and(inArray(categories.id, data.categoryIds), eq(categories.isVisible, true)))
       : [];
 
     await db.insert(contactSubmissions).values({

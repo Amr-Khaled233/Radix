@@ -1,7 +1,7 @@
 "use server";
 
 import { and, eq, max } from "drizzle-orm";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { logAudit } from "@/lib/audit";
 import { ActionFailure, adminAction, refreshTags } from "@/lib/admin/action";
 import { categoryCreateSchema, categoryFormSchema, serviceFormSchema } from "@/lib/admin/schemas";

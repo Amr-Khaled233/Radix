@@ -53,7 +53,9 @@ export function SectionHeading({
       {heading ? (
         <Tag
           className={cn(
-            "text-foreground reveal-rise mt-fib-13 max-w-4xl text-balance",
+            "text-foreground mt-fib-13 max-w-4xl text-balance",
+            // A page's h1 is its LCP element: it lifts in without being hidden first.
+            Tag === "h1" ? "reveal-lift" : "reveal-rise",
             size === "display" ? "type-display" : size === "h1" ? "type-h1" : "type-h2",
           )}
         >

@@ -119,7 +119,7 @@ export function Uploader({ accept = "any", onUploaded }: UploaderProps) {
           />
         </label>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-[160px_1fr]">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-[160px_1fr]">
           {preview ? (
             isImage ? (
               // eslint-disable-next-line @next/next/no-img-element

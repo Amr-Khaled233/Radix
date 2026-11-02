@@ -25,7 +25,7 @@ export function StandardHero({
     <Reveal as="section" className="container-site pt-fib-55 pb-fib-55">
       {t(copy.label, locale) ? <p className="type-label text-label reveal-rise">{t(copy.label, locale)}</p> : null}
       <div className="grid gap-fib-34 pt-fib-21 lg:grid-cols-12 lg:items-end">
-        <h1 className="type-display text-foreground reveal-rise text-balance lg:col-span-8">
+        <h1 className="type-display text-foreground reveal-lift text-balance lg:col-span-8">
           {t(copy.headline, locale)}
         </h1>
         <div className="reveal-rise space-y-fib-21 lg:col-span-4">

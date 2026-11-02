@@ -75,14 +75,6 @@ export async function getSetting<K extends SettingsKey>(key: K): Promise<Setting
   return (parsed.success ? parsed.data : schema.safeParse({}).data) as SettingsValue<K>;
 }
 
-export async function getMedia(ids: (string | null | undefined)[]) {
-  "use cache";
-  cacheLife("max");
-  cacheTag(TAGS.media);
-  if (!hasDb()) return {} as Record<string, MediaRef>;
-  return Object.fromEntries(await mediaMap(ids));
-}
-
 export async function getVisibleCategories() {
   "use cache";
   cacheLife("max");

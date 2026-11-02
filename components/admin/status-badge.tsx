@@ -1,15 +1,5 @@
 import type { ReactNode } from "react";
 
-export function EmptyState({ title, body, action }: { title: string; body?: ReactNode; action?: ReactNode }) {
-  return (
-    <div className="border-line flex flex-col items-start gap-3 border border-dashed p-8">
-      <p className="type-h4 text-foreground">{title}</p>
-      {body ? <div className="text-muted max-w-lg text-sm">{body}</div> : null}
-      {action}
-    </div>
-  );
-}
-
 const TONES = {
   neutral: "border-line text-muted",
   accent: "border-accent text-foreground",

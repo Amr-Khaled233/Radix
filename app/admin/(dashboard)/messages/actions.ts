@@ -1,7 +1,7 @@
 "use server";
 
 import { inArray } from "drizzle-orm";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { logAudit } from "@/lib/audit";
 import { adminAction } from "@/lib/admin/action";
 import { assertCan } from "@/lib/auth/permissions";

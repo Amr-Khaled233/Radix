@@ -105,7 +105,7 @@ export function ProjectForm({ project, initial, media, options, permissions }: P
 
   return (
     <form onSubmit={submit} noValidate className="space-y-6">
-      <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1fr)_380px]">
         <div className="space-y-6">
           <FormSection title={t("projects.content")}>
             <LocaleTabs completeness={status}>
@@ -233,7 +233,7 @@ export function ProjectForm({ project, initial, media, options, permissions }: P
 
           <FormSection title={t("projects.results")} description={t("projects.resultsHint")}>
             {results.fields.map((field, index) => (
-              <div key={field.id} className="grid items-start gap-2 sm:grid-cols-[120px_1fr_1fr_auto]">
+              <div key={field.id} className="grid grid-cols-1 items-start gap-2 sm:grid-cols-[120px_1fr_1fr_auto]">
                 <Input
                   placeholder={t("projects.resultValue")}
                   dir="ltr"
@@ -279,7 +279,7 @@ export function ProjectForm({ project, initial, media, options, permissions }: P
             ) : (
               <>
                 {team.fields.map((field, index) => (
-                  <div key={field.id} className="grid items-start gap-2 sm:grid-cols-[1fr_1fr_1fr_auto]">
+                  <div key={field.id} className="grid grid-cols-1 items-start gap-2 sm:grid-cols-[1fr_1fr_1fr_auto]">
                     <Controller
                       control={control}
                       name={`team.${index}.teamMemberId`}

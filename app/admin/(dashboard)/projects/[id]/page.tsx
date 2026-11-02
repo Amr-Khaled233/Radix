@@ -1,7 +1,7 @@
 import { asc, eq } from "drizzle-orm";
 import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { PageHeader } from "@/components/admin/page-header";
 import { getAdminLocale } from "@/lib/admin/locale";
 import { mediaByIds } from "@/lib/admin/media";

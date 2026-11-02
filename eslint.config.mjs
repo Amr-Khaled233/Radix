@@ -17,8 +17,14 @@ const eslintConfig = defineConfig([
           ignoreRestSiblings: true,
         },
       ],
+      // lib/zod.ts turns off Zod's JIT (CSP has no 'unsafe-eval'); type-only imports are fine.
+      "@typescript-eslint/no-restricted-imports": [
+        "error",
+        { paths: [{ name: "zod", message: "Import { z } from '@/lib/zod'.", allowTypeImports: true }] },
+      ],
     },
   },
+  { files: ["lib/zod.ts"], rules: { "@typescript-eslint/no-restricted-imports": "off" } },
   // Override default ignores of eslint-config-next.
   globalIgnores([
     // Default ignores of eslint-config-next:

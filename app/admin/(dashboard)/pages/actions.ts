@@ -1,6 +1,6 @@
 "use server";
 
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { adminAction } from "@/lib/admin/action";
 import { assertCan } from "@/lib/auth/permissions";
 import { writeSetting } from "@/lib/settings/store";

@@ -1,6 +1,6 @@
 import { draftMode } from "next/headers";
 import { redirect } from "next/navigation";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { can } from "@/lib/auth/permissions";
 import { getAdminUser } from "@/lib/auth/session";
 import { SLUG_RE } from "@/lib/slug";

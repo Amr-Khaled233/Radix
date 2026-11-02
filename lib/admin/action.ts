@@ -1,6 +1,6 @@
 import "server-only";
 import { updateTag } from "next/cache";
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { ForbiddenError } from "@/lib/auth/permissions";
 import { requireAdmin, UnauthorizedError, type AdminUser } from "@/lib/auth/session";
 import { AdminActionError } from "@/lib/auth/admins";

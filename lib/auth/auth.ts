@@ -1,7 +1,7 @@
 import "server-only";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { APIError, createAuthMiddleware, getSessionFromCtx } from "better-auth/api";
+import { APIError, createAuthMiddleware } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
 import { admin } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
@@ -9,19 +9,14 @@ import { db } from "@/lib/db/client";
 import * as schema from "@/lib/db/schema";
 import { asLocale, sendResetPasswordEmail, siteUrl } from "@/lib/email/send";
 import { ac, authRoles } from "./access";
-import { checkAdminChange, type AdminChange } from "./permissions";
-import { countActiveSuperAdmins } from "./queries";
 import { PASSWORD_MAX, PASSWORD_MIN } from "./schemas";
 
-/** Admin-plugin endpoints that must pass the account safeguards. */
-const GUARDED_ADMIN_PATHS: Record<string, (body: Record<string, unknown>) => AdminChange> = {
-  "/admin/set-role": (body) => ({ type: "setRole", role: body.role as schema.Role }),
-  "/admin/ban-user": () => ({ type: "deactivate" }),
-  "/admin/remove-user": () => ({ type: "delete" }),
-};
-
-/** Nobody can see or directly set another admin's password, and impersonation is not offered. */
-const BLOCKED_PATHS = new Set(["/admin/set-user-password", "/admin/impersonate-user", "/admin/stop-impersonating"]);
+/**
+ * The admin plugin is used for roles and for blocking deactivated accounts only.
+ * Its HTTP endpoints (/admin/*) are closed: account management goes through
+ * lib/auth/admins.ts, which enforces permissions and the last-super-admin rules.
+ */
+const isAdminPluginEndpoint = (path: string) => path.startsWith("/admin/");
 
 export const auth = betterAuth({
   appName: "RADIX",
@@ -87,34 +82,8 @@ export const auth = betterAuth({
 
   hooks: {
     before: createAuthMiddleware(async (ctx) => {
-      if (BLOCKED_PATHS.has(ctx.path)) {
+      if (isAdminPluginEndpoint(ctx.path)) {
         throw new APIError("FORBIDDEN", { message: "This action is not available." });
-      }
-      const toChange = GUARDED_ADMIN_PATHS[ctx.path];
-      if (!toChange) return;
-
-      // The session isn't on ctx.context yet in before-hooks, so resolve it here.
-      const actorId = (await getSessionFromCtx(ctx))?.user.id;
-      const body = (ctx.body ?? {}) as Record<string, unknown>;
-      const targetId = typeof body.userId === "string" ? body.userId : undefined;
-      if (!actorId || !targetId) return; // the plugin itself rejects unauthenticated/invalid calls
-
-      const target = await db.query.user.findFirst({ where: eq(schema.user.id, targetId) });
-      if (!target) return;
-      const result = checkAdminChange({
-        actorId,
-        target,
-        change: toChange(body),
-        activeSuperAdminCount: await countActiveSuperAdmins(),
-      });
-      if (!result.ok) {
-        throw new APIError("FORBIDDEN", {
-          message:
-            result.reason === "self"
-              ? "You can’t change your own account here."
-              : "The last super admin can’t be changed.",
-          code: result.reason === "self" ? "SELF_CHANGE" : "LAST_SUPER_ADMIN",
-        });
       }
     }),
   },

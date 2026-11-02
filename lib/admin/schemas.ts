@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "@/lib/zod";
 import { localizedRichSchema, localizedSchema } from "@/lib/localized";
 import { slugSchema } from "@/lib/slug";
 import { ICON_NAMES } from "@/components/brand/icon";
