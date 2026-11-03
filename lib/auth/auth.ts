@@ -46,7 +46,7 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       preferredLocale: { type: "string", required: false, defaultValue: "en", input: false },
-      preferredTheme: { type: "string", required: false, defaultValue: "system", input: false },
+      preferredTheme: { type: "string", required: false, defaultValue: "dark", input: false },
       lastLoginAt: { type: "date", required: false, input: false },
     },
   },

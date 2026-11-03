@@ -1,6 +1,8 @@
 /**
- * Brand copy transcribed from docs/brand-content.md.
- * English is final. Arabic strings are first drafts — they are seeded with
+ * Brand copy, based on docs/brand-content.md. Owner revision (Nov 2026): the
+ * third pillar is "Sites & Systems" (websites moved from Digital, AI production
+ * moved to Growth) and the Arabic was edited for natural phrasing.
+ * English is final. Arabic strings are drafts — they are seeded with
  * "Needs review" in the database (Phase 2) and edited from the dashboard.
  *
  * Until the database exists (Phase 2–4) the public layout reads from here.
@@ -13,7 +15,7 @@ export const brandCopy = {
   tagline: { en: "Where Growth Takes Root.", ar: "حيث يتجذّر النمو." },
   statement: {
     en: "Rooted in Strategy. Built for Growth.",
-    ar: "جذورنا استراتيجية، وبناؤنا للنمو.",
+    ar: "متجذّرون في الاستراتيجية، نبني من أجل النمو.",
   },
   descriptor: {
     en: "Integrated creative & digital solutions",
@@ -21,7 +23,7 @@ export const brandCopy = {
   },
   heroBody: {
     en: "We connect strategy, creativity, and technology to build the foundations for meaningful business growth.",
-    ar: "نربط الاستراتيجية والإبداع والتقنية لنبني الأسس التي يقوم عليها نموّ حقيقي للأعمال.",
+    ar: "نجمع الاستراتيجية والإبداع والتقنية لنبني الأسس التي يقوم عليها نموّ حقيقي للأعمال.",
   },
 } satisfies Record<string, LocalizedText>;
 
@@ -41,62 +43,61 @@ export const seedCategories: SeedCategory[] = [
     tagline: { en: "Build from the Core.", ar: "نبني من الجوهر." },
     services: [
       { en: "Brand strategy", ar: "استراتيجية العلامة التجارية" },
-      { en: "Naming", ar: "التسمية" },
-      { en: "Logo design for new clients", ar: "تصميم الشعارات للعملاء الجدد" },
-      { en: "Brand identity systems", ar: "أنظمة الهوية التجارية" },
+      { en: "Naming", ar: "اختيار الاسم" },
+      { en: "Logo design for new clients", ar: "تصميم الشعار للعلامات الجديدة" },
+      { en: "Brand identity systems", ar: "أنظمة الهوية" },
       { en: "Visual identity", ar: "الهوية البصرية" },
-      { en: "Brand guidelines", ar: "أدلة الهوية" },
-      { en: "Packaging", ar: "التغليف" },
+      { en: "Brand guidelines", ar: "دليل استخدام الهوية" },
+      { en: "Packaging", ar: "تصميم العبوات" },
       { en: "Brand applications", ar: "تطبيقات الهوية" },
       { en: "Art direction", ar: "الإدارة الفنية" },
-      { en: "Brand communication systems", ar: "أنظمة التواصل للعلامة التجارية" },
+      { en: "Brand communication systems", ar: "أنظمة تواصل العلامة" },
     ],
   },
   {
     slug: "digital",
     icon: "digital",
-    name: { en: "Digital", ar: "الرقمي" },
+    name: { en: "Digital", ar: "التجارب الرقمية" },
     tagline: { en: "Turn Ideas into Experiences.", ar: "نحوّل الأفكار إلى تجارب." },
     services: [
-      { en: "Website design", ar: "تصميم المواقع" },
-      { en: "Website development", ar: "تطوير المواقع" },
-      { en: "Landing pages", ar: "صفحات الهبوط" },
-      { en: "UI/UX design", ar: "تصميم الواجهات وتجربة المستخدم (UI/UX)" },
+      { en: "UI/UX design", ar: "تصميم الواجهات وتجربة المستخدم" },
       { en: "Digital product design", ar: "تصميم المنتجات الرقمية" },
-      { en: "SaaS interfaces", ar: "واجهات SaaS" },
-      { en: "Responsive experiences", ar: "تجارب متجاوبة" },
+      { en: "SaaS interfaces", ar: "واجهات منصات SaaS" },
+      { en: "Responsive experiences", ar: "تجارب تعمل على كل الشاشات" },
       { en: "Digital platforms", ar: "المنصات الرقمية" },
     ],
   },
   {
-    slug: "intelligence",
+    slug: "sites-and-systems",
     icon: "intelligence",
-    name: { en: "Intelligence", ar: "الذكاء" },
-    tagline: { en: "Make Technology Work Smarter.", ar: "نجعل التقنية تعمل بذكاء أكبر." },
+    name: { en: "Sites & Systems", ar: "المواقع والأنظمة" },
+    tagline: { en: "Build What Runs the Business.", ar: "نبني ما يُدير أعمالك." },
     services: [
-      { en: "AI-powered video production", ar: "إنتاج الفيديو بالذكاء الاصطناعي" },
-      { en: "AI-assisted creative production", ar: "الإنتاج الإبداعي بمساعدة الذكاء الاصطناعي" },
-      { en: "Intelligent digital systems", ar: "الأنظمة الرقمية الذكية" },
+      { en: "Website design", ar: "تصميم المواقع" },
+      { en: "Website development", ar: "تطوير المواقع" },
+      { en: "Landing pages", ar: "صفحات الهبوط" },
+      { en: "SaaS solutions", ar: "حلول SaaS" },
+      { en: "Digital tools and systems", ar: "أدوات وأنظمة رقمية مخصّصة" },
       { en: "Workflow automation", ar: "أتمتة سير العمل" },
       { en: "AI integration", ar: "دمج الذكاء الاصطناعي" },
-      { en: "SaaS solutions", ar: "حلول SaaS" },
       { en: "Business process improvement", ar: "تحسين العمليات التشغيلية" },
-      { en: "Digital tools and systems", ar: "الأدوات والأنظمة الرقمية" },
     ],
   },
   {
     slug: "growth",
     icon: "growth",
     name: { en: "Growth", ar: "النموّ" },
-    tagline: { en: "Grow with Purpose.", ar: "نموّ له هدف." },
+    tagline: { en: "Grow with Purpose.", ar: "ننمو بهدف." },
     services: [
-      { en: "Social media management", ar: "إدارة وسائل التواصل الاجتماعي" },
+      { en: "Social media management", ar: "إدارة حسابات التواصل الاجتماعي" },
       { en: "Content strategy", ar: "استراتيجية المحتوى" },
       { en: "Social media design", ar: "تصميم محتوى التواصل الاجتماعي" },
       { en: "Digital campaigns", ar: "الحملات الرقمية" },
       { en: "Creative production", ar: "الإنتاج الإبداعي" },
-      { en: "Content development", ar: "تطوير المحتوى" },
-      { en: "Brand communication", ar: "تواصل العلامة التجارية" },
+      { en: "AI-powered video production", ar: "إنتاج الفيديو بالذكاء الاصطناعي" },
+      { en: "AI-assisted creative production", ar: "الإنتاج الإبداعي بمساعدة الذكاء الاصطناعي" },
+      { en: "Content development", ar: "صناعة المحتوى" },
+      { en: "Brand communication", ar: "تواصل العلامة" },
       { en: "Digital growth initiatives", ar: "مبادرات النمو الرقمي" },
     ],
   },

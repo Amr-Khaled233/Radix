@@ -12,7 +12,7 @@ const profileSchema = z.object({
   name: z.string().trim().min(1, "required").max(120),
   image: z.string().refine(isOwnUploadUrl).nullable(),
   preferredLocale: z.enum(["en", "ar"]),
-  preferredTheme: z.enum(["system", "light", "dark"]),
+  preferredTheme: z.enum(["light", "dark"]),
 });
 
 /** Updates the signed-in admin's own profile (no permission beyond being signed in). */

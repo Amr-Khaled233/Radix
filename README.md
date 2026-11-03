@@ -2,7 +2,7 @@
 
 Marketing website and content dashboard for RADIX. Bilingual (English / Arabic with RTL), light and dark themes, multiple admins with roles, and a scroll-driven hero animation controlled from the dashboard.
 
-- **Stack:** Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, next-intl, Drizzle ORM + Postgres (Neon), Better Auth, Vercel Blob, Resend + React Email.
+- **Stack:** Next.js 16 (App Router), React 19, TypeScript, Tailwind CSS v4, next-intl, Drizzle ORM + Postgres (Neon), Better Auth, Vercel Blob, Nodemailer (SMTP) + React Email.
 - **Specs:** [`docs/BUILD_SPEC.md`](docs/BUILD_SPEC.md) (functionality), [`docs/brand-guidelines.pdf`](docs/brand-guidelines.pdf) (visual), [`docs/brand-content.md`](docs/brand-content.md) (copy), [`docs/PLAN.md`](docs/PLAN.md) (architecture).
 
 ## Local development
@@ -68,12 +68,12 @@ ffmpeg -i input-portrait.mov -an -vf "scale=1080:-2,fps=30" -c:v libx264 -pix_fm
 ## Deploying on Vercel
 
 1. **GitHub:** push this repository to GitHub.
-2. **Vercel project:** in [vercel.com](https://vercel.com) choose **Add New → Project** and import the repository. Vercel reads [`vercel.json`](vercel.json); its build command runs the migrations and the (idempotent) brand-content seed before `next build`. A commercial site needs the **Pro** plan.
-3. **Database:** Project → **Storage** → **Create Database** → **Neon** (Marketplace) → connect it to all environments. This adds `DATABASE_URL` and `DATABASE_URL_UNPOOLED`. Optional: enable Neon branching for preview deployments so previews get their own database.
-4. **File storage:** Project → **Storage** → **Create** → **Blob** → connect it. This adds `BLOB_READ_WRITE_TOKEN`.
-5. **Email:** at [resend.com](https://resend.com) add and verify your sending domain (DNS records), create an API key, and add `RESEND_API_KEY` and `EMAIL_FROM` (for example `RADIX <no-reply@your-domain>`) under Project → Settings → Environment Variables.
+2. **Vercel project:** in [vercel.com](https://vercel.com) choose **Add New → Project** and import the repository. Vercel reads [`vercel.json`](vercel.json); its build command runs the migrations and the (idempotent) brand-content seed before `next build`. Works on the free **Hobby** plan (check its current limits on vercel.com/pricing; Vercel’s terms reserve Hobby for non-commercial use, so move to Pro if that applies).
+3. **Database:** Project → **Storage** → **Create Database** → **Neon** (Marketplace, free plan) → region **Frankfurt** → connect it to all environments. Then Settings → Functions → set the function region to **Frankfurt (fra1)** too. This adds `DATABASE_URL` and `DATABASE_URL_UNPOOLED`. Optional: enable Neon branching for preview deployments so previews get their own database.
+4. **File storage:** Project → **Storage** → **Create** → **Blob** (free tier) → connect it. This adds `BLOB_READ_WRITE_TOKEN`.
+5. **Email (SMTP + app password, no domain needed):** on the Gmail account that will send the emails, turn on **2-Step Verification**, then open https://myaccount.google.com/apppasswords, create an app password named `RADIX` and copy the 16 characters. Add `SMTP_USER` (the Gmail address) and `SMTP_PASSWORD` (the app password) under Project → Settings → Environment Variables. Emails are sent as `RADIX <SMTP_USER>`; `EMAIL_FROM`, `SMTP_HOST` and `SMTP_PORT` are optional (defaults: Gmail, port 465). Gmail allows about 500 emails a day, plenty for invites, password resets and contact notifications.
 6. **Remaining variables** (Settings → Environment Variables, Production and Preview):
-   - `BETTER_AUTH_SECRET`: a random string; generate one with `openssl rand -base64 32`.
+   - `BETTER_AUTH_SECRET`: a random string; generate one with `node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"`.
    - `BETTER_AUTH_URL` and `NEXT_PUBLIC_SITE_URL`: the site URL, for example `https://radix-xyz.vercel.app` (change them to the custom domain in step 9).
    - `SITE_TIME_ZONE`: for example `Africa/Cairo`.
    - Do **not** set `EMAIL_TRANSPORT` or `MEDIA_STORAGE` on Vercel; they are local-only.
@@ -87,7 +87,7 @@ ffmpeg -i input-portrait.mov -an -vf "scale=1080:-2,fps=30" -c:v libx264 -pix_fm
    ```
    (Variables loaded this way take precedence over `.env.local`, so the seed writes to the production database.)
    Sign in at `/admin`, change the password from **Profile**, then delete `.env.production.local`. Invite the other admins from **Admins**.
-9. **Custom domain:** Project → Settings → **Domains** → add the domain and follow the DNS instructions. Then update `BETTER_AUTH_URL` and `NEXT_PUBLIC_SITE_URL` to `https://your-domain` and redeploy.
+9. **Custom domain (optional, any time later):** without one the site runs on its `*.vercel.app` address. Project → Settings → **Domains** → add the domain and follow the DNS instructions. Then update `BETTER_AUTH_URL` and `NEXT_PUBLIC_SITE_URL` to `https://your-domain` and redeploy.
 10. **In the dashboard:** Settings → add the contact-notification email addresses, contact details and social links; review the Arabic texts flagged "Needs review".
 11. **Smoke test:** sign in; forgot password → email → reset; create a category; publish a project; send the contact form; check both languages and both themes; test the hero on a real iPhone (Safari) and Android phone (Chrome).
 

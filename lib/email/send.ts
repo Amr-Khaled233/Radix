@@ -1,7 +1,7 @@
 import "server-only";
 import { render } from "@react-email/render";
 import { createTranslator } from "next-intl";
-import { Resend } from "resend";
+import nodemailer, { type Transporter } from "nodemailer";
 import { ActionEmail } from "@/emails/action-email";
 import type { Role } from "@/lib/db/schema/auth";
 import type { Locale } from "@/lib/i18n/routing";
@@ -29,12 +29,34 @@ type Outgoing = { to: string | string[]; subject: string; html: string; text: st
 /** Last outgoing email per recipient — read by integration tests only. */
 export const sentEmails: (Outgoing & { url?: string })[] = [];
 
+/**
+ * SMTP with an app password (Gmail by default: smtp.gmail.com:465). The sender
+ * defaults to "RADIX <SMTP_USER>", so no custom domain is needed.
+ */
+let transporter: Transporter | null = null;
+function smtp() {
+  const user = process.env.SMTP_USER;
+  const pass = process.env.SMTP_PASSWORD?.replace(/\s+/g, ""); // Google shows app passwords in groups of four
+  if (!user || !pass) return null;
+  const port = Number(process.env.SMTP_PORT || 465);
+  transporter ??= nodemailer.createTransport({
+    host: process.env.SMTP_HOST || "smtp.gmail.com",
+    port,
+    secure: port === 465,
+    auth: { user, pass },
+  });
+  return { transporter, from: process.env.EMAIL_FROM || `RADIX <${user}>` };
+}
+
+/** Header values never carry line breaks (header injection). */
+const oneLine = (value: string) => value.replace(/[\r\n]+/g, " ").trim();
+
 async function deliver(message: Outgoing, url?: string) {
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
+  const mailer = smtp();
+  if (!mailer) {
     // EMAIL_TRANSPORT=console lets a local production build log links too; never set it on Vercel.
     if (process.env.NODE_ENV === "production" && process.env.EMAIL_TRANSPORT !== "console") {
-      throw new Error("RESEND_API_KEY is not set — cannot send email in production.");
+      throw new Error("SMTP_USER / SMTP_PASSWORD are not set — cannot send email in production.");
     }
     const to = [message.to].flat().join(", ");
     sentEmails.push({ ...message, to, url });
@@ -46,16 +68,14 @@ async function deliver(message: Outgoing, url?: string) {
     console.info(`\n[email] to=${to}\n[email] subject=${message.subject}\n[email] link=${url ?? "-"}\n`);
     return;
   }
-  const resend = new Resend(apiKey);
-  const { error } = await resend.emails.send({
-    from: process.env.EMAIL_FROM ?? "RADIX <onboarding@resend.dev>",
+  await mailer.transporter.sendMail({
+    from: mailer.from,
     to: message.to,
-    subject: message.subject,
+    subject: oneLine(message.subject),
     html: message.html,
     text: message.text,
-    ...(message.replyTo ? { replyTo: message.replyTo } : {}),
+    ...(message.replyTo ? { replyTo: oneLine(message.replyTo) } : {}),
   });
-  if (error) throw new Error(`Email delivery failed: ${error.message}`);
 }
 
 async function sendActionEmail(params: {

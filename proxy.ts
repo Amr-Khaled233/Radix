@@ -1,6 +1,6 @@
 import { getSessionCookie } from "better-auth/cookies";
 import createMiddleware from "next-intl/middleware";
-import { NextResponse, type NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { routing } from "./lib/i18n/routing";
 
 const intl = createMiddleware(routing);
@@ -22,7 +22,11 @@ export default function proxy(request: NextRequest) {
     return response;
   }
 
-  return intl(request);
+  // First visits open in the default language (English), not the browser's; a
+  // visitor's own choice is still remembered by the NEXT_LOCALE cookie.
+  const headers = new Headers(request.headers);
+  headers.delete("accept-language");
+  return intl(new NextRequest(request, { headers }));
 }
 
 export const config = {

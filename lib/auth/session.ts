@@ -32,7 +32,7 @@ export async function getAdminUser(): Promise<AdminUser | null> {
     email: u.email,
     image: u.image ?? null,
     preferredLocale: u.preferredLocale ?? "en",
-    preferredTheme: u.preferredTheme ?? "system",
+    preferredTheme: u.preferredTheme ?? "dark",
   };
 }
 

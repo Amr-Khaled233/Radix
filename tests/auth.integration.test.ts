@@ -12,7 +12,8 @@ process.env.DATABASE_URL = `postgres://postgres:postgres@127.0.0.1:${PORT}/postg
 process.env.BETTER_AUTH_SECRET = "test-secret-test-secret-test-secret-1234";
 process.env.BETTER_AUTH_URL = "http://localhost:3000";
 process.env.NEXT_PUBLIC_SITE_URL = "http://localhost:3000";
-delete process.env.RESEND_API_KEY;
+delete process.env.SMTP_USER;
+delete process.env.SMTP_PASSWORD;
 
 let server: PGLiteSocketServer;
 let pg: PGlite;

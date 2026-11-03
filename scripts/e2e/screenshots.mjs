@@ -12,8 +12,9 @@ mkdirSync(out, { recursive: true });
 
 const browser = await chromium.launch();
 for (const [device, viewport] of Object.entries(viewports)) {
-  for (const colorScheme of ["light", "dark"]) {
-    const context = await browser.newContext({ viewport, colorScheme, deviceScaleFactor: 1 });
+  for (const theme of ["light", "dark"]) {
+    const context = await browser.newContext({ viewport, deviceScaleFactor: 1 });
+    await context.addInitScript((value) => localStorage.setItem("radix-theme", value), theme);
     const page = await context.newPage();
     for (const locale of ["en", "ar"]) {
       for (const path of pages) {
@@ -27,7 +28,7 @@ for (const [device, viewport] of Object.entries(viewports)) {
           scrollTo(0, 0);
           await new Promise((r) => setTimeout(r, 400));
         });
-        const name = `${locale}-${path.replaceAll("/", "_").slice(1) || "home"}-${colorScheme}-${device}.png`;
+        const name = `${locale}-${path.replaceAll("/", "_").slice(1) || "home"}-${theme}-${device}.png`;
         await page.screenshot({ path: `${out}/${name}`, fullPage: true });
         console.log(name);
       }

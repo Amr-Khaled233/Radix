@@ -27,7 +27,14 @@ export default async function AdminLayout({ children }: LayoutProps<"/admin">) {
   const messages = await getMessages({ locale });
 
   return (
-    <html lang={locale} dir={directionOf(locale)} className={fontVariables} suppressHydrationWarning>
+    <html
+      lang={locale}
+      dir={directionOf(locale)}
+      className={fontVariables}
+      // Default theme before the theme script runs (it applies a saved choice).
+      data-theme="dark"
+      suppressHydrationWarning
+    >
       <body className="min-h-dvh">
         <NextIntlClientProvider locale={locale} messages={messages} timeZone={process.env.SITE_TIME_ZONE || "UTC"}>
           <ThemeProvider>

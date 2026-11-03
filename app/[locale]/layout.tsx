@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import { hasLocale, NextIntlClientProvider } from "next-intl";
 import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -32,20 +32,20 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F6F3EE" },
-    { media: "(prefers-color-scheme: dark)", color: "#1B1028" },
-  ],
-};
-
 export default async function LocaleLayout({ children }: LayoutProps<"/[locale]">) {
   const locale = await getLocale();
   if (!hasLocale(routing.locales, locale)) notFound();
   const t = await getTranslations("a11y");
 
   return (
-    <html lang={locale} dir={directionOf(locale)} className={fontVariables} suppressHydrationWarning>
+    <html
+      lang={locale}
+      dir={directionOf(locale)}
+      className={fontVariables}
+      // Default theme before the theme script runs (it applies a saved choice).
+      data-theme="dark"
+      suppressHydrationWarning
+    >
       <head>
         <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
       </head>

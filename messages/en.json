@@ -23,11 +23,10 @@
     "menu": "Menu"
   },
   "theme": {
-    "label": "Colour theme",
-    "system": "System",
+    "label": "Theme",
     "light": "Light",
     "dark": "Dark",
-    "current": "Colour theme: {theme}. Activate to change."
+    "switchTo": "Switch to {theme} mode"
   },
   "locale": {
     "label": "Language",
@@ -887,7 +886,7 @@
     "work": {
       "label": "Work",
       "title": "Work",
-      "intro": "Selected case studies across brand, digital, intelligence and growth.",
+      "intro": "Selected case studies across brand, digital, sites & systems, and growth.",
       "all": "All",
       "filter": "Filter by category",
       "empty": "Case studies will be published here soon.",

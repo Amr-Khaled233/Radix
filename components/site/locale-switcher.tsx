@@ -13,34 +13,23 @@ function Switcher({ query, className }: { query?: Record<string, string>; classN
   const t = useTranslations("locale");
   const active = useLocale();
   const pathname = usePathname();
+  const other = routing.locales.find((locale) => locale !== active) ?? routing.defaultLocale;
 
   return (
-    <nav aria-label={t("label")} className={cn("flex items-center", className)}>
-      {routing.locales.map((locale, i) => (
-        <span key={locale} className="flex items-center">
-          {i > 0 ? (
-            <span aria-hidden className="text-line mx-1.5">
-              |
-            </span>
-          ) : null}
-          <Link
-            href={{ pathname, query }}
-            locale={locale}
-            lang={locale}
-            hrefLang={locale}
-            aria-current={locale === active ? "true" : undefined}
-            aria-label={locale === active ? t(locale) : t("switchTo", { language: t(locale) })}
-            className={cn(
-              "inline-flex min-h-11 items-center px-1 transition-colors duration-(--duration-hover)",
-              locale === "ar" ? "font-sans text-sm font-medium" : "type-label",
-              locale === active ? "text-foreground" : "text-label hover:text-foreground",
-            )}
-          >
-            {SHORT[locale]}
-          </Link>
-        </span>
-      ))}
-    </nav>
+    <Link
+      href={{ pathname, query }}
+      locale={other}
+      lang={other}
+      hrefLang={other}
+      aria-label={t("switchTo", { language: t(other) })}
+      className={cn(
+        "text-label hover:text-foreground inline-flex min-h-11 items-center px-1 transition-colors duration-(--duration-hover)",
+        other === "ar" ? "font-sans text-sm font-medium" : "type-label",
+        className,
+      )}
+    >
+      {SHORT[other]}
+    </Link>
   );
 }
 
@@ -50,7 +39,7 @@ function SwitcherWithQuery({ className }: { className?: string }) {
   return <Switcher query={query} className={className} />;
 }
 
-/** `EN | عربي` — keeps the current page and query string; next-intl sets the NEXT_LOCALE cookie. */
+/** Shows only the other language (EN on Arabic pages, عربي on English ones); keeps the page and query string. */
 export function LocaleSwitcher({ className }: { className?: string }) {
   return (
     <Suspense fallback={<Switcher className={className} />}>

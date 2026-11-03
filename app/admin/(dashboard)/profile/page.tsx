@@ -21,8 +21,7 @@ export default async function ProfilePage() {
           email: user.email,
           image: user.image,
           preferredLocale: user.preferredLocale === "ar" ? "ar" : "en",
-          preferredTheme: (["light", "dark"].includes(user.preferredTheme) ? user.preferredTheme : "system") as
-            "system" | "light" | "dark",
+          preferredTheme: user.preferredTheme === "light" ? "light" : "dark",
         }}
       />
     </>

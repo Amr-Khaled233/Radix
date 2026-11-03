@@ -25,7 +25,7 @@ type ProfileUser = {
   email: string;
   image: string | null;
   preferredLocale: "en" | "ar";
-  preferredTheme: "system" | "light" | "dark";
+  preferredTheme: "light" | "dark";
 };
 
 export function ProfileView({ user }: { user: ProfileUser }) {
@@ -113,7 +113,7 @@ function DetailsForm({ user }: { user: ProfileUser }) {
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {(["system", "light", "dark"] as const).map((theme) => (
+                    {(["light", "dark"] as const).map((theme) => (
                       <SelectItem key={theme} value={theme}>
                         {tTheme(theme)}
                       </SelectItem>

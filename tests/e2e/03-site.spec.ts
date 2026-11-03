@@ -21,15 +21,32 @@ test.describe("public site", () => {
     await expect(page).toHaveURL(/\/ar\/work\?category=brand$/);
   });
 
-  test("theme toggle cycles System → Light → Dark and persists", async ({ page }) => {
-    await page.goto("/en");
-    const toggle = page.getByRole("button", { name: /Colour theme:/ }).first();
-    await toggle.click();
+  test("theme: dark by default (even on a light OS), toggles to light and persists", async ({ browser }) => {
+    const page = await (await browser.newContext({ colorScheme: "light" })).newPage();
+    await page.goto("/");
+    await expect(page).toHaveURL(/\/en$/);
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+    await page.getByRole("button", { name: "Switch to Light mode" }).first().click();
     await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
-    await toggle.click();
-    await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
     await page.reload();
+    await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+    await page.getByRole("button", { name: "Switch to Dark mode" }).first().click();
     await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  });
+
+  test("first visit opens in English even with an Arabic browser", async ({ browser }) => {
+    const page = await (await browser.newContext({ locale: "ar-EG" })).newPage();
+    await page.goto("/");
+    await expect(page).toHaveURL(/\/en$/);
+  });
+
+  test("language switch shows only the other language", async ({ page }) => {
+    await page.goto("/en");
+    const header = page.getByRole("banner");
+    await expect(header.getByRole("link", { name: "Switch language to العربية" }).first()).toBeVisible();
+    await expect(header.getByRole("link", { name: /Switch language to English/ })).toHaveCount(0);
+    await page.goto("/ar");
+    await expect(page.getByRole("banner").getByRole("link", { name: "التبديل إلى English" }).first()).toBeVisible();
   });
 
   test("reduced motion: hero is static, all content visible", async ({ browser }) => {
@@ -54,14 +71,16 @@ test.describe("public site", () => {
 
   for (const path of ["/en", "/ar", "/en/contact", "/ar/about", "/en/work"]) {
     test(`accessibility (axe, WCAG 2.2 AA): ${path}`, async ({ browser }) => {
-      for (const colorScheme of ["light", "dark"] as const) {
-        const page = await (await browser.newContext({ colorScheme, reducedMotion: "reduce" })).newPage();
+      for (const theme of ["light", "dark"] as const) {
+        const context = await browser.newContext({ reducedMotion: "reduce" });
+        await context.addInitScript((value) => localStorage.setItem("radix-theme", value), theme);
+        const page = await context.newPage();
         await page.goto(path);
         const results = await new AxeBuilder({ page })
           .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
           .analyze();
         const summary = results.violations.map((v) => `${v.id} (${v.nodes.length}): ${v.nodes[0]?.target.join(" ")}`);
-        expect(summary, `${path} ${colorScheme}`).toEqual([]);
+        expect(summary, `${path} ${theme}`).toEqual([]);
       }
     });
   }
