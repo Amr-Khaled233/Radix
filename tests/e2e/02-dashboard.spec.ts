@@ -1,6 +1,6 @@
 import { expect, test, type BrowserContext } from "@playwright/test";
 import sharp from "sharp";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { expectSaved, lastEmailLink, runId, signIn } from "./helpers";
 
 const OWNER_PASSWORD = "e2e-owner-password-2"; // set by the reset test
@@ -18,12 +18,17 @@ test.beforeEach(async ({ context, page }) => {
   sessionCookies = await context.cookies();
 });
 
-test("invite an admin who sets a password and signs in", async ({ page, browser }) => {
-  const email = `editor-${runId}@example.com`;
+// The invited editor (responsible for Sites & Systems) — reused by the inbox test.
+const EDITOR_EMAIL = `editor-${runId}@example.com`;
+let editorCookies: Awaited<ReturnType<BrowserContext["cookies"]>> = [];
+
+test("invite an account responsible for a pillar, who sets a password and signs in", async ({ page, browser }) => {
+  const email = EDITOR_EMAIL;
   await page.goto("/admin/admins");
-  await page.getByRole("button", { name: "Invite admin" }).click();
+  await page.getByRole("button", { name: "Invite account" }).click();
   await page.getByLabel("Name").fill("E2E Editor");
   await page.getByLabel("Email", { exact: true }).fill(email);
+  await page.getByRole("dialog").getByRole("checkbox", { name: "Sites & Systems" }).click();
   await page.getByRole("button", { name: "Send invitation" }).click();
   await expect(page.getByText("Invitation sent.")).toBeVisible();
 
@@ -34,6 +39,7 @@ test("invite an admin who sets a password and signs in", async ({ page, browser 
   await invitee.getByLabel("Confirm new password").fill("editor-password-1");
   await invitee.getByRole("button", { name: "Save password" }).click();
   await signIn(invitee, email, "editor-password-1");
+  editorCookies = await invitee.context().cookies();
   // Editors can't open admin management (and don't see it in the navigation).
   await invitee.goto("/admin/admins");
   await expect(invitee.getByRole("heading", { name: "Admins" })).toHaveCount(0);
@@ -130,4 +136,41 @@ test("contact submissions arrive in the inbox", async ({ page, browser }) => {
 
   await page.goto("/admin/messages");
   await expect(page.getByRole("button", { name: new RegExp(`Visitor ${runId}`) })).toBeVisible();
+});
+
+test("messages reach only the account responsible for their pillar", async ({ page, browser }) => {
+  const visitor = await (await browser.newContext()).newPage();
+  const leads = [
+    ["Sites & Systems", `Sites lead ${runId}`],
+    ["Brand", `Brand lead ${runId}`],
+  ] as const;
+  for (const [pillar, name] of leads) {
+    await visitor.goto("/en/contact");
+    await visitor.getByLabel("Name").fill(name);
+    await visitor.getByLabel("Email", { exact: true }).fill("visitor@example.com");
+    await visitor.getByRole("checkbox", { name: pillar }).check({ force: true });
+    await visitor.getByLabel("Message").fill("We would like to talk about a project.");
+    await visitor.getByRole("button", { name: "Send message" }).click();
+    await expect(visitor.getByText("Thank you.")).toBeVisible();
+  }
+
+  // The notification went to the responsible account only.
+  const log = readFileSync(".data/e2e-emails.log", "utf8")
+    .trim()
+    .split("\n")
+    .map((line) => JSON.parse(line) as { to: string; subject: string });
+  expect(log.find((e) => e.subject === `New message from Sites lead ${runId}`)?.to).toBe(EDITOR_EMAIL);
+
+  // The responsible editor sees the Sites & Systems message and not the Brand one.
+  const editorContext = await browser.newContext();
+  await editorContext.addCookies(editorCookies);
+  const editor = await editorContext.newPage();
+  await editor.goto("/admin/messages");
+  await expect(editor.getByRole("button", { name: new RegExp(`Sites lead ${runId}`) })).toBeVisible();
+  await expect(editor.getByRole("button", { name: new RegExp(`Brand lead ${runId}`) })).toHaveCount(0);
+
+  // The super admin sees both.
+  await page.goto("/admin/messages");
+  await expect(page.getByRole("button", { name: new RegExp(`Brand lead ${runId}`) })).toBeVisible();
+  await expect(page.getByRole("button", { name: new RegExp(`Sites lead ${runId}`) })).toBeVisible();
 });

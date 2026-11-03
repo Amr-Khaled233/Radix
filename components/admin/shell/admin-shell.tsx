@@ -17,13 +17,15 @@ type AdminShellProps = {
   user: AdminUser;
   locale: Locale;
   newMessages: number;
+  /** Whether this account has an inbox (super admin, or responsible for a pillar). */
+  hasInbox: boolean;
   children: ReactNode;
 };
 
 /** Dashboard frame: sidebar on desktop, drawer on mobile, top bar with language/theme/account. */
-export async function AdminShell({ user, locale, newMessages, children }: AdminShellProps) {
+export async function AdminShell({ user, locale, newMessages, hasInbox, children }: AdminShellProps) {
   const t = await getTranslations({ locale, namespace: "admin" });
-  const items = navFor(user);
+  const items = navFor(user, { inbox: hasInbox });
   const logo = <Logo variant="horizontal" height={40} clearSpace={false} title="RADIX" />;
 
   return (

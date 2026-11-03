@@ -22,6 +22,8 @@ export type NavItem = {
   key: NavKey;
   href: string;
   permission?: [Action, Resource];
+  /** Shown only to accounts with an inbox (see lib/messages/scope.ts). */
+  inbox?: true;
   children?: NavItem[];
 };
 
@@ -43,7 +45,7 @@ const NAV: NavItem[] = [
       { key: "footer", href: "/admin/pages/footer" },
     ],
   },
-  { key: "messages", href: "/admin/messages", permission: ["view", "messages"] },
+  { key: "messages", href: "/admin/messages", inbox: true },
   { key: "media", href: "/admin/media", permission: ["view", "media"] },
   { key: "admins", href: "/admin/admins", permission: ["view", "admins"] },
   { key: "settings", href: "/admin/settings", permission: ["view", "settings"] },
@@ -51,6 +53,6 @@ const NAV: NavItem[] = [
 ];
 
 /** Navigation filtered to what the actor may open (the pages re-check on the server). */
-export function navFor(actor: Actor): NavItem[] {
-  return NAV.filter((item) => !item.permission || can(actor, ...item.permission));
+export function navFor(actor: Actor, access: { inbox: boolean }): NavItem[] {
+  return NAV.filter((item) => (!item.permission || can(actor, ...item.permission)) && (!item.inbox || access.inbox));
 }

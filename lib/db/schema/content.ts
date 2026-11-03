@@ -276,6 +276,27 @@ export const settings = pgTable("settings", {
   updatedBy: text().references(() => user.id, { onDelete: "set null" }),
 });
 
+/**
+ * Which dashboard accounts are responsible for which pillar. A responsible
+ * account sees (and is emailed) the contact messages about that pillar.
+ */
+export const categoryAssignments = pgTable(
+  "category_assignments",
+  {
+    userId: text()
+      .notNull()
+      .references(() => user.id, { onDelete: "cascade" }),
+    categoryId: uuid()
+      .notNull()
+      .references(() => categories.id, { onDelete: "cascade" }),
+    createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
+  },
+  (table) => [
+    primaryKey({ columns: [table.userId, table.categoryId] }),
+    index("category_assignments_category_idx").on(table.categoryId),
+  ],
+);
+
 export const submissionStatus = pgEnum("submission_status", ["new", "read", "archived"]);
 
 export const contactSubmissions = pgTable(

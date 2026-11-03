@@ -7,6 +7,8 @@ import { db } from "@/lib/db/client";
 import { categories, contactSubmissions } from "@/lib/db/schema";
 import { sendContactNotification } from "@/lib/email/send";
 import { contactSchema, type ContactInput } from "@/lib/site/contact-schema";
+import { accountsWithAssignments } from "@/lib/messages/access";
+import { notificationRecipients } from "@/lib/messages/scope";
 import { allowRequest, hashIp } from "@/lib/site/rate-limit";
 import { readSetting } from "@/lib/settings/store";
 
@@ -15,7 +17,7 @@ export type ContactResult =
   | { ok: false; error: "validation"; fields: Record<string, string> }
   | { ok: false; error: "rateLimited" | "server" };
 
-/** Public contact form: validates, rate-limits per hashed IP, stores, then notifies the team. */
+/** Public contact form: validates, rate-limits per hashed IP, stores, then notifies the responsible accounts. */
 export async function submitContact(input: ContactInput): Promise<ContactResult> {
   const parsed = contactSchema.safeParse(input);
   if (!parsed.success) {
@@ -55,10 +57,16 @@ export async function submitContact(input: ContactInput): Promise<ContactResult>
       userAgent: h.get("user-agent")?.slice(0, 300) ?? null,
     });
 
-    const { notificationEmails } = await readSetting("contact");
-    if (notificationEmails.length) {
+    // Only the accounts responsible for the chosen pillars are notified (fallback: Settings, then the super admin).
+    const [{ notificationEmails }, accounts] = await Promise.all([readSetting("contact"), accountsWithAssignments()]);
+    const to = notificationRecipients(
+      valid.map((c) => c.id),
+      accounts,
+      notificationEmails,
+    );
+    if (to.length) {
       await sendContactNotification({
-        to: notificationEmails,
+        to,
         submission: { ...data, interests: valid.map((c) => c.name.en) },
       }).catch((error) => console.error("[contact] notification failed", error));
     }

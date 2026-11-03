@@ -1,6 +1,7 @@
 /**
- * Creates the first super admin from SEED_SUPER_ADMIN_* env vars. Idempotent:
- * an existing account with that email is left unchanged.
+ * Creates the super admin from SEED_SUPER_ADMIN_* env vars. Idempotent: an
+ * existing account with that email is left unchanged, and nothing is created
+ * once a super admin exists (there is only one).
  */
 import { hashPassword } from "better-auth/crypto";
 import { eq } from "drizzle-orm";
@@ -28,6 +29,13 @@ async function main() {
   const existing = await db.query.user.findFirst({ where: eq(user.email, email) });
   if (existing) {
     console.log(`An account for ${email} already exists (role: ${existing.role}). Nothing changed.`);
+    await close();
+    return;
+  }
+  // One super admin manages every account; others are invited from the dashboard.
+  const owner = await db.query.user.findFirst({ where: eq(user.role, "super_admin") });
+  if (owner) {
+    console.log(`A super admin already exists (${owner.email}). Invite other accounts from Dashboard → Admins.`);
     await close();
     return;
   }

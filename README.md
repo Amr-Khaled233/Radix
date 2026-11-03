@@ -92,3 +92,10 @@ ffmpeg -i input-portrait.mov -an -vf "scale=1080:-2,fps=30" -c:v libx264 -pix_fm
 11. **Smoke test:** sign in; forgot password → email → reset; create a category; publish a project; send the contact form; check both languages and both themes; test the hero on a real iPhone (Safari) and Android phone (Chrome).
 
 Content changes go live within seconds (tag revalidation); no redeploy is needed.
+
+## Accounts and who gets which messages
+
+- **One super admin** (created once with `pnpm db:seed:admin`) manages every account from **Dashboard → Admins**: invites, roles, password reset links, deactivation and deletion. Nobody else can be made super admin, and the seed script won't create a second one.
+- Other accounts are **Admin** (all content and settings) or **Editor** (content drafts).
+- **Responsible for:** each account can be made responsible for one or more pillars (in the invite form, or later in the Admins table). It then sees in **Messages**, and is emailed, only the contact messages about those pillars. An account responsible for nothing has no inbox.
+- The super admin sees every message. A message about a pillar nobody is responsible for (or with no pillar chosen) is emailed to the addresses in **Settings → Contact**, or to the super admin when that list is empty.

@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { KeyRound, MoreHorizontal, Plus, UserCheck, UserX, Trash2 } from "lucide-react";
-import { useFormatter, useNow, useTranslations } from "next-intl";
+import { useFormatter, useLocale, useNow, useTranslations } from "next-intl";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -15,6 +15,7 @@ import { uiIcon } from "@/components/admin/ui-icon";
 import { useAction } from "@/components/admin/use-action";
 import { useFieldError } from "@/components/admin/use-field-error";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -31,9 +32,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { inviteSchema } from "@/lib/auth/invite-schema";
-import { ROLES, type Role } from "@/lib/db/schema/auth";
+import { INVITABLE_ROLES, inviteSchema } from "@/lib/auth/invite-schema";
+import type { Role } from "@/lib/db/schema/auth";
 import {
   changeRoleAction,
   deactivateAction,
@@ -41,7 +43,10 @@ import {
   inviteAdminAction,
   reactivateAction,
   sendResetLinkAction,
+  setCategoriesAction,
 } from "./actions";
+
+type Pillar = { id: string; name: string };
 
 type AdminRow = {
   id: string;
@@ -51,9 +56,18 @@ type AdminRow = {
   banned: boolean;
   lastLoginAt: string | null;
   createdAt: string;
+  categoryIds: string[];
 };
 
-export function AdminsTable({ admins, currentUserId }: { admins: AdminRow[]; currentUserId: string }) {
+export function AdminsTable({
+  admins,
+  currentUserId,
+  pillars,
+}: {
+  admins: AdminRow[];
+  currentUserId: string;
+  pillars: Pillar[];
+}) {
   const t = useTranslations("admin");
   const format = useFormatter();
   const now = useNow();
@@ -82,7 +96,7 @@ export function AdminsTable({ admins, currentUserId }: { admins: AdminRow[]; cur
       header: t("admins.columns.role"),
       accessorFn: (a) => a.role,
       cell: ({ row: { original: a } }) =>
-        a.id === currentUserId ? (
+        a.id === currentUserId || a.role === "super_admin" ? (
           <span>{t(`roles.${a.role}`)}</span>
         ) : (
           <Select
@@ -93,13 +107,29 @@ export function AdminsTable({ admins, currentUserId }: { admins: AdminRow[]; cur
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
-              {ROLES.map((role) => (
+              {INVITABLE_ROLES.map((role) => (
                 <SelectItem key={role} value={role}>
                   {t(`roles.${role}`)}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
+        ),
+    },
+    {
+      id: "pillars",
+      header: t("admins.columns.pillars"),
+      enableSorting: false,
+      cell: ({ row: { original: a } }) =>
+        a.role === "super_admin" ? (
+          <span className="text-muted text-sm">{t("admins.allMessages")}</span>
+        ) : (
+          <PillarPicker
+            label={`${t("admins.columns.pillars")} — ${a.name}`}
+            pillars={pillars}
+            value={a.categoryIds}
+            onChange={(ids) => run(() => setCategoriesAction(a.id, ids), { success: "updated" })}
+          />
         ),
     },
     {
@@ -199,14 +229,14 @@ export function AdminsTable({ admins, currentUserId }: { admins: AdminRow[]; cur
   );
 }
 
-export function InviteAdminButton() {
+export function InviteAdminButton({ pillars }: { pillars: Pillar[] }) {
   const t = useTranslations("admin");
   const fieldError = useFieldError();
   const { run, pending } = useAction();
   const [open, setOpen] = useState(false);
   const form = useForm<z.input<typeof inviteSchema>>({
     resolver: zodResolver(inviteSchema),
-    defaultValues: { name: "", email: "", role: "editor", locale: "en" },
+    defaultValues: { name: "", email: "", role: "editor", locale: "en", categoryIds: [] },
   });
 
   const submit = form.handleSubmit((values) =>
@@ -264,7 +294,7 @@ export function InviteAdminButton() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {ROLES.map((role) => (
+                      {INVITABLE_ROLES.map((role) => (
                         <SelectItem key={role} value={role}>
                           {t(`roles.${role}`)}
                         </SelectItem>
@@ -293,6 +323,17 @@ export function InviteAdminButton() {
               )}
             />
           </div>
+          <Controller
+            control={form.control}
+            name="categoryIds"
+            render={({ field }) => (
+              <fieldset className="space-y-2">
+                <legend className="text-foreground text-sm font-semibold">{t("admins.columns.pillars")}</legend>
+                <p className="text-muted text-xs">{t("admins.pillarsHint")}</p>
+                <PillarChecklist pillars={pillars} value={field.value ?? []} onChange={field.onChange} />
+              </fieldset>
+            )}
+          />
           <DialogFooter>
             <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
               {t("actions.cancel")}
@@ -304,5 +345,62 @@ export function InviteAdminButton() {
         </form>
       </DialogContent>
     </Dialog>
+  );
+}
+
+function PillarChecklist({
+  pillars,
+  value,
+  onChange,
+}: {
+  pillars: Pillar[];
+  value: string[];
+  onChange: (ids: string[]) => void;
+}) {
+  return (
+    <ul className="space-y-1">
+      {pillars.map((p) => (
+        <li key={p.id}>
+          <label className="hover:bg-background flex cursor-pointer items-center gap-3 px-2 py-1.5 text-sm">
+            <Checkbox
+              checked={value.includes(p.id)}
+              onCheckedChange={(checked) =>
+                onChange(checked === true ? [...value, p.id] : value.filter((id) => id !== p.id))
+              }
+            />
+            {p.name}
+          </label>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** Which pillars an account is responsible for; it sees and is emailed only those messages. */
+function PillarPicker({
+  label,
+  pillars,
+  value,
+  onChange,
+}: {
+  label: string;
+  pillars: Pillar[];
+  value: string[];
+  onChange: (ids: string[]) => void;
+}) {
+  const t = useTranslations("admin.admins");
+  const locale = useLocale();
+  const names = pillars.filter((p) => value.includes(p.id)).map((p) => p.name);
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button variant="outline" size="sm" aria-label={label} className="max-w-56 justify-start">
+          <span className="truncate">{names.length ? names.join(locale === "ar" ? "، " : ", ") : t("noPillars")}</span>
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent align="start" className="w-64 p-2">
+        <PillarChecklist pillars={pillars} value={value} onChange={onChange} />
+      </PopoverContent>
+    </Popover>
   );
 }

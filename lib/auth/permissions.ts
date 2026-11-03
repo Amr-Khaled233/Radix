@@ -35,7 +35,7 @@ const GRANTS: Record<Role, Grant> = {
     team: ALL,
     pages: ALL,
     media: ALL,
-    messages: ALL,
+    // Messages are not role-based: see lib/messages/scope.ts (pillar responsibility).
   },
   editor: {
     // Categories & services: edit only.

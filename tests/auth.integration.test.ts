@@ -236,20 +236,12 @@ describe("roles and safeguards", () => {
     await expect(auth.api.listUsers({ query: {}, headers: session.headers })).rejects.toThrow();
   });
 
-  it("the last super admin is protected even from another super admin's demotion attempts once alone", async () => {
+  it("there is only one super admin: nobody can be promoted to it, and the owner can't demote itself", async () => {
     const owner = await actorFor(OWNER.email);
     const larry = await userByEmail("larry@example.com");
-    await admins.changeAdminRole(owner, larry.id, "super_admin");
-    const larryActor = await actorFor("larry@example.com");
-
-    // Two super admins: Larry may demote the owner…
-    await admins.changeAdminRole(larryActor, owner.id, "admin");
-    // …but now Larry is the last one and can't be demoted by anyone.
-    const demotedOwner = await actorFor(OWNER.email);
-    await expect(admins.changeAdminRole(demotedOwner, larry.id, "editor")).rejects.toThrow(/Forbidden/);
-
-    // Restore: Larry promotes the owner back.
-    await admins.changeAdminRole(larryActor, owner.id, "super_admin");
+    await expect(admins.changeAdminRole(owner, larry.id, "super_admin")).rejects.toThrow(/Forbidden/);
+    await expect(admins.changeAdminRole(owner, owner.id, "admin")).rejects.toThrow(/SELF_CHANGE/);
+    expect((await userByEmail("larry@example.com")).role).not.toBe("super_admin");
     expect((await userByEmail(OWNER.email)).role).toBe("super_admin");
   });
 

@@ -51,8 +51,9 @@ describe("permission map (spec §6)", () => {
     expect(can(admin, "delete", "media")).toBe(true);
   });
 
-  it("messages inbox: admins only", () => {
-    expect(can(admin, "view", "messages")).toBe(true);
+  // Message access is per pillar (tests/message-scope.test.ts); only the super admin has it by role.
+  it("messages inbox by role: super admin only", () => {
+    expect(can(admin, "view", "messages")).toBe(false);
     expect(can(editor, "view", "messages")).toBe(false);
   });
 

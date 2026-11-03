@@ -18,6 +18,7 @@ import {
   user as userTable,
 } from "@/lib/db/schema";
 import { completeness, type Localized } from "@/lib/localized";
+import { countNewMessages, getMessageScope, scopeWhere } from "@/lib/messages/access";
 
 /** Counts items whose Arabic is missing (required fields) or still flagged for review. */
 async function translationGaps() {
@@ -47,16 +48,22 @@ export default async function OverviewPage() {
   const format = await getFormatter({ locale });
   await connection();
   const now = new Date();
-  const showMessages = can(user, "view", "messages");
+  const scope = await getMessageScope(user);
+  const showMessages = Boolean(scope);
 
-  const [[published], [drafts], [catCount], [teamCount], [newMessages], messages, activity, gaps] = await Promise.all([
+  const [[published], [drafts], [catCount], [teamCount], newMessages, messages, activity, gaps] = await Promise.all([
     db.select({ value: count() }).from(projects).where(eq(projects.status, "published")),
     db.select({ value: count() }).from(projects).where(eq(projects.status, "draft")),
     db.select({ value: count() }).from(categories),
     db.select({ value: count() }).from(teamMembers),
-    db.select({ value: count() }).from(contactSubmissions).where(eq(contactSubmissions.status, "new")),
-    showMessages
-      ? db.select().from(contactSubmissions).orderBy(desc(contactSubmissions.createdAt)).limit(5)
+    countNewMessages(scope),
+    scope
+      ? db
+          .select()
+          .from(contactSubmissions)
+          .where(scopeWhere(scope))
+          .orderBy(desc(contactSubmissions.createdAt))
+          .limit(5)
       : Promise.resolve([]),
     db
       .select({ id: auditLog.id, action: auditLog.action, createdAt: auditLog.createdAt, actor: userTable.name })
@@ -74,7 +81,7 @@ export default async function OverviewPage() {
     { key: "drafts", value: drafts.value, href: "/admin/projects" },
     { key: "categories", value: catCount.value, href: "/admin/categories" },
     { key: "team", value: teamCount.value, href: "/admin/team" },
-    ...(showMessages ? [{ key: "messages" as const, value: newMessages.value, href: "/admin/messages" }] : []),
+    ...(showMessages ? [{ key: "messages" as const, value: newMessages, href: "/admin/messages" }] : []),
   ];
 
   const quick = [

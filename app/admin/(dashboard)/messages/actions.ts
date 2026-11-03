@@ -1,21 +1,26 @@
 "use server";
 
-import { inArray } from "drizzle-orm";
+import { and, inArray } from "drizzle-orm";
 import { z } from "@/lib/zod";
 import { logAudit } from "@/lib/audit";
-import { adminAction } from "@/lib/admin/action";
-import { assertCan } from "@/lib/auth/permissions";
+import { ActionFailure, adminAction } from "@/lib/admin/action";
 import { db } from "@/lib/db/client";
 import { contactSubmissions } from "@/lib/db/schema";
+import { getMessageScope, scopeWhere } from "@/lib/messages/access";
 
 const statusSchema = z.enum(["new", "read", "archived"]);
 
 export async function setMessageStatus(ids: string[], status: z.infer<typeof statusSchema>) {
   return adminAction(async (actor) => {
-    assertCan(actor, "edit", "messages");
+    const scope = await getMessageScope(actor);
+    if (!scope) throw new ActionFailure("forbidden");
     const parsed = z.array(z.uuid()).min(1).parse(ids);
     const next = statusSchema.parse(status);
-    await db.update(contactSubmissions).set({ status: next }).where(inArray(contactSubmissions.id, parsed));
+    // Only messages inside the account's scope are changed.
+    await db
+      .update(contactSubmissions)
+      .set({ status: next })
+      .where(and(inArray(contactSubmissions.id, parsed), scopeWhere(scope)));
     if (next === "archived") {
       await logAudit({
         actorId: actor.id,

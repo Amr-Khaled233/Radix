@@ -3,10 +3,10 @@ import { getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { PageHeader } from "@/components/admin/page-header";
 import { getAdminLocale } from "@/lib/admin/locale";
-import { can } from "@/lib/auth/permissions";
 import { requireAdminPage } from "@/lib/auth/session";
 import { db } from "@/lib/db/client";
 import { categories, contactSubmissions } from "@/lib/db/schema";
+import { getMessageScope, scopeWhere } from "@/lib/messages/access";
 import { MessagesInbox } from "./messages-inbox";
 
 export async function generateMetadata() {
@@ -16,10 +16,17 @@ export async function generateMetadata() {
 
 export default async function MessagesPage() {
   const user = await requireAdminPage();
-  if (!can(user, "view", "messages")) notFound();
+  // Super admin: every message. Others: only the pillars they are responsible for.
+  const scope = await getMessageScope(user);
+  if (!scope) notFound();
   const t = await getTranslations({ locale: await getAdminLocale(), namespace: "admin" });
   const [rows, cats] = await Promise.all([
-    db.select().from(contactSubmissions).orderBy(desc(contactSubmissions.createdAt)).limit(2000),
+    db
+      .select()
+      .from(contactSubmissions)
+      .where(scopeWhere(scope))
+      .orderBy(desc(contactSubmissions.createdAt))
+      .limit(2000),
     db.select({ id: categories.id, name: categories.name }).from(categories),
   ]);
 

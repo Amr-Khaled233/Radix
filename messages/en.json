@@ -503,9 +503,9 @@
     "admins": {
       "label": "Access",
       "title": "Admins",
-      "description": "Everyone who can sign in to the dashboard. Only super admins see this page.",
-      "invite": "Invite admin",
-      "inviteTitle": "Invite an admin",
+      "description": "Everyone who can sign in to the dashboard. Only the super admin sees this page and decides who is responsible for which pillar.",
+      "invite": "Invite account",
+      "inviteTitle": "Invite an account",
       "inviteBody": "They'll receive an email to set their password. The link is valid for 48 hours.",
       "name": "Name",
       "email": "Email",
@@ -517,7 +517,8 @@
         "admin": "Admin",
         "role": "Role",
         "status": "Status",
-        "lastLogin": "Last sign-in"
+        "lastLogin": "Last sign-in",
+        "pillars": "Responsible for"
       },
       "active": "Active",
       "deactivated": "Deactivated",
@@ -531,7 +532,10 @@
       "reactivate": "Reactivate",
       "deactivateBody": "{name} will be signed out everywhere and won't be able to sign in until reactivated.",
       "deleteBody": "{name}'s account will be deleted permanently. Content they created stays.",
-      "rolesHelp": "Super admin: everything, including admins and the audit log. Admin: all content, settings and messages. Editor: edits content and drafts; can't publish or delete."
+      "rolesHelp": "Super admin (one account): manages every account and sees all messages. Admin: all content and settings. Editor: edits content and drafts; can't publish or delete. Messages: each account sees only the pillars it is responsible for; messages nobody is responsible for go to the super admin.",
+      "pillarsHint": "They see, and are emailed, only the contact messages about these pillars.",
+      "noPillars": "No pillar",
+      "allMessages": "All messages"
     },
     "settings": {
       "label": "Configuration",

@@ -1,17 +1,18 @@
 import "server-only";
 import { generateRandomString } from "better-auth/crypto";
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import { logAudit } from "@/lib/audit";
 import { db } from "@/lib/db/client";
-import { ROLES, user, type Role } from "@/lib/db/schema";
+import { categories, categoryAssignments, user, type Role } from "@/lib/db/schema";
 import { asLocale, sendInviteEmail, sendResetPasswordEmail } from "@/lib/email/send";
 import { auth } from "./auth";
-import { inviteSchema, type InviteInput } from "./invite-schema";
+import { INVITABLE_ROLES, inviteSchema, type InviteInput } from "./invite-schema";
 import { assertCan, checkAdminChange, ForbiddenError, type Actor, type AdminChange } from "./permissions";
 import { countActiveSuperAdmins } from "./queries";
 
 /**
- * Admin-account management (super_admin only). Every function checks the
+ * Admin-account management (super_admin only: the one account that manages
+ * every account and decides who is responsible for which pillar). Every function checks the
  * permission map and the account safeguards itself, so it is safe to call
  * from any Server Action.
  */
@@ -79,6 +80,8 @@ export async function inviteAdmin(actor: Actor & { name: string }, input: Invite
     password: await ctx.password.hash(generateRandomString(48, "a-z", "A-Z", "0-9", "-_")),
   });
 
+  await replaceAssignments(created.id, data.categoryIds);
+
   const token = await issuePasswordToken(created.id, INVITE_TTL_SECONDS);
   await sendInviteEmail({ to: data.email, locale: data.locale, token, inviterName: actor.name, role: data.role });
   await logAudit({
@@ -86,7 +89,7 @@ export async function inviteAdmin(actor: Actor & { name: string }, input: Invite
     action: "admin.invite",
     entityType: "user",
     entityId: created.id,
-    summary: { email: data.email, role: data.role },
+    summary: { email: data.email, role: data.role, categories: data.categoryIds.length },
   });
   return { id: created.id };
 }
@@ -101,7 +104,8 @@ export async function sendAdminResetLink(actor: Actor, targetId: string) {
 
 export async function changeAdminRole(actor: Actor, targetId: string, role: Role) {
   assertCan(actor, "edit", "admins");
-  if (!ROLES.includes(role)) throw new ForbiddenError("edit", "admins");
+  // Nobody else can be made super admin: one account manages all accounts.
+  if (!(INVITABLE_ROLES as readonly Role[]).includes(role)) throw new ForbiddenError("edit", "admins");
   const target = await findAdmin(targetId);
   await guard(actor, target, { type: "setRole", role });
   await db.update(user).set({ role }).where(eq(user.id, target.id));
@@ -144,5 +148,34 @@ export async function deleteAdmin(actor: Actor, targetId: string) {
     entityType: "user",
     entityId: target.id,
     summary: { email: target.email, role: target.role },
+  });
+}
+
+/** Replaces an account's pillar responsibilities with existing category ids. */
+async function replaceAssignments(userId: string, categoryIds: string[]) {
+  const ids = [...new Set(categoryIds)];
+  const existing = ids.length
+    ? await db.select({ id: categories.id }).from(categories).where(inArray(categories.id, ids))
+    : [];
+  await db.transaction(async (tx) => {
+    await tx.delete(categoryAssignments).where(eq(categoryAssignments.userId, userId));
+    if (existing.length) {
+      await tx.insert(categoryAssignments).values(existing.map((c) => ({ userId, categoryId: c.id })));
+    }
+  });
+  return existing.length;
+}
+
+/** Sets which pillars an account is responsible for (its inbox and notifications follow). */
+export async function setAdminCategories(actor: Actor, targetId: string, categoryIds: string[]) {
+  assertCan(actor, "edit", "admins");
+  const target = await findAdmin(targetId);
+  const count = await replaceAssignments(target.id, categoryIds);
+  await logAudit({
+    actorId: actor.id,
+    action: "admin.setCategories",
+    entityType: "user",
+    entityId: target.id,
+    summary: { categories: count },
   });
 }
