@@ -78,7 +78,7 @@ test("category: create, edit, toggle visibility, reorder", async ({ page }) => {
   await expect(page.getByText("Order updated.").last()).toBeVisible();
 });
 
-test("project: create, publish, appears on the public Work page", async ({ page }) => {
+test("project: create, publish, appears on its pillar page", async ({ page }) => {
   const title = `Case Study ${runId}`;
   await page.goto("/admin/projects");
   await page.getByRole("button", { name: "New project" }).click();
@@ -92,8 +92,20 @@ test("project: create, publish, appears on the public Work page", async ({ page 
   await page.getByRole("button", { name: "Save", exact: true }).click();
   await expectSaved(page);
 
-  await page.goto("/en/work");
-  await expect(page.getByRole("link", { name: new RegExp(title) })).toBeVisible();
+  // The pre-rendered pillar page refreshes on its next visit after a change, so reload until it shows.
+  const card = page.getByRole("link", { name: new RegExp(title) });
+  await expect
+    .poll(
+      async () => {
+        await page.goto("/en/services/brand");
+        return card.count();
+      },
+      { timeout: 15_000 },
+    )
+    .toBeGreaterThan(0);
+  await card.click();
+  await expect(page).toHaveURL(new RegExp(`/en/services/brand/case-study-${runId}$`));
+  await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
 });
 
 test("hero animation: upload poster → configure → appears on home", async ({ page }) => {

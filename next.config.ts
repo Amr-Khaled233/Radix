@@ -55,6 +55,13 @@ const nextConfig: NextConfig = {
     // Development uploads stored on disk (see lib/media/storage.ts).
     localPatterns: [{ pathname: "/api/media/local/**" }, { pathname: "/brand/**" }, { pathname: "/icons/**" }],
   },
+  // The Work index was removed: case studies live under their pillar (/services/{pillar}/{project}).
+  async redirects() {
+    return [
+      { source: "/:locale(en|ar)/work", destination: "/:locale/services", permanent: true },
+      { source: "/:locale(en|ar)/work/:path*", destination: "/:locale/services", permanent: true },
+    ];
+  },
   async headers() {
     return [{ source: "/:path*", headers: securityHeaders }];
   },

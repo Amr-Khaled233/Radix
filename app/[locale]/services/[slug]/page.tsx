@@ -13,6 +13,7 @@ import type { Locale } from "@/lib/i18n/routing";
 import { t } from "@/lib/localized";
 import { getCategoryPage, getPublicSlugs, getSetting, PLACEHOLDER_SLUG } from "@/lib/site/data";
 import { localizeDigits } from "@/lib/site/digits";
+import { projectPath } from "@/lib/site/paths";
 import { pageMetadata } from "@/lib/site/seo";
 
 export async function generateStaticParams() {
@@ -88,7 +89,13 @@ async function CategoryContent({ params }: { params: PageProps<"/[locale]/servic
           <SectionHeading label={tS("projectsHeading")} />
           <div className="reveal-settle mt-fib-34 grid gap-fib-34 sm:grid-cols-2 lg:grid-cols-3">
             {projects.map((project) => (
-              <ProjectCard key={project.slug} project={project} locale={locale} digits={digits} />
+              <ProjectCard
+                key={project.slug}
+                project={project}
+                href={projectPath(slug, project.slug)}
+                locale={locale}
+                digits={digits}
+              />
             ))}
           </div>
         </Reveal>

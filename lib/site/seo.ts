@@ -17,7 +17,7 @@ export function localeUrl(locale: Locale, path = "") {
 
 type PageMetaInput = {
   locale: Locale;
-  /** Path after the locale, e.g. "/work/brand-refresh" ("" for home). */
+  /** Path after the locale, e.g. "/services/brand/brand-refresh" ("" for home). */
   path: string;
   title?: string;
   description?: string;

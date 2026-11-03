@@ -5,7 +5,16 @@ import { chromium } from "@playwright/test";
 import { mkdirSync } from "node:fs";
 
 const base = process.argv[2] ?? "http://localhost:3000";
-const pages = ["", "/about", "/services", "/services/brand", "/work", "/team", "/contact", "/privacy"];
+const pages = [
+  "",
+  "/about",
+  "/services",
+  "/services/brand",
+  "/services/sites-and-systems",
+  "/team",
+  "/contact",
+  "/privacy",
+];
 const viewports = { mobile: { width: 375, height: 812 }, desktop: { width: 1440, height: 900 } };
 const out = ".data/screenshots";
 mkdirSync(out, { recursive: true });

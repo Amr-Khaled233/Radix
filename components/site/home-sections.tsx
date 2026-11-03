@@ -9,6 +9,7 @@ import type { Locale } from "@/lib/i18n/routing";
 import { t, type Localized } from "@/lib/localized";
 import type { PublicCategory, PublicProjectCard, PublicTeamCard } from "@/lib/site/data";
 import { localizeDigits } from "@/lib/site/digits";
+import { projectPath } from "@/lib/site/paths";
 import { ProjectCard, TeamCard } from "./cards";
 import { CtaLink, SectionHeading } from "./ui";
 
@@ -129,29 +130,25 @@ export function FeaturedWorkSection({
   categoryNames,
   locale,
   digits,
-  allLabel,
 }: {
   copy: { label: Localized; heading: Localized };
   projects: PublicProjectCard[];
   categoryNames: Map<string, string>;
   locale: Locale;
   digits: Digits;
-  allLabel: string;
 }) {
   if (!projects.length) return null;
   return (
     <Reveal as="section" className="container-site">
       <div className="flex flex-wrap items-end justify-between gap-fib-21 pb-fib-34">
         <SectionHeading label={t(copy.label, locale)} heading={t(copy.heading, locale) || undefined} />
-        <CtaLink href="/work" variant="secondary">
-          {allLabel}
-        </CtaLink>
       </div>
       <div className="reveal-settle grid gap-fib-34 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project) => (
           <ProjectCard
             key={project.slug}
             project={project}
+            href={projectPath(project.pillarSlug, project.slug)}
             locale={locale}
             digits={digits}
             categoryNames={project.categoryIds

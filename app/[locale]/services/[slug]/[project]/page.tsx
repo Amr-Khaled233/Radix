@@ -12,24 +12,40 @@ import { CtaLink, SectionHeading } from "@/components/site/ui";
 import { Link } from "@/lib/i18n/navigation";
 import type { Locale } from "@/lib/i18n/routing";
 import { t } from "@/lib/localized";
-import { getProjectPage, getPublicSlugs, getSetting, PLACEHOLDER_SLUG } from "@/lib/site/data";
+import { getCategoryPage, getProjectPage, getPublicSlugs, getSetting, PLACEHOLDER_SLUG } from "@/lib/site/data";
+import { projectPath } from "@/lib/site/paths";
 import { localizeDigits } from "@/lib/site/digits";
 import { localeUrl, pageMetadata, siteOrigin } from "@/lib/site/seo";
 
-export async function generateStaticParams() {
+// A case study unknown at build time renders on its first request (then cached) instead of
+// streaming a generic shell: the header needs the full URL (language switch).
+export const instant = false;
+
+type Params = PageProps<"/[locale]/services/[slug]/[project]">["params"];
+
+/** Case studies are pre-rendered under their primary pillar; other pillars render on demand. */
+export async function generateStaticParams({ params }: { params: { slug: string } }) {
   const { projects } = await getPublicSlugs();
-  return projects.length ? projects.map(({ slug }) => ({ slug })) : [{ slug: PLACEHOLDER_SLUG }];
+  const own = projects.filter((p) => p.pillarSlug === params.slug);
+  return own.length ? own.map(({ slug }) => ({ project: slug })) : [{ project: PLACEHOLDER_SLUG }];
 }
 
-export async function generateMetadata({ params }: PageProps<"/[locale]/work/[slug]">) {
-  const { slug } = await params;
-  const locale = (await getLocale()) as Locale;
+/** The project, if it belongs to this pillar (a case study can sit under each of its pillars). */
+async function projectIn(pillar: string, slug: string) {
   const data = await getProjectPage(slug);
+  return data && data.categories.some((c) => c.slug === pillar) ? data : null;
+}
+
+export async function generateMetadata({ params }: { params: Params }) {
+  const { slug: pillar, project: slug } = await params;
+  const locale = (await getLocale()) as Locale;
+  const data = await projectIn(pillar, slug);
   if (!data) return {};
   const { project } = data;
   return pageMetadata({
     locale,
-    path: `/work/${slug}`,
+    // Canonical: the primary pillar.
+    path: projectPath(data.categories[0].slug, slug),
     title: t(project.seoTitle, locale) || t(project.title, locale),
     description: t(project.seoDescription, locale) || t(project.summary, locale),
     image: data.ogImage ?? data.cover,
@@ -37,14 +53,23 @@ export async function generateMetadata({ params }: PageProps<"/[locale]/work/[sl
   });
 }
 
-async function CaseStudy({ params }: { params: PageProps<"/[locale]/work/[slug]">["params"] }) {
-  const { slug } = await params;
+async function CaseStudy({ params }: { params: Params }) {
+  const { slug: pillar, project: slug } = await params;
   const locale = (await getLocale()) as Locale;
   const tW = await getTranslations("site.work");
   const tNav = await getTranslations("nav");
-  const [data, localeSettings] = await Promise.all([getProjectPage(slug), getSetting("locale")]);
-  if (!data) notFound();
-  const { project, cover, categories, services, gallery, results, credits, next } = data;
+  const [data, pillarPage, localeSettings] = await Promise.all([
+    projectIn(pillar, slug),
+    getCategoryPage(pillar),
+    getSetting("locale"),
+  ]);
+  if (!data || !pillarPage) notFound();
+  const { project, cover, categories, services, gallery, results, credits } = data;
+  // Next case study within the same pillar, in the pillar page's order.
+  const siblings = pillarPage.projects.filter((p) => p.status === "published");
+  const position = siblings.findIndex((p) => p.slug === slug);
+  const nextProject = siblings.length > 1 && position >= 0 ? siblings[(position + 1) % siblings.length] : null;
+  const pillarName = t(pillarPage.category.name, locale);
   const digits = localeSettings.arabicDigits;
   const title = t(project.title, locale);
   const client = t(project.clientName, locale);
@@ -72,7 +97,7 @@ async function CaseStudy({ params }: { params: PageProps<"/[locale]/work/[slug]"
         <div className="bg-inverse text-on-inverse">
           <div className="container-site flex flex-wrap items-center justify-between gap-3 py-3 text-sm">
             <span>{tW("draft")}</span>
-            <a href={`/api/draft/disable?to=/${locale}/work`} className="underline underline-offset-4">
+            <a href={`/api/draft/disable?to=/${locale}/services/${pillar}`} className="underline underline-offset-4">
               {tW("exitPreview")}
             </a>
           </div>
@@ -80,7 +105,7 @@ async function CaseStudy({ params }: { params: PageProps<"/[locale]/work/[slug]"
       ) : null}
 
       <Reveal as="header" className="container-site pt-fib-55">
-        <SectionHeading as="h1" size="h1" label={client || tW("label")} heading={title} />
+        <SectionHeading as="h1" size="h1" label={client || pillarName} heading={title} />
         {t(project.summary, locale) ? (
           <p className="type-body-lg text-muted reveal-rise mt-fib-21 max-w-3xl">{t(project.summary, locale)}</p>
         ) : null}
@@ -187,16 +212,22 @@ async function CaseStudy({ params }: { params: PageProps<"/[locale]/work/[slug]"
       ) : null}
 
       <section className="container-site flex flex-wrap items-center justify-between gap-fib-21">
-        {next ? (
-          <Link href={`/work/${next.slug}`} className="group">
+        {nextProject && nextProject.slug !== slug ? (
+          <Link href={projectPath(pillar, nextProject.slug)} className="group">
             <span className="type-label text-label block">{tW("next")}</span>
             <span className="type-h3 text-foreground group-hover:text-muted mt-1 inline-flex items-center gap-2">
-              {t(next.title, locale)}
+              {t(nextProject.title, locale)}
               <Icon name="arrow-right" size={22} />
             </span>
           </Link>
         ) : (
-          <span />
+          <Link href={`/services/${pillar}`} className="group">
+            <span className="type-label text-label block">{tW("backTo")}</span>
+            <span className="type-h3 text-foreground group-hover:text-muted mt-1 inline-flex items-center gap-2">
+              {pillarName}
+              <Icon name="arrow-right" size={22} />
+            </span>
+          </Link>
         )}
         <CtaLink href="/contact">{tNav("cta")}</CtaLink>
       </section>
@@ -207,7 +238,7 @@ async function CaseStudy({ params }: { params: PageProps<"/[locale]/work/[slug]"
           "@type": "CreativeWork",
           name: title,
           description: t(project.summary, locale) || undefined,
-          url: localeUrl(locale, `/work/${project.slug}`),
+          url: localeUrl(locale, projectPath(categories[0].slug, project.slug)),
           inLanguage: locale,
           dateCreated: project.year ? String(project.year) : undefined,
           image: cover?.url,
@@ -220,7 +251,7 @@ async function CaseStudy({ params }: { params: PageProps<"/[locale]/work/[slug]"
   );
 }
 
-export default function ProjectPage(props: PageProps<"/[locale]/work/[slug]">) {
+export default function ProjectPage(props: PageProps<"/[locale]/services/[slug]/[project]">) {
   return (
     <Suspense fallback={<div className="container-site min-h-[60vh] pt-fib-55" />}>
       <CaseStudy params={props.params} />

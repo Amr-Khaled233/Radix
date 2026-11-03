@@ -26,7 +26,10 @@ export default async function ProjectsPage() {
     db
       .select({ projectId: projectCategories.projectId, categoryId: projectCategories.categoryId })
       .from(projectCategories),
-    db.select({ id: categories.id, name: categories.name }).from(categories).orderBy(asc(categories.sortOrder)),
+    db
+      .select({ id: categories.id, slug: categories.slug, name: categories.name })
+      .from(categories)
+      .orderBy(asc(categories.sortOrder)),
   ]);
   const covers = await mediaByIds(rows.map((r) => r.coverImageId));
   const coverBy = new Map(covers.map((m) => [m.id, m]));

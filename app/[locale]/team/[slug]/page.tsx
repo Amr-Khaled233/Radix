@@ -12,6 +12,7 @@ import { Link } from "@/lib/i18n/navigation";
 import type { Locale } from "@/lib/i18n/routing";
 import { t } from "@/lib/localized";
 import { getPublicSlugs, getTeamMemberPage, PLACEHOLDER_SLUG } from "@/lib/site/data";
+import { projectPath } from "@/lib/site/paths";
 import { localeUrl, pageMetadata, siteOrigin } from "@/lib/site/seo";
 
 export async function generateStaticParams() {
@@ -136,7 +137,7 @@ async function MemberContent({ params }: { params: PageProps<"/[locale]/team/[sl
             {work.map((project) => (
               <li key={project.slug} className="border-line border-b">
                 <Link
-                  href={`/work/${project.slug}`}
+                  href={projectPath(project.pillarSlug, project.slug)}
                   className="group flex flex-wrap items-baseline justify-between gap-2 py-fib-13"
                 >
                   <span className="type-h4 text-foreground group-hover:text-muted">{t(project.title, locale)}</span>

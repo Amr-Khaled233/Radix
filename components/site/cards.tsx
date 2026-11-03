@@ -14,14 +14,17 @@ type ProjectCardData = {
   cover: MediaRef | null;
 };
 
+/** `href` is the case study under a pillar (lib/site/paths.ts → projectPath). */
 export function ProjectCard({
   project,
+  href,
   locale,
   categoryNames = [],
   digits,
   priority,
 }: {
   project: ProjectCardData;
+  href: string;
   locale: Locale;
   categoryNames?: string[];
   digits: "western" | "arabic-indic";
@@ -29,7 +32,7 @@ export function ProjectCard({
 }) {
   const client = t(project.clientName, locale);
   return (
-    <Link href={`/work/${project.slug}`} className="group block">
+    <Link href={href} className="group block">
       <div className="bg-inverse relative aspect-[4/3] overflow-hidden">
         {project.cover ? (
           <SiteImage

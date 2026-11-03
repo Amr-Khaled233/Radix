@@ -33,7 +33,10 @@ export default async function ProjectEditPage({ params }: PageProps<"/admin/proj
   const t = await getTranslations({ locale, namespace: "admin.projects" });
 
   const [cats, svc, members, pc, ps, pm, pr, pt] = await Promise.all([
-    db.select({ id: categories.id, name: categories.name }).from(categories).orderBy(asc(categories.sortOrder)),
+    db
+      .select({ id: categories.id, slug: categories.slug, name: categories.name })
+      .from(categories)
+      .orderBy(asc(categories.sortOrder)),
     db
       .select({ id: services.id, name: services.name, categoryId: services.categoryId })
       .from(services)

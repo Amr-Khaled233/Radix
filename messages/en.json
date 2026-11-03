@@ -13,7 +13,6 @@
   "nav": {
     "about": "About",
     "services": "Services",
-    "work": "Work",
     "team": "Team",
     "contact": "Contact",
     "privacy": "Privacy",
@@ -366,7 +365,7 @@
     "projects": {
       "label": "Portfolio",
       "title": "Projects",
-      "description": "Case studies shown in Work and on category pages. Only published projects appear on the site.",
+      "description": "Case studies, shown on the page of each pillar they belong to (and on the home page when featured). Only published ones appear on the site.",
       "new": "New project",
       "newTitle": "New project",
       "titleEn": "Title (English)",
@@ -855,7 +854,6 @@
     },
     "home": {
       "allServices": "All services",
-      "allWork": "All work",
       "meetTeam": "Meet the team",
       "step": "Step"
     },
@@ -888,13 +886,6 @@
       "cta": "Discuss a {name} project"
     },
     "work": {
-      "label": "Work",
-      "title": "Work",
-      "intro": "Selected case studies across brand, digital, sites & systems, and growth.",
-      "all": "All",
-      "filter": "Filter by category",
-      "empty": "Case studies will be published here soon.",
-      "emptyFiltered": "No published work in this category yet.",
       "client": "Client",
       "year": "Year",
       "categories": "Disciplines",
@@ -905,7 +896,8 @@
       "visit": "Visit the project",
       "next": "Next project",
       "draft": "Draft preview — not visible to the public.",
-      "exitPreview": "Exit preview"
+      "exitPreview": "Exit preview",
+      "backTo": "Back to"
     },
     "team": {
       "label": "Team",

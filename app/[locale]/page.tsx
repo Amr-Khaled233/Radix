@@ -90,7 +90,6 @@ export default async function HomePage() {
         categoryNames={categoryNames}
         locale={locale}
         digits={digits}
-        allLabel={tSite("home.allWork")}
       />
     ),
     process: <ProcessSection copy={home.process} steps={process.steps} locale={locale} digits={digits} />,

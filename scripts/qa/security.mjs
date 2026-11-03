@@ -165,7 +165,7 @@ for (const p of [
 
 // 11. XSS reflection in query strings
 const xss = "<script>alert(1)</script>";
-const w = await (await get(`/en/work?category=${encodeURIComponent(xss)}`)).text();
+const w = await (await get(`/en/services?category=${encodeURIComponent(xss)}`)).text();
 check("Query string not reflected unescaped", !w.includes(xss));
 
 console.log(results.join("\n"));

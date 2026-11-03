@@ -1,7 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
-const PAGES = ["", "/about", "/services", "/services/brand", "/work", "/contact", "/privacy"];
+const PAGES = ["", "/about", "/services", "/services/brand", "/services/sites-and-systems", "/contact", "/privacy"];
 
 test.describe("public site", () => {
   for (const locale of ["en", "ar"] as const) {
@@ -16,9 +16,15 @@ test.describe("public site", () => {
   }
 
   test("language switch keeps the page and query string", async ({ page }) => {
-    await page.goto("/en/work?category=brand");
+    await page.goto("/en/services/brand?ref=e2e");
     await page.getByRole("link", { name: "Switch language to العربية" }).first().click();
-    await expect(page).toHaveURL(/\/ar\/work\?category=brand$/);
+    await expect(page).toHaveURL(/\/ar\/services\/brand\?ref=e2e$/);
+  });
+
+  test("the old Work page redirects to the services", async ({ page }) => {
+    await page.goto("/en/work");
+    await expect(page).toHaveURL(/\/en\/services$/);
+    await expect(page.getByRole("banner").getByRole("link", { name: "Work" })).toHaveCount(0);
   });
 
   test("theme: dark by default (even on a light OS), toggles to light and persists", async ({ browser }) => {
@@ -69,7 +75,7 @@ test.describe("public site", () => {
     expect(og.headers()["content-type"]).toBe("image/png");
   });
 
-  for (const path of ["/en", "/ar", "/en/contact", "/ar/about", "/en/work"]) {
+  for (const path of ["/en", "/ar", "/en/contact", "/ar/about", "/en/services/sites-and-systems"]) {
     test(`accessibility (axe, WCAG 2.2 AA): ${path}`, async ({ browser }) => {
       for (const theme of ["light", "dark"] as const) {
         const context = await browser.newContext({ reducedMotion: "reduce" });

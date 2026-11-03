@@ -28,6 +28,7 @@ import type { projects } from "@/lib/db/schema";
 import type { Locale } from "@/lib/i18n/routing";
 import { completeness, t as localized, type Localized } from "@/lib/localized";
 import type { MediaItem } from "@/lib/media/types";
+import { projectPath } from "@/lib/site/paths";
 import { deleteProject, duplicateProject, updateProject } from "../actions";
 
 type Values = z.input<typeof projectFormSchema>;
@@ -38,7 +39,7 @@ type ProjectFormProps = {
   initial: Pick<Values, "categoryIds" | "serviceIds" | "gallery" | "results" | "team">;
   media: MediaItem[];
   options: {
-    categories: { id: string; name: Localized }[];
+    categories: { id: string; slug: string; name: Localized }[];
     services: { id: string; name: Localized; categoryId: string }[];
     members: { id: string; name: Localized }[];
   };
@@ -86,6 +87,9 @@ export function ProjectForm({ project, initial, media, options, permissions }: P
 
   const status = completeness([(watched.title ?? emptyL) as Localized, (watched.summary ?? emptyL) as Localized]);
   const selectedCategories = useMemo(() => watched.categoryIds ?? [], [watched.categoryIds]);
+  // Public URL: under the first selected pillar in display order.
+  const livePillar = options.categories.find((c) => initial.categoryIds.includes(c.id));
+  const livePath = livePillar ? projectPath(livePillar.slug, project.slug) : "/services";
   const availableServices = useMemo(
     () => options.services.filter((s) => selectedCategories.includes(s.categoryId)),
     [options.services, selectedCategories],
@@ -481,7 +485,7 @@ export function ProjectForm({ project, initial, media, options, permissions }: P
         </Button>
         {project.status === "published" ? (
           <Button asChild variant="ghost">
-            <Link href={`/${locale}/work/${project.slug}`} target="_blank">
+            <Link href={`/${locale}${livePath}`} target="_blank">
               <ExternalLink {...uiIcon} size={16} className="rtl:-scale-x-100" />
               {t("projects.viewLive")}
             </Link>

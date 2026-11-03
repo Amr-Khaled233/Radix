@@ -153,7 +153,25 @@ export async function getCategoryPage(slug: string) {
   };
 }
 
-/** Published projects for the Work index and home page. */
+/**
+ * Each project's primary pillar (its first visible category in display order).
+ * Case studies live under a pillar (/services/{pillar}/{project}); a project
+ * without a visible pillar has no public page.
+ */
+async function primaryPillars(projectIds: string[]) {
+  if (!projectIds.length) return new Map<string, string>();
+  const rows = await db
+    .select({ projectId: projectCategories.projectId, slug: categories.slug })
+    .from(projectCategories)
+    .innerJoin(categories, eq(categories.id, projectCategories.categoryId))
+    .where(and(inArray(projectCategories.projectId, projectIds), eq(categories.isVisible, true)))
+    .orderBy(asc(categories.sortOrder));
+  const map = new Map<string, string>();
+  for (const row of rows) if (!map.has(row.projectId)) map.set(row.projectId, row.slug);
+  return map;
+}
+
+/** Published projects that belong to a visible pillar (home page and sitemap). */
 export async function getPublishedProjects() {
   "use cache";
   cacheLife("max");
@@ -189,17 +207,23 @@ export async function getPublishedProjects() {
         eq(categories.isVisible, true),
       ),
     );
-  const covers = await mediaMap(rows.map((r) => r.coverImageId));
-  return rows.map((row) => ({
-    ...row,
-    cover: row.coverImageId ? (covers.get(row.coverImageId) ?? null) : null,
-    categoryIds: links.filter((l) => l.projectId === row.id).map((l) => l.categoryId),
-  }));
+  const [covers, pillars] = await Promise.all([
+    mediaMap(rows.map((r) => r.coverImageId)),
+    primaryPillars(rows.map((r) => r.id)),
+  ]);
+  return rows
+    .filter((row) => pillars.has(row.id))
+    .map((row) => ({
+      ...row,
+      pillarSlug: pillars.get(row.id)!,
+      cover: row.coverImageId ? (covers.get(row.coverImageId) ?? null) : null,
+      categoryIds: links.filter((l) => l.projectId === row.id).map((l) => l.categoryId),
+    }));
 }
 
 export type PublicProjectCard = Awaited<ReturnType<typeof getPublishedProjects>>[number];
 
-/** Full case study (drafts visible in draft mode). */
+/** Full case study (drafts visible in draft mode). `categories` is in display order; the first is its primary pillar. */
 export async function getProjectPage(slug: string) {
   "use cache";
   cacheLife("max");
@@ -209,7 +233,7 @@ export async function getProjectPage(slug: string) {
   const project = await db.query.projects.findFirst({ where: eq(projects.slug, slug) });
   if (!project || (project.status !== "published" && !(draft && project.status === "draft"))) return null;
 
-  const [cats, svc, gallery, results, credits, published] = await Promise.all([
+  const [cats, svc, gallery, results, credits] = await Promise.all([
     db
       .select({ id: categories.id, slug: categories.slug, name: categories.name })
       .from(projectCategories)
@@ -239,15 +263,9 @@ export async function getProjectPage(slug: string) {
       .innerJoin(teamMembers, eq(teamMembers.id, projectTeam.teamMemberId))
       .where(eq(projectTeam.projectId, project.id))
       .orderBy(asc(projectTeam.sortOrder)),
-    db
-      .select({ slug: projects.slug, title: projects.title })
-      .from(projects)
-      .where(eq(projects.status, "published"))
-      .orderBy(asc(projects.sortOrder), desc(projects.publishedAt)),
   ]);
+  if (!cats.length) return null; // no visible pillar → no public page
   const files = await mediaMap([project.coverImageId, project.ogImageId, ...gallery.map((g) => g.mediaId)]);
-  const position = published.findIndex((p) => p.slug === project.slug);
-  const next = published.length > 1 ? published[(position + 1) % published.length] : null;
 
   return {
     project,
@@ -258,7 +276,6 @@ export async function getProjectPage(slug: string) {
     gallery: gallery.map((g) => ({ caption: g.caption, media: files.get(g.mediaId) ?? null })).filter((g) => g.media),
     results: results.map((r) => ({ value: r.value, label: r.label })),
     credits: credits.map((c) => ({ ...c, slug: c.visible ? c.slug : null })),
-    next: next && next.slug !== project.slug ? next : null,
     isDraft: project.status !== "published",
   };
 }
@@ -303,18 +320,25 @@ export async function getTeamMemberPage(slug: string) {
       .where(and(eq(teamMemberCategories.teamMemberId, member.id), eq(categories.isVisible, true)))
       .orderBy(asc(categories.sortOrder)),
     db
-      .select({ slug: projects.slug, title: projects.title, role: projectTeam.role, year: projects.year })
+      .select({
+        id: projects.id,
+        slug: projects.slug,
+        title: projects.title,
+        role: projectTeam.role,
+        year: projects.year,
+      })
       .from(projectTeam)
       .innerJoin(projects, eq(projects.id, projectTeam.projectId))
       .where(and(eq(projectTeam.teamMemberId, member.id), eq(projects.status, "published")))
       .orderBy(asc(projects.sortOrder)),
     mediaMap([member.photoId]),
   ]);
+  const pillars = await primaryPillars(work.map((w) => w.id));
   return {
     member: { ...member, email: member.showEmail ? member.email : null },
     photo: member.photoId ? (photos.get(member.photoId) ?? null) : null,
     expertise,
-    work,
+    work: work.filter((w) => pillars.has(w.id)).map((w) => ({ ...w, pillarSlug: pillars.get(w.id)! })),
   };
 }
 
@@ -356,7 +380,7 @@ export async function getPublicSlugs() {
       .from(categories)
       .where(eq(categories.isVisible, true)),
     db
-      .select({ slug: projects.slug, updatedAt: projects.updatedAt })
+      .select({ id: projects.id, slug: projects.slug, updatedAt: projects.updatedAt })
       .from(projects)
       .where(eq(projects.status, "published")),
     db
@@ -364,7 +388,11 @@ export async function getPublicSlugs() {
       .from(teamMembers)
       .where(eq(teamMembers.isVisible, true)),
   ]);
-  return { categories: c, projects: p, team: t };
+  const pillars = await primaryPillars(p.map((row) => row.id));
+  const projectSlugs = p
+    .filter((row) => pillars.has(row.id))
+    .map((row) => ({ slug: row.slug, pillarSlug: pillars.get(row.id)!, updatedAt: row.updatedAt }));
+  return { categories: c, projects: projectSlugs, team: t };
 }
 
 export const PLACEHOLDER_SLUG = "__none__";

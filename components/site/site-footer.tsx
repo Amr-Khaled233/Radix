@@ -50,7 +50,6 @@ export async function SiteFooter() {
   const links = [
     { href: "/about", label: t("about") },
     { href: "/services", label: t("services") },
-    { href: "/work", label: t("work") },
     ...(team.length ? [{ href: "/team", label: t("team") }] : []),
     { href: "/contact", label: t("contact") },
   ];

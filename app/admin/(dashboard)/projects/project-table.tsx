@@ -29,6 +29,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { requiredEn } from "@/lib/admin/schemas";
 import type { Locale } from "@/lib/i18n/routing";
 import { t as localized, type Localized } from "@/lib/localized";
+import { projectPath } from "@/lib/site/paths";
 import type { MediaItem } from "@/lib/media/types";
 import { slugify, slugSchema } from "@/lib/slug";
 import { createProject, duplicateProject, setProjectFeatured, setProjectStatus } from "./actions";
@@ -58,7 +59,7 @@ export function ProjectTable({
   permissions,
 }: {
   projects: ProjectRow[];
-  categories: { id: string; name: Localized }[];
+  categories: { id: string; slug: string; name: Localized }[];
   permissions: { create: boolean; publish: boolean; delete: boolean };
 }) {
   const t = useTranslations("admin");
@@ -68,6 +69,11 @@ export function ProjectTable({
   const [status, setStatus] = useState<Status | "all">("all");
   const [category, setCategory] = useState<string>("all");
   const [featuredOnly, setFeaturedOnly] = useState(false);
+  // Public URL: under the first pillar (display order) the project belongs to.
+  const livePath = (ids: string[], slug: string) => {
+    const pillar = categories.find((c) => ids.includes(c.id));
+    return pillar ? projectPath(pillar.slug, slug) : "/services";
+  };
   const categoryName = useMemo(
     () => new Map(categories.map((c) => [c.id, localized(c.name, locale)])),
     [categories, locale],
@@ -157,7 +163,7 @@ export function ProjectTable({
             </DropdownMenuItem>
             {p.status === "published" ? (
               <DropdownMenuItem asChild>
-                <Link href={`/${locale}/work/${p.slug}`} target="_blank">
+                <Link href={`/${locale}${livePath(p.categoryIds, p.slug)}`} target="_blank">
                   <ExternalLink {...uiIcon} size={14} className="rtl:-scale-x-100" />
                   {t("projects.viewLive")}
                 </Link>

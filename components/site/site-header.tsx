@@ -43,7 +43,6 @@ export async function SiteHeader() {
   const links: NavLink[] = [
     { href: "/about", label: t("about") },
     { href: "/services", label: t("services") },
-    { href: "/work", label: t("work") },
     ...(hasTeam ? [{ href: "/team", label: t("team") }] : []),
   ];
   const cta: NavLink = { href: "/contact", label: t("cta") };
@@ -94,9 +93,6 @@ export async function SiteHeader() {
         ) : (
           <ServicesMenu label={t("services")} categories={categories} />
         )}
-        <Link href="/work" className={navLinkClass}>
-          {t("work")}
-        </Link>
         {hasTeam ? (
           <Link href="/team" className={navLinkClass}>
             {t("team")}

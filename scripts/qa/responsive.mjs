@@ -4,7 +4,17 @@ import { chromium } from "@playwright/test";
 
 const base = process.argv[2] ?? "http://localhost:3999";
 const widths = [320, 375, 768, 1024, 1440, 1920];
-const site = ["", "/about", "/services", "/services/brand", "/work", "/team", "/contact", "/privacy", "/nope-404"];
+const site = [
+  "",
+  "/about",
+  "/services",
+  "/services/brand",
+  "/services/sites-and-systems",
+  "/team",
+  "/contact",
+  "/privacy",
+  "/nope-404",
+];
 const admin = [
   "/admin",
   "/admin/categories",
