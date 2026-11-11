@@ -68,7 +68,7 @@ ffmpeg -i input-portrait.mov -an -vf "scale=1080:-2,fps=30" -c:v libx264 -pix_fm
 ## Deploying on Vercel
 
 1. **GitHub:** push this repository to GitHub.
-2. **Vercel project:** in [vercel.com](https://vercel.com) choose **Add New → Project** and import the repository. Vercel reads [`vercel.json`](vercel.json); its build command runs the migrations and the (idempotent) brand-content seed before `next build`. Works on the free **Hobby** plan (check its current limits on vercel.com/pricing; Vercel’s terms reserve Hobby for non-commercial use, so move to Pro if that applies).
+2. **Vercel project:** in [vercel.com](https://vercel.com) choose **Add New → Project** and import the repository. Vercel reads [`vercel.json`](vercel.json); its build command runs the migrations, the (idempotent) brand-content seed and the case-study import (below) before `next build`, so it works with Vercel's protected environment variables. Works on the free **Hobby** plan (check its current limits on vercel.com/pricing; Vercel’s terms reserve Hobby for non-commercial use, so move to Pro if that applies).
 3. **Database:** Project → **Storage** → **Create Database** → **Neon** (Marketplace, free plan) → region **Frankfurt** → connect it to all environments. Then Settings → Functions → set the function region to **Frankfurt (fra1)** too. This adds `DATABASE_URL` and `DATABASE_URL_UNPOOLED`. Optional: enable Neon branching for preview deployments so previews get their own database.
 4. **File storage:** Project → **Storage** → **Create** → **Blob** (free tier) → connect it. This adds `BLOB_READ_WRITE_TOKEN`.
 5. **Email (SMTP + app password, no domain needed):** on the Gmail account that will send the emails, turn on **2-Step Verification**, then open https://myaccount.google.com/apppasswords, create an app password named `RADIX` and copy the 16 characters. Add `SMTP_USER` (the Gmail address) and `SMTP_PASSWORD` (the app password) under Project → Settings → Environment Variables. Emails are sent as `RADIX <SMTP_USER>`; `EMAIL_FROM`, `SMTP_HOST` and `SMTP_PORT` are optional (defaults: Gmail, port 465). Gmail allows about 500 emails a day, plenty for invites, password resets and contact notifications.
@@ -95,15 +95,13 @@ Content changes go live within seconds (tag revalidation); no redeploy is needed
 
 ## Importing the prepared case studies
 
-Two sets of case studies are ready to import as **drafts** (text in `projects.ts`, images and videos in `images/`, recaptured with each folder's `capture.mjs`):
+`pnpm db:import:case-studies` runs in every Vercel build (see `vercel.json`) and adds what isn't in the database yet (text in `projects.ts`, images and videos in `images/`, recaptured with each folder's `capture.mjs`):
 
-- `scripts/content/portfolio/` → **Brand**: Mahmoud Hwary's brand identities (with his consent), credited to his team profile (created hidden).
-- `scripts/content/sites/` → **Sites & Systems**: websites we built, with screenshots (desktop and phone), a screen recording where it helps, and a **Visit the live site** button.
+- `scripts/content/portfolio/` → **Brand**, published: Mahmoud Hwary's brand identities (with his consent), credited to his team profile (created hidden).
+- `scripts/content/sites/` → **Sites & Systems**, published: websites we built, with screenshots (desktop and phone), a screen recording where it helps, and a **Visit the live site** button.
+- `scripts/content/systems/<slug>/` → **Sites & Systems**, as **drafts**: one folder per system (`project.json`, `capture.json`, `images/`, from the showcase prompt). Commit the folder and push; the next deploy imports it.
 
-```bash
-# against production: same env file as the super-admin step (DATABASE_URL + BLOB_READ_WRITE_TOKEN)
-pnpm dlx dotenv-cli -e .env.production.local -- pnpm db:import:case-studies
-```
+To add a new system: copy its `radix-case-study/` folder to `scripts/content/systems/<slug>/`, commit, push, then publish it from the dashboard after review.
 
 Files are uploaded to Vercel Blob when `BLOB_READ_WRITE_TOKEN` is set (local storage otherwise). Running it again skips what already exists. Then review each project in **Dashboard → Projects** and set it to **Published**; make Mahmoud visible in **Team** when his profile is ready. Project galleries accept images and videos (MP4/WebM), so a screen recording of a system can be added from the dashboard too.
 

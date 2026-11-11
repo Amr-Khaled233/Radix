@@ -1,5 +1,6 @@
 /**
- * Imports the prepared case studies as DRAFT projects, with their images,
+ * Imports the prepared case studies as projects (published, or a draft where
+ * noted), with their images,
  * videos, services, live links and credits:
  *   - scripts/content/portfolio → Brand (Mahmoud Hwary's work; his team
  *     profile is created hidden and credited on each project)
@@ -49,16 +50,26 @@ type CaseStudySet = {
   items: CaseStudy[];
   /** Credit Mahmoud Hwary on each project. */
   credit: boolean;
+  /** Published right away (approved by the owner) or a draft to review first. */
+  publish: boolean;
   coverAlt: (item: CaseStudy) => L;
 };
 
 const SETS: CaseStudySet[] = [
-  { dir: "portfolio", pillar: "brand", items: PORTFOLIO, credit: true, coverAlt: (item) => item.alt(0) },
+  {
+    dir: "portfolio",
+    pillar: "brand",
+    items: PORTFOLIO,
+    credit: true,
+    publish: true,
+    coverAlt: (item) => item.alt(0),
+  },
   {
     dir: "sites",
     pillar: "sites-and-systems",
     items: SITES,
     credit: false,
+    publish: true,
     coverAlt: (item) => ({ en: `${item.client.en} — home page`, ar: `${item.client.ar} — الصفحة الرئيسية` }),
   },
 ];
@@ -94,6 +105,8 @@ async function systemSets(): Promise<CaseStudySet[]> {
       dir: `systems/${folder.name}`,
       pillar: "sites-and-systems",
       credit: false,
+      // New systems arrive as drafts to review in the dashboard.
+      publish: false,
       items: [
         {
           ...data,
@@ -260,7 +273,8 @@ async function main() {
             coverImageId: coverId,
             year: item.year,
             externalUrl: item.externalUrl ?? null,
-            status: "draft",
+            status: set.publish ? "published" : "draft",
+            publishedAt: set.publish ? new Date() : null,
             sortOrder: order,
             arNeedsReview: true,
           })
@@ -282,12 +296,14 @@ async function main() {
         }
       });
       created += 1;
-      console.log(`Draft created: ${item.title.en} → ${set.pillar} (${files.length} files)`);
+      console.log(
+        `${set.publish ? "Published" : "Draft created"}: ${item.title.en} → ${set.pillar} (${files.length} files)`,
+      );
     }
   }
 
   await close();
-  console.log(`Done: ${created} drafts created. Review them in Dashboard → Projects, then set each one to Published.`);
+  console.log(`Done: ${created} case studies imported (existing ones skipped). Drafts wait in Dashboard → Projects.`);
 }
 
 main().catch((error) => {
