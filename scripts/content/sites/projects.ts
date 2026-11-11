@@ -32,8 +32,8 @@ const DELIVERED = both(
 
 /** The last paragraph on the two stores: their videos show the dashboard, recorded locally on demo data. */
 const DELIVERED_STORE = both(
-  "We handled the whole build: the storefront, the dashboard behind it, the code, and making every page work as well on a phone as on a desktop. The two walkthroughs below go through every page of the dashboard; they are recorded on a demo copy of the store filled with sample orders and customers, so no real customer data is shown.",
-  "تولّينا العمل بالكامل: واجهة المتجر، ولوحة التحكم التي تديره، والبرمجة، وأن تعمل كل صفحة على الموبايل بنفس جودتها على الكمبيوتر. الجولتان بالأسفل تمرّان على كل صفحات لوحة التحكم، ومسجّلتان على نسخة تجريبية من المتجر مليئة بطلبات وعملاء تجريبيين، فلا تظهر أي بيانات حقيقية للعملاء.",
+  "We handled the whole build: the storefront, the dashboard behind it, the code, and making every page work as well on a phone as on a desktop. The two walkthroughs below open on the store, then go through every page of the dashboard; the dashboard is recorded on a demo copy of the store filled with sample orders and customers, so no real customer data is shown.",
+  "تولّينا العمل بالكامل: واجهة المتجر، ولوحة التحكم التي تديره، والبرمجة، وأن تعمل كل صفحة على الموبايل بنفس جودتها على الكمبيوتر. الجولتان بالأسفل تبدآن بالمتجر، ثم تمرّان على كل صفحات لوحة التحكم، ولوحة التحكم مسجّلة على نسخة تجريبية من المتجر مليئة بطلبات وعملاء تجريبيين، فلا تظهر أي بيانات حقيقية للعملاء.",
 );
 
 export const SITES: CaseStudy[] = [
@@ -127,16 +127,16 @@ export const SITES: CaseStudy[] = [
     externalUrl: "https://www.luwjje.com",
     ...gallery("LUWJJE", "LUWJJE", [
       [
-        "walkthrough on desktop: every page of the dashboard",
-        "جولة على الكمبيوتر: كل صفحات لوحة التحكم",
-        "Sign-in, then every page of the dashboard: orders, unconfirmed orders, products, categories, stock, offers, shipping, free shipping, shop filters, promo codes, analytics, shoppers and settings.",
-        "تسجيل الدخول، ثم كل صفحات لوحة التحكم: الطلبات، والطلبات غير المؤكدة، والمنتجات، والفئات، والمخزون، والعروض، والشحن، والشحن المجاني، وفلاتر المتجر، وأكواد الخصم، والتحليلات، والمتسوّقين، والإعدادات.",
+        "walkthrough on desktop: the store, then every page of the dashboard",
+        "جولة على الكمبيوتر: المتجر ثم كل صفحات لوحة التحكم",
+        "The store and a product, then sign-in and every page of the dashboard: orders, unconfirmed orders, products, categories, stock, offers, shipping, free shipping, shop filters, promo codes, analytics, shoppers and settings.",
+        "المتجر وصفحة منتج، ثم تسجيل الدخول وكل صفحات لوحة التحكم: الطلبات، والطلبات غير المؤكدة، والمنتجات، والفئات، والمخزون، والعروض، والشحن، والشحن المجاني، وفلاتر المتجر، وأكواد الخصم، والتحليلات، والمتسوّقين، والإعدادات.",
       ],
       [
-        "walkthrough on a phone: the dashboard",
-        "جولة على الموبايل: لوحة التحكم",
-        "The same tour of the dashboard on a phone.",
-        "نفس جولة لوحة التحكم على الموبايل.",
+        "walkthrough on a phone: the store and the dashboard",
+        "جولة على الموبايل: المتجر ولوحة التحكم",
+        "The same tour on a phone: the store, then the whole dashboard.",
+        "نفس الجولة على الموبايل: المتجر، ثم لوحة التحكم كاملة.",
       ],
     ]),
   },
