@@ -122,7 +122,7 @@ async function CaseStudy({ params }: { params: Params }) {
 
       {cover ? (
         <div className="container-site">
-          <div className="bg-inverse relative aspect-[16/9] overflow-hidden">
+          <div className="bg-inverse relative aspect-video overflow-hidden">
             <SiteImage image={cover} locale={locale} priority sizes="(min-width: 1440px) 1248px, 100vw" />
           </div>
         </div>
@@ -147,25 +147,31 @@ async function CaseStudy({ params }: { params: Params }) {
 
       {gallery.length ? (
         <section className="container-site" aria-label={tW("gallery")}>
-          <ul className="grid gap-fib-21 md:grid-cols-2">
-            {gallery.map((item, i) => (
-              <li key={item.media!.id} className={i % 3 === 0 ? "md:col-span-2" : undefined}>
-                <figure>
-                  <div
-                    className={`bg-inverse relative overflow-hidden ${i % 3 === 0 ? "aspect-[16/9]" : "aspect-[4/3]"}`}
-                  >
-                    <SiteImage
-                      image={item.media!}
-                      locale={locale}
-                      sizes={i % 3 === 0 ? "100vw" : "(min-width: 768px) 50vw, 100vw"}
-                    />
-                  </div>
-                  {t(item.caption, locale) ? (
-                    <figcaption className="type-label text-label mt-fib-8">{t(item.caption, locale)}</figcaption>
-                  ) : null}
-                </figure>
-              </li>
-            ))}
+          {/* Natural aspect ratios (never cropped): wide images span the row, upright ones pair up
+              (dense flow lets a later upright image fill the gap beside an earlier one). */}
+          <ul className="grid items-start gap-fib-21 md:grid-flow-dense md:grid-cols-2">
+            {gallery.map((item) => {
+              const { width, height } = item.media!;
+              const wide = !width || !height || width / height >= 1.2;
+              return (
+                <li key={item.media!.id} className={wide ? "md:col-span-2" : undefined}>
+                  <figure>
+                    <div className="bg-inverse overflow-hidden">
+                      <SiteImage
+                        image={item.media!}
+                        locale={locale}
+                        fill={false}
+                        className="h-auto w-full"
+                        sizes={wide ? "(min-width: 1440px) 1248px, 100vw" : "(min-width: 768px) 50vw, 100vw"}
+                      />
+                    </div>
+                    {t(item.caption, locale) ? (
+                      <figcaption className="type-label text-label mt-fib-8">{t(item.caption, locale)}</figcaption>
+                    ) : null}
+                  </figure>
+                </li>
+              );
+            })}
           </ul>
         </section>
       ) : null}

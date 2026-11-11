@@ -33,7 +33,7 @@ export function ProjectCard({
   const client = t(project.clientName, locale);
   return (
     <Link href={href} className="group block">
-      <div className="bg-inverse relative aspect-[4/3] overflow-hidden">
+      <div className="bg-inverse relative aspect-[16/10] overflow-hidden">
         {project.cover ? (
           <SiteImage
             image={project.cover}

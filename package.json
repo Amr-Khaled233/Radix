@@ -19,7 +19,8 @@
     "db:seed:admin": "tsx scripts/db/seed-admin.ts",
     "db:seed:demo": "tsx scripts/db/seed-demo.ts",
     "db:local": "pglite-server --db=.data/pglite --port=5433 --max-connections=200",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "db:import:portfolio": "tsx scripts/db/import-portfolio.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

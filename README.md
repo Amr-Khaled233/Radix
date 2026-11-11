@@ -93,6 +93,17 @@ ffmpeg -i input-portrait.mov -an -vf "scale=1080:-2,fps=30" -c:v libx264 -pix_fm
 
 Content changes go live within seconds (tag revalidation); no redeploy is needed.
 
+## Importing the portfolio case studies
+
+`scripts/content/portfolio/` holds Mahmoud Hwary's brand-identity case studies (text in `projects.ts`, images in `images/`, captured from his portfolio with `node scripts/content/portfolio/capture.mjs`). Import them once as **drafts** under the Brand pillar, with his (hidden) team profile and credits:
+
+```bash
+# against production: same env file as the super-admin step (DATABASE_URL + BLOB_READ_WRITE_TOKEN)
+pnpm dlx dotenv-cli -e .env.production.local -- pnpm db:import:portfolio
+```
+
+Images are uploaded to Vercel Blob when `BLOB_READ_WRITE_TOKEN` is set (local storage otherwise). Running it again skips what already exists. Then review each project in **Dashboard → Projects** and set it to **Published**; make Mahmoud visible in **Team** when his profile is ready.
+
 ## Accounts and who gets which messages
 
 - **One super admin** (created once with `pnpm db:seed:admin`) manages every account from **Dashboard → Admins**: invites, roles, password reset links, deactivation and deletion. Nobody else can be made super admin, and the seed script won't create a second one.

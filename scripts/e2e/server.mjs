@@ -8,7 +8,7 @@
 import { PGlite } from "@electric-sql/pglite";
 import { PGLiteSocketServer } from "@electric-sql/pglite-socket";
 import { spawn } from "node:child_process";
-import { mkdirSync, writeFileSync } from "node:fs";
+import { mkdirSync, rmSync, writeFileSync } from "node:fs";
 
 const DB_PORT = 54330;
 const APP_PORT = Number(process.env.E2E_PORT ?? 3999);
@@ -49,6 +49,8 @@ await run("pnpm", ["db:migrate"]);
 await run("pnpm", ["db:seed"]);
 await run("pnpm", ["db:seed:admin"]);
 if (!process.env.E2E_SKIP_BUILD) await run("pnpm", ["build"]);
+// Pages cached by an earlier run (possibly another build or database) must not be served.
+rmSync(".next/server/route-cache", { recursive: true, force: true });
 
 const app = spawn("pnpm", ["start", "-p", String(APP_PORT)], { env, stdio: "inherit", shell: true });
 const stop = async () => {
