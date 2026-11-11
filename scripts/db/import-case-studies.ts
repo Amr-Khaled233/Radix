@@ -66,7 +66,7 @@ const SETS: CaseStudySet[] = [
     items: PORTFOLIO,
     credit: true,
     publish: true,
-    coverAlt: (item) => item.alt(0),
+    coverAlt: (item) => item.coverAlt ?? item.alt(0),
   },
   {
     dir: "sites",

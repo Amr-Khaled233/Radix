@@ -32,6 +32,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Source material for the Brand case studies (a separate repository, not part of the site).
+    "hwary_portfolio/**",
   ]),
 ]);
 

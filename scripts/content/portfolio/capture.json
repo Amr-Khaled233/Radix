@@ -1,42 +1,93 @@
 {
   "genz:cover": "genz-cover.webp",
   "genz": [
-    "genz-photo-01.webp",
-    "genz-photo-02.webp",
-    "genz-photo-03.webp",
-    "genz-photo-04.webp",
-    "genz-photo-05.webp",
-    "genz-photo-06.webp",
-    "genz-photo-07.webp",
-    "genz-photo-08.webp",
-    "genz-photo-09.webp"
+    "genz-01.webp",
+    "genz-02.webp",
+    "genz-03.webp",
+    "genz-04.webp",
+    "genz-05.webp",
+    "genz-06.webp",
+    "genz-07.webp",
+    "genz-08.webp",
+    "genz-09.webp",
+    "genz-10.webp"
   ],
   "reve:cover": "reve-cover.webp",
   "reve": [
-    "reve-photo-01.webp",
-    "reve-photo-02.webp",
-    "reve-photo-03.webp",
-    "reve-photo-04.webp",
-    "reve-photo-05.webp",
-    "reve-photo-06.webp",
-    "reve-photo-07.webp",
-    "reve-photo-08.webp",
-    "reve-photo-09.webp",
-    "reve-photo-10.webp"
+    "reve-01.webp",
+    "reve-02.webp",
+    "reve-03.webp",
+    "reve-04.webp",
+    "reve-05.webp",
+    "reve-06.webp",
+    "reve-07.webp",
+    "reve-08.webp",
+    "reve-09.webp",
+    "reve-10.webp",
+    "reve-11.webp",
+    "reve-12.webp"
   ],
   "bakebake:cover": "bakebake-cover.webp",
-  "bakebake": ["bakebake-01.webp"],
+  "bakebake": [
+    "bakebake-01.webp",
+    "bakebake-02.webp",
+    "bakebake-03.webp",
+    "bakebake-04.webp",
+    "bakebake-05.webp",
+    "bakebake-06.webp",
+    "bakebake-07.webp"
+  ],
   "levelup:cover": "levelup-cover.webp",
-  "levelup": ["levelup-01.webp"],
+  "levelup": [
+    "levelup-01.webp",
+    "levelup-02.webp",
+    "levelup-03.webp",
+    "levelup-04.webp",
+    "levelup-05.webp"
+  ],
   "upperegypt:cover": "upperegypt-cover.webp",
-  "upperegypt": ["upperegypt-01.webp"],
+  "upperegypt": [
+    "upperegypt-01.webp",
+    "upperegypt-02.webp",
+    "upperegypt-03.webp",
+    "upperegypt-04.webp",
+    "upperegypt-05.webp",
+    "upperegypt-06.webp"
+  ],
   "nas:cover": "nas-cover.webp",
-  "nas": ["nas-01.webp"],
+  "nas": [
+    "nas-01.webp",
+    "nas-02.webp",
+    "nas-03.webp",
+    "nas-04.webp",
+    "nas-05.webp",
+    "nas-06.webp"
+  ],
   "gamestation:cover": "gamestation-cover.webp",
-  "gamestation": ["gamestation-01.webp", "gamestation-02.webp"],
+  "gamestation": [
+    "gamestation-01.webp",
+    "gamestation-02.webp",
+    "gamestation-03.webp"
+  ],
   "fawzi:cover": "fawzi-cover.webp",
-  "fawzi": ["fawzi-01.webp"],
+  "fawzi": [
+    "fawzi-01.webp",
+    "fawzi-02.webp",
+    "fawzi-03.webp",
+    "fawzi-04.webp",
+    "fawzi-05.webp",
+    "fawzi-06.webp"
+  ],
   "paula:cover": "paula-cover.webp",
-  "paula": ["paula-01.webp", "paula-02.webp"],
-  "portrait": ["mahmoud-hwary.webp"]
+  "paula": [
+    "paula-01.webp",
+    "paula-02.webp",
+    "paula-03.webp",
+    "paula-04.webp",
+    "paula-05.webp",
+    "paula-06.webp"
+  ],
+  "portrait": [
+    "mahmoud-hwary.webp"
+  ]
 }

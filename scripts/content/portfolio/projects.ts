@@ -5,13 +5,22 @@
  * competition entry are deliberately left out.
  *
  * Text is as written on the portfolio (no added results or links). Arabic is a
- * first draft, flagged "Needs review". Images come from ./capture.mjs.
+ * first draft, flagged "Needs review". Images come from ./build.mjs (his original files).
  * Imported as drafts by `pnpm db:import:case-studies`.
  */
 import { both, type CaseStudy } from "../types";
 
-const overview = (name: string, nameAr: string) => (i: number) =>
-  both(`${name} brand identity — case study, part ${i + 1}`, `هوية ${nameAr} — دراسة الحالة، الجزء ${i + 1}`);
+/** [en, ar] per image: what it shows. Used as the alt text (with the project name) and the visible caption. */
+type Shot = [string, string];
+const shots = (name: string, nameAr: string, cover: Shot, gallery: Shot[]) => ({
+  coverAlt: both(`${name} — ${cover[0]}`, `${nameAr} — ${cover[1]}`),
+  alt: (i: number) => {
+    const [en, ar] = gallery[i] ?? [`image ${i + 1}`, `صورة ${i + 1}`];
+    return both(`${name} — ${en}`, `${nameAr} — ${ar}`);
+  },
+  caption: (i: number) => (gallery[i] ? both(cap(gallery[i][0]), gallery[i][1]) : undefined),
+});
+const cap = (t: string) => t.charAt(0).toUpperCase() + t.slice(1) + ".";
 
 export const MAHMOUD = {
   slug: "mahmoud-hwary",
@@ -60,19 +69,18 @@ export const PORTFOLIO: CaseStudy[] = [
       both("Dad cap", "قبعة"),
     ],
     services: ["Visual identity", "Packaging", "Brand applications", "Art direction"],
-    alt: (i) =>
-      [
-        both("GENZ brand identity — case study overview", "هوية GENZ — نظرة عامة على دراسة الحالة"),
-        both("GENZ FW'25 campaign hoodie", "هودي حملة GENZ لخريف وشتاء 2025"),
-        both("GENZ hang tags", "بطاقات تعليق GENZ"),
-        both("GENZ canvas tote", "حقيبة GENZ القماشية"),
-        both("GENZ e-commerce website", "متجر GENZ الإلكتروني"),
-        both("GENZ signature tee", "تيشيرت GENZ المميز"),
-        both("GENZ knit socks", "جوارب GENZ المحبوكة"),
-        both("GENZ lookbook", "كتالوج إطلالات GENZ"),
-        both("GENZ mailer box", "صندوق شحن GENZ"),
-        both("GENZ dad cap", "قبعة GENZ"),
-      ][i] ?? overview("GENZ", "GENZ")(i),
+    ...shots("GENZ", "GENZ", ["canvas tote", "الحقيبة القماشية"], [
+      ["the Arabic wordmark", "الشعار النصي بالعربية"],
+      ["the Latin wordmark, Crafted by People", "الشعار النصي باللاتينية، Crafted by People"],
+      ["FW'25 campaign hoodie", "هودي حملة خريف وشتاء 2025"],
+      ["lookbook", "كتالوج الإطلالات"],
+      ["hang tags", "بطاقات التعليق"],
+      ["e-commerce website", "المتجر الإلكتروني"],
+      ["signature tee", "التيشيرت المميز"],
+      ["knit socks", "الجوارب المحبوكة"],
+      ["mailer box", "صندوق الشحن"],
+      ["dad cap", "القبعة"],
+    ]),
   },
   {
     key: "reve",
@@ -100,10 +108,20 @@ export const PORTFOLIO: CaseStudy[] = [
       both("Woven label and textile swatch", "ملصق منسوج وعينة قماش"),
     ],
     services: ["Brand identity systems", "Visual identity", "Packaging", "Brand applications"],
-    alt: (i) =>
-      i === 0
-        ? both("21Rêve visual identity — case study overview", "هوية 21Rêve — نظرة عامة على دراسة الحالة")
-        : both(`21Rêve identity in use — application ${i}`, `هوية 21Rêve قيد الاستخدام — تطبيق ${i}`),
+    ...shots("21Rêve", "21Rêve", ["storefront signage", "لافتة الواجهة"], [
+      ["the wordmark, Luxurize Your Home", "الشعار النصي، Luxurize Your Home"],
+      ["the 21 mark in reverse", "علامة 21 على خلفية داكنة"],
+      ["dimensional wall logo", "الشعار الجداري المجسّم"],
+      ["hanging banner", "اللافتة المعلّقة"],
+      ["business cards", "بطاقات العمل"],
+      ["line-motif poster", "ملصق الزخرفة الخطية"],
+      ["letterhead", "الورق الرسمي"],
+      ["stationery suite", "مجموعة القرطاسية"],
+      ["stamps", "الطوابع"],
+      ["woven label", "الملصق المنسوج"],
+      ["textile swatch", "عينة القماش"],
+      ["typeface and palette", "الخط ولوحة الألوان"],
+    ]),
   },
   {
     key: "bakebake",
@@ -128,7 +146,15 @@ export const PORTFOLIO: CaseStudy[] = [
       both("Storefront signage", "لافتة الواجهة"),
     ],
     services: ["Visual identity", "Packaging", "Brand applications"],
-    alt: overview("Bake Bake", "Bake Bake"),
+    ...shots("Bake Bake", "Bake Bake", ["primary logo", "الشعار الأساسي"], [
+      ["the mark in reverse", "الشعار على خلفية داكنة"],
+      ["wrapping pattern", "نقشة التغليف"],
+      ["box pattern wrap", "نقشة تغليف العلب"],
+      ["the mark on the wrapping and box patterns", "الشعار على نقشتي التغليف والعلب"],
+      ["apron", "مريلة العمل"],
+      ["storefront signage", "لافتة الواجهة"],
+      ["typeface and palette", "الخط ولوحة الألوان"],
+    ]),
   },
   {
     key: "levelup",
@@ -154,7 +180,13 @@ export const PORTFOLIO: CaseStudy[] = [
       both("Stationery", "القرطاسية"),
     ],
     services: ["Visual identity", "Brand identity systems", "Brand applications"],
-    alt: overview("Level Up", "Level Up"),
+    ...shots("Level Up", "Level Up", ["out-of-home billboard", "لوحة إعلانية خارجية"], [
+      ["logo lockup, Take Your Fun to the Next Level", "الشعار، Take Your Fun to the Next Level"],
+      ["brand mark and sticker set", "العلامة ومجموعة الملصقات"],
+      ["digital production", "الإنتاج الرقمي"],
+      ["out-of-home billboard", "لوحة إعلانية خارجية"],
+      ["stationery", "القرطاسية"],
+    ]),
   },
   {
     key: "upperegypt",
@@ -180,7 +212,14 @@ export const PORTFOLIO: CaseStudy[] = [
       ),
     ],
     services: ["Visual identity", "Packaging"],
-    alt: overview("Upper Egypt For Food Industries", "Upper Egypt For Food Industries"),
+    ...shots("Upper Egypt For Food Industries", "Upper Egypt For Food Industries", ["logo", "الشعار"], [
+      ["the leaf-and-monogram symbol", "رمز الورقة والحرف الأول"],
+      ["product family", "عائلة المنتجات"],
+      ["Mix with Corn", "خضار مشكّل بالذرة"],
+      ["Okra", "بامية"],
+      ["Peas & Carrots", "بازلاء وجزر"],
+      ["construction grid", "شبكة بناء الرمز"],
+    ]),
   },
   {
     key: "nas",
@@ -200,7 +239,14 @@ export const PORTFOLIO: CaseStudy[] = [
     ],
     applications: [],
     services: ["Visual identity", "Brand applications"],
-    alt: overview("NAS Film Production", "NAS Film Production"),
+    ...shots("NAS Film Production", "NAS Film Production", ["the symbol", "الرمز"], [
+      ["logo", "الشعار"],
+      ["the play-button symbol, all over the world", "رمز زر التشغيل، إلى العالم كله"],
+      ["on-set slate and motion bumper", "لوح التصوير والفاصل المتحرك"],
+      ["content that travels all over the world", "محتوى يسافر إلى العالم كله"],
+      ["stories that travel", "قصص تسافر"],
+      ["typeface and app", "الخط والتطبيق"],
+    ]),
   },
   {
     key: "gamestation",
@@ -226,7 +272,11 @@ export const PORTFOLIO: CaseStudy[] = [
       both("Web", "الويب"),
     ],
     services: ["Visual identity", "Brand identity systems", "Art direction"],
-    alt: overview("Game Station", "Game Station"),
+    ...shots("Game Station", "Game Station", ["the 8-bit boot screen", "شاشة التشغيل بأسلوب 8-bit"], [
+      ["the G-S monogram", "شعار G-S"],
+      ["the boot screen and cloud sprites", "شاشة التشغيل والسحب بالبكسل"],
+      ["jet, avocado and two neutrals", "الأسود والأخضر الزيتوني ولونان محايدان"],
+    ]),
   },
   {
     key: "fawzi",
@@ -250,7 +300,14 @@ export const PORTFOLIO: CaseStudy[] = [
       both("Environmental signage", "لافتات المكان"),
     ],
     services: ["Visual identity", "Brand applications"],
-    alt: overview("Fawzi Ronadi", "فوزي رونادي"),
+    ...shots("Fawzi Ronadi", "فوزي رونادي", ["environmental signage", "لافتات المكان"], [
+      ["logo in signal coral", "الشعار باللون المرجاني"],
+      ["logo in reverse", "الشعار على خلفية داكنة"],
+      ["poster and construction grid", "الملصق وشبكة البناء"],
+      ["digital display", "الشاشة الرقمية"],
+      ["environmental signage", "لافتات المكان"],
+      ["primary mark and app", "العلامة الأساسية والتطبيق"],
+    ]),
   },
   {
     key: "paula",
@@ -277,6 +334,13 @@ export const PORTFOLIO: CaseStudy[] = [
       both("Cycle performance report", "تقرير أداء الدورة"),
     ],
     services: ["Visual identity", "Brand identity systems", "Brand applications"],
-    alt: overview("Paula", "Paula"),
+    ...shots("Paula", "Paula", ["primary logo, Predict. Optimize. Grow.", "الشعار الأساسي، Predict. Optimize. Grow."], [
+      ["logo in reverse", "الشعار على خلفية داكنة"],
+      ["stacked logo", "الشعار الرأسي"],
+      ["colour palette", "لوحة الألوان"],
+      ["prediction dashboard", "لوحة التنبؤ"],
+      ["business card and social post", "بطاقة العمل ومنشور التواصل"],
+      ["live insight, facility signage and letterhead", "تنبيه مباشر ولافتات المنشأة والورق الرسمي"],
+    ]),
   },
 ];
