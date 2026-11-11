@@ -93,16 +93,19 @@ ffmpeg -i input-portrait.mov -an -vf "scale=1080:-2,fps=30" -c:v libx264 -pix_fm
 
 Content changes go live within seconds (tag revalidation); no redeploy is needed.
 
-## Importing the portfolio case studies
+## Importing the prepared case studies
 
-`scripts/content/portfolio/` holds Mahmoud Hwary's brand-identity case studies (text in `projects.ts`, images in `images/`, captured from his portfolio with `node scripts/content/portfolio/capture.mjs`). Import them once as **drafts** under the Brand pillar, with his (hidden) team profile and credits:
+Two sets of case studies are ready to import as **drafts** (text in `projects.ts`, images and videos in `images/`, recaptured with each folder's `capture.mjs`):
+
+- `scripts/content/portfolio/` → **Brand**: Mahmoud Hwary's brand identities (with his consent), credited to his team profile (created hidden).
+- `scripts/content/sites/` → **Sites & Systems**: websites we built, with screenshots (desktop and phone), a screen recording where it helps, and a **Visit the live site** button.
 
 ```bash
 # against production: same env file as the super-admin step (DATABASE_URL + BLOB_READ_WRITE_TOKEN)
-pnpm dlx dotenv-cli -e .env.production.local -- pnpm db:import:portfolio
+pnpm dlx dotenv-cli -e .env.production.local -- pnpm db:import:case-studies
 ```
 
-Images are uploaded to Vercel Blob when `BLOB_READ_WRITE_TOKEN` is set (local storage otherwise). Running it again skips what already exists. Then review each project in **Dashboard → Projects** and set it to **Published**; make Mahmoud visible in **Team** when his profile is ready.
+Files are uploaded to Vercel Blob when `BLOB_READ_WRITE_TOKEN` is set (local storage otherwise). Running it again skips what already exists. Then review each project in **Dashboard → Projects** and set it to **Published**; make Mahmoud visible in **Team** when his profile is ready. Project galleries accept images and videos (MP4/WebM), so a screen recording of a system can be added from the dashboard too.
 
 ## Accounts and who gets which messages
 

@@ -893,11 +893,12 @@
       "results": "Results",
       "credits": "Credits",
       "gallery": "Gallery",
-      "visit": "Visit the project",
+      "visit": "Visit the live site",
       "next": "Next project",
       "draft": "Draft preview — not visible to the public.",
       "exitPreview": "Exit preview",
-      "backTo": "Back to"
+      "backTo": "Back to",
+      "opensNewTab": "(opens in a new tab)"
     },
     "team": {
       "label": "Team",

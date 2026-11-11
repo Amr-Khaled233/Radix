@@ -175,8 +175,10 @@ export function ProjectForm({ project, initial, media, options, permissions }: P
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <p className="text-foreground text-sm font-semibold">{t("projects.gallery")}</p>
+                {/* Images and videos (e.g. a screen recording of a system). */}
                 <MediaPicker
                   label=""
+                  accept="any"
                   value={null}
                   onChange={(item) => {
                     if (!item) return;

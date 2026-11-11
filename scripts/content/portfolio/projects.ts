@@ -6,27 +6,9 @@
  *
  * Text is as written on the portfolio (no added results or links). Arabic is a
  * first draft, flagged "Needs review". Images come from ./capture.mjs.
- * Imported as drafts by `pnpm db:import:portfolio`.
+ * Imported as drafts by `pnpm db:import:case-studies`.
  */
-type L = { en: string; ar: string };
-const both = (en: string, ar: string): L => ({ en, ar });
-
-export type PortfolioProject = {
-  key: string; // capture.json key
-  slug: string;
-  title: L;
-  client: L;
-  year: number | null;
-  summary: L;
-  /** Case-study paragraphs. */
-  body: L[];
-  /** Applications shown in the case study (rendered as a list). */
-  applications: L[];
-  /** Brand pillar services, by English name. */
-  services: string[];
-  /** Alt text for the case-study captures and photos, in gallery order. */
-  alt: (index: number) => L;
-};
+import { both, type CaseStudy } from "../types";
 
 const overview = (name: string, nameAr: string) => (i: number) =>
   both(`${name} brand identity — case study, part ${i + 1}`, `هوية ${nameAr} — دراسة الحالة، الجزء ${i + 1}`);
@@ -49,7 +31,7 @@ export const MAHMOUD = {
   creditRole: both("Art direction & brand identity", "الإدارة الفنية والهوية البصرية"),
 };
 
-export const PORTFOLIO: PortfolioProject[] = [
+export const PORTFOLIO: CaseStudy[] = [
   {
     key: "genz",
     slug: "genz",

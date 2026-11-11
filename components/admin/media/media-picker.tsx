@@ -16,7 +16,7 @@ type MediaPickerProps = {
   label: string;
   value: MediaItem | null;
   onChange: (item: MediaItem | null) => void;
-  accept?: "image" | "video";
+  accept?: "image" | "video" | "any";
   hint?: string;
   aspect?: "square" | "video";
 };

@@ -20,7 +20,7 @@
     "db:seed:demo": "tsx scripts/db/seed-demo.ts",
     "db:local": "pglite-server --db=.data/pglite --port=5433 --max-connections=200",
     "test:e2e": "playwright test",
-    "db:import:portfolio": "tsx scripts/db/import-portfolio.ts"
+    "db:import:case-studies": "tsx scripts/db/import-case-studies.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
@@ -75,6 +75,7 @@
     "drizzle-kit": "^0.31.11",
     "eslint": "^9",
     "eslint-config-next": "16.4.3",
+    "ffmpeg-static": "^5.3.0",
     "prettier": "^3.9.10",
     "sharp": "^0.35.5",
     "tailwindcss": "^4",

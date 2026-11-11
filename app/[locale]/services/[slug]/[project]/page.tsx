@@ -109,6 +109,19 @@ async function CaseStudy({ params }: { params: Params }) {
         {t(project.summary, locale) ? (
           <p className="type-body-lg text-muted reveal-rise mt-fib-21 max-w-3xl">{t(project.summary, locale)}</p>
         ) : null}
+        {project.externalUrl ? (
+          // The live site: the most useful thing on the page for a website case study.
+          <a
+            href={project.externalUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="type-button bg-accent text-on-accent hover:bg-inverse hover:text-on-inverse mt-fib-34 inline-flex min-h-12 items-center gap-2 px-6 transition-colors duration-(--duration-hover) ease-brand"
+          >
+            {tW("visit")}
+            <Icon name="arrow-up-right" size={18} />
+            <span className="sr-only">{tW("opensNewTab")}</span>
+          </a>
+        ) : null}
         <SurfaceLine className="mt-fib-55" />
         <dl className="grid gap-fib-21 pt-fib-21 sm:grid-cols-2 lg:grid-cols-4">
           {facts.map((fact) => (
@@ -130,19 +143,6 @@ async function CaseStudy({ params }: { params: Params }) {
 
       <section className="container-site grid gap-fib-55 lg:grid-cols-12">
         <RichText value={project.body} locale={locale} className="lg:col-span-8" />
-        {project.externalUrl ? (
-          <div className="lg:col-span-3 lg:col-start-10">
-            <a
-              href={project.externalUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="type-button text-foreground border-line-strong inline-flex items-center gap-2 border-b pb-1"
-            >
-              {tW("visit")}
-              <Icon name="arrow-up-right" size={16} />
-            </a>
-          </div>
-        ) : null}
       </section>
 
       {gallery.length ? (
@@ -151,19 +151,32 @@ async function CaseStudy({ params }: { params: Params }) {
               (dense flow lets a later upright image fill the gap beside an earlier one). */}
           <ul className="grid items-start gap-fib-21 md:grid-flow-dense md:grid-cols-2">
             {gallery.map((item) => {
-              const { width, height } = item.media!;
-              const wide = !width || !height || width / height >= 1.2;
+              const { width, height, kind } = item.media!;
+              const wide = kind === "video" || !width || !height || width / height >= 1.2;
               return (
                 <li key={item.media!.id} className={wide ? "md:col-span-2" : undefined}>
                   <figure>
                     <div className="bg-inverse overflow-hidden">
-                      <SiteImage
-                        image={item.media!}
-                        locale={locale}
-                        fill={false}
-                        className="h-auto w-full"
-                        sizes={wide ? "(min-width: 1440px) 1248px, 100vw" : "(min-width: 768px) 50vw, 100vw"}
-                      />
+                      {kind === "video" ? (
+                        // Screen recordings of a system: the visitor starts them; no autoplay.
+                        <video
+                          src={item.media!.url}
+                          controls
+                          muted
+                          playsInline
+                          preload="metadata"
+                          aria-label={t(item.media!.alt, locale) || title}
+                          className="block h-auto w-full"
+                        />
+                      ) : (
+                        <SiteImage
+                          image={item.media!}
+                          locale={locale}
+                          fill={false}
+                          className="h-auto w-full"
+                          sizes={wide ? "(min-width: 1440px) 1248px, 100vw" : "(min-width: 768px) 50vw, 100vw"}
+                        />
+                      )}
                     </div>
                     {t(item.caption, locale) ? (
                       <figcaption className="type-label text-label mt-fib-8">{t(item.caption, locale)}</figcaption>
