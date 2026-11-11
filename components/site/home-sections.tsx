@@ -74,19 +74,18 @@ export function PillarsSection({
           nodes={categories.map((category, i) => ({
             depth: [55, 89, 55, 89][i % 4],
             content: (
-              <Link
-                href={`/services/${category.slug}`}
-                className="frame-card group block p-fib-13"
-              >
-                <div className="text-foreground group-hover:[&_svg]:text-focus flex items-center justify-between [&_svg]:transition-colors">
-                  <IndexMarker n={localizeDigits(formatIndex(category.index), locale, digits)} />
-                  <Icon name={category.iconKey as IconName} />
-                </div>
-                <h3 className="type-h3 text-foreground group-hover:text-focus mt-fib-13 transition-colors">
-                  {t(category.name, locale)}
-                </h3>
-                <p className="type-body text-muted mt-1">{t(category.tagline, locale)}</p>
-              </Link>
+              <div className="frame-slot">
+                <Link href={`/services/${category.slug}`} className="frame-card group block p-fib-13">
+                  <div className="text-foreground group-hover:[&_svg]:text-focus flex items-center justify-between [&_svg]:transition-colors">
+                    <IndexMarker n={localizeDigits(formatIndex(category.index), locale, digits)} />
+                    <Icon name={category.iconKey as IconName} />
+                  </div>
+                  <h3 className="type-h3 text-foreground group-hover:text-focus mt-fib-13 transition-colors">
+                    {t(category.name, locale)}
+                  </h3>
+                  <p className="type-body text-muted mt-1">{t(category.tagline, locale)}</p>
+                </Link>
+              </div>
             ),
           }))}
         />
