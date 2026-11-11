@@ -66,7 +66,7 @@ export function PillarsSection({
         <SectionHeading label={t(copy.label, locale)} heading={t(copy.heading, locale)} className="pb-fib-34" />
       ) : null}
       <SurfaceLine />
-      <div className="relative">
+      <div className="dim-scope relative">
         <Strata count={5} className="absolute inset-x-0 top-0" />
         <CoreLines
           className="relative"
@@ -76,13 +76,13 @@ export function PillarsSection({
             content: (
               <Link
                 href={`/services/${category.slug}`}
-                className="group ease-brand block transition-transform duration-(--duration-hover) hover:-translate-y-2 motion-reduce:transform-none"
+                className="frame-card group block p-fib-13"
               >
-                <div className="text-foreground group-hover:[&_svg]:text-accent flex items-center justify-between [&_svg]:transition-colors">
+                <div className="text-foreground group-hover:[&_svg]:text-focus flex items-center justify-between [&_svg]:transition-colors">
                   <IndexMarker n={localizeDigits(formatIndex(category.index), locale, digits)} />
                   <Icon name={category.iconKey as IconName} />
                 </div>
-                <h3 className="type-h3 text-foreground group-hover:text-muted mt-fib-13 transition-colors">
+                <h3 className="type-h3 text-foreground group-hover:text-focus mt-fib-13 transition-colors">
                   {t(category.name, locale)}
                 </h3>
                 <p className="type-body text-muted mt-1">{t(category.tagline, locale)}</p>
@@ -146,7 +146,7 @@ export function FeaturedWorkSection({
       <div className="flex flex-wrap items-end justify-between gap-fib-21 pb-fib-34">
         <SectionHeading label={t(copy.label, locale)} heading={t(copy.heading, locale) || undefined} />
       </div>
-      <div className="reveal-settle grid gap-fib-34 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="dim-scope reveal-settle grid gap-fib-34 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project) => (
           <ProjectCard
             key={project.slug}
@@ -224,7 +224,7 @@ export function TeamPreviewSection({
           {allLabel}
         </CtaLink>
       </div>
-      <div className="reveal-settle grid grid-cols-2 gap-fib-21 lg:grid-cols-4">
+      <div className="dim-scope reveal-settle grid grid-cols-2 gap-fib-21 lg:grid-cols-4">
         {team.map((member) => (
           <TeamCard key={member.slug} member={member} locale={locale} />
         ))}

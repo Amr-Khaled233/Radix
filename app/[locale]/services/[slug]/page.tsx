@@ -87,7 +87,7 @@ async function CategoryContent({ params }: { params: PageProps<"/[locale]/servic
       {projects.length ? (
         <Reveal as="section" className="container-site">
           <SectionHeading label={tS("projectsHeading")} />
-          <div className="reveal-settle mt-fib-34 grid gap-fib-34 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="dim-scope reveal-settle mt-fib-34 grid gap-fib-34 sm:grid-cols-2 lg:grid-cols-3">
             {projects.map((project) => (
               <ProjectCard
                 key={project.slug}

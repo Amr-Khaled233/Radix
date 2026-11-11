@@ -365,23 +365,38 @@
 
 /* Hover: the surface lifts off its foundation. A hard, square offset in the accent colour
    (a shifted plane — no blur, no glow) marks what is under the pointer. */
-.lift-card,
+/* A card is one framed panel: image and text lift together. While one is under the pointer,
+   the others in the same group step back (fade, desaturate, sink slightly). */
+.frame-card,
 .lift-button {
   transition:
     transform var(--duration-hover) var(--ease-brand),
     box-shadow var(--duration-hover) var(--ease-brand),
+    border-color var(--duration-hover) var(--ease-brand),
     background-color var(--duration-hover) var(--ease-brand),
+    opacity var(--duration-hover) var(--ease-brand),
+    filter var(--duration-hover) var(--ease-brand),
     color var(--duration-hover) var(--ease-brand);
 }
+.frame-card {
+  border: 1px solid var(--line);
+  background-color: var(--surface);
+}
 @media (hover: hover) {
-  .group:hover .lift-card,
-  .lift-card:hover {
-    transform: translateY(-8px);
-    box-shadow: 8px 8px 0 0 var(--accent);
+  .frame-card:hover {
+    transform: translateY(-10px);
+    border-color: var(--accent);
+    box-shadow: 10px 10px 0 0 var(--accent);
+    z-index: 1;
+    position: relative;
   }
-  [dir="rtl"] .group:hover .lift-card,
-  [dir="rtl"] .lift-card:hover {
-    box-shadow: -8px 8px 0 0 var(--accent);
+  [dir="rtl"] .frame-card:hover {
+    box-shadow: -10px 10px 0 0 var(--accent);
+  }
+  .dim-scope:has(.frame-card:hover) .frame-card:not(:hover) {
+    opacity: 0.35;
+    filter: grayscale(1);
+    transform: scale(0.97);
   }
   .lift-button:hover {
     transform: translateY(-3px);
@@ -391,8 +406,9 @@
     box-shadow: -4px 4px 0 0 var(--accent);
   }
 }
-.group:focus-visible .lift-card {
-  box-shadow: 8px 8px 0 0 var(--accent);
+.frame-card:focus-visible {
+  border-color: var(--accent);
+  box-shadow: 10px 10px 0 0 var(--accent);
 }
 
 /* Navigation: an accent line draws in under a link from the reading start, and stays under the current page. */
@@ -421,8 +437,8 @@
 
 @media (prefers-reduced-motion: reduce) {
   /* Hover states keep their accent offset, without movement. */
-  .group:hover .lift-card,
-  .lift-card:hover,
+  .frame-card:hover,
+  .dim-scope:has(.frame-card:hover) .frame-card:not(:hover),
   .lift-button:hover {
     transform: none !important;
   }

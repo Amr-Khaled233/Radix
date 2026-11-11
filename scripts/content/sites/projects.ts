@@ -30,6 +30,12 @@ const DELIVERED = both(
   "تولّينا العمل بالكامل: التخطيط والهوية البصرية للموقع، والبرمجة، وأن تعمل كل صفحة على الموبايل بنفس جودتها على الكمبيوتر. الجولتان بالأسفل مسجّلتان من الموقع الحقيقي.",
 );
 
+/** The last paragraph on the two stores: their videos show the dashboard, recorded locally on demo data. */
+const DELIVERED_STORE = both(
+  "We handled the whole build: the storefront, the dashboard behind it, the code, and making every page work as well on a phone as on a desktop. The two walkthroughs below go through every page of the dashboard; they are recorded on a demo copy of the store filled with sample orders and customers, so no real customer data is shown.",
+  "تولّينا العمل بالكامل: واجهة المتجر، ولوحة التحكم التي تديره، والبرمجة، وأن تعمل كل صفحة على الموبايل بنفس جودتها على الكمبيوتر. الجولتان بالأسفل تمرّان على كل صفحات لوحة التحكم، ومسجّلتان على نسخة تجريبية من المتجر مليئة بطلبات وعملاء تجريبيين، فلا تظهر أي بيانات حقيقية للعملاء.",
+);
+
 export const SITES: CaseStudy[] = [
   {
     key: "jexi",
@@ -50,7 +56,11 @@ export const SITES: CaseStudy[] = [
         "Every product has its own page with photos, price and options, and curated gift boxes show the pieces inside and the saving of the bundle. The cart runs on cash on delivery, and customers can track their orders.",
         "لكل منتج صفحته بالصور والسعر والاختيارات، وصناديق الهدايا الجاهزة تعرض القطع التي بداخلها وقيمة التوفير في الباقة. السلة تعمل بالدفع عند الاستلام، ويستطيع العميل تتبّع طلبه.",
       ),
-      DELIVERED,
+      both(
+        "Behind the store is a dashboard the owner runs it from: an overview of orders, revenue, pending orders and low stock; the orders list with search and status filters, and each order's items, customer, address and status history, with an email to the customer when the status changes; products with colour variants and stock; gift boxes; categories and colours; the home page sections; promo codes; free-shipping offers; shipping zones per governorate; the store settings and the admin accounts.",
+        "وخلف المتجر لوحة تحكم يديره صاحبه منها: نظرة عامة على الطلبات والإيرادات والطلبات المعلّقة والمخزون القليل؛ وقائمة الطلبات بالبحث والفلترة حسب الحالة، وتفاصيل كل طلب بمنتجاته وبيانات العميل والعنوان وسجل حالاته، مع إيميل للعميل عند تغيير الحالة؛ والمنتجات بألوانها ومخزونها؛ وصناديق الهدايا؛ والفئات والألوان؛ وأقسام الصفحة الرئيسية؛ وأكواد الخصم؛ وعروض الشحن المجاني؛ ومناطق الشحن لكل محافظة؛ وإعدادات المتجر وحسابات المشرفين.",
+      ),
+      DELIVERED_STORE,
     ],
     applications: [
       both("Catalogue by category and collection", "كتالوج حسب الفئة والمجموعة"),
@@ -58,22 +68,24 @@ export const SITES: CaseStudy[] = [
       both("Gift boxes with bundle savings", "صناديق هدايا بقيمة توفير"),
       both("Cart and cash on delivery", "سلة مشتريات والدفع عند الاستلام"),
       both("Order tracking", "تتبّع الطلبات"),
+      both("Dashboard: orders, products, stock and revenue", "لوحة تحكم: الطلبات والمنتجات والمخزون والإيرادات"),
+      both("Promo codes, free shipping and shipping zones", "أكواد خصم وشحن مجاني ومناطق شحن"),
       both("Responsive design for phones", "تصميم متجاوب مع الموبايل"),
     ],
     services: ["Website design", "Website development"],
     externalUrl: "https://jexi-store.vercel.app",
     ...gallery("JEXI Accessories", "JEXI Accessories", [
       [
-        "walkthrough on desktop: home, shop, product and gift box",
-        "جولة على الكمبيوتر: الرئيسية والمتجر والمنتج وصندوق الهدايا",
-        "Home page, the full catalogue, a product page and a gift box.",
-        "الرئيسية، والكتالوج كامل، وصفحة منتج، وصندوق هدايا.",
+        "walkthrough on desktop: the store, then every page of the dashboard",
+        "جولة على الكمبيوتر: المتجر ثم كل صفحات لوحة التحكم",
+        "The store and a product, then sign-in and every page of the dashboard: overview, orders and an order's details, home page, products, gift boxes, categories, promo codes, free shipping, shipping zones and settings.",
+        "المتجر وصفحة منتج، ثم تسجيل الدخول وكل صفحات لوحة التحكم: النظرة العامة، والطلبات وتفاصيل طلب، والصفحة الرئيسية، والمنتجات، وصناديق الهدايا، والفئات، وأكواد الخصم، والشحن المجاني، ومناطق الشحن، والإعدادات.",
       ],
       [
-        "walkthrough on a phone: home and product",
-        "جولة على الموبايل: الرئيسية والمنتج",
-        "The home page and a product page on a phone.",
-        "الرئيسية وصفحة منتج على الموبايل.",
+        "walkthrough on a phone: the store and the dashboard",
+        "جولة على الموبايل: المتجر ولوحة التحكم",
+        "The same tour on a phone: the store, then the whole dashboard.",
+        "نفس الجولة على الموبايل: المتجر، ثم لوحة التحكم كاملة.",
       ],
     ]),
   },
@@ -96,7 +108,11 @@ export const SITES: CaseStudy[] = [
         "Product pages with a photo gallery and sizes, order tracking for customers, and the shipping, returns, privacy and terms pages a real store needs.",
         "صفحات منتجات بمعرض صور ومقاسات، وتتبّع الطلبات للعملاء، وصفحات الشحن والاسترجاع والخصوصية والشروط اللي يحتاجها أي متجر حقيقي.",
       ),
-      DELIVERED,
+      both(
+        "The store is run from a bilingual dashboard: orders with revenue and average order value, search and status filters, and the orders still waiting for the customer's email confirmation; products, categories and stock per colour and size; the home page offers and colour palette; shipping prices for all 27 governorates and free-shipping rules; the shop filters; promo codes; analytics with revenue by day, top products and the path from opening a product to placing an order, exportable to Excel; a shoppers report; and the store settings.",
+        "ويُدار المتجر من لوحة تحكم بلغتين: الطلبات مع الإيرادات ومتوسط قيمة الطلب، والبحث والفلترة حسب الحالة، والطلبات التي تنتظر تأكيد العميل بالإيميل؛ والمنتجات والفئات والمخزون لكل لون ومقاس؛ وعروض الصفحة الرئيسية ولوحة الألوان؛ وأسعار الشحن لكل المحافظات الـ٢٧ وقواعد الشحن المجاني؛ وفلاتر المتجر؛ وأكواد الخصم؛ وتحليلات بالإيرادات اليومية والمنتجات الأكثر مبيعًا ومسار الزائر من فتح المنتج حتى إتمام الطلب، مع التصدير إلى Excel؛ وتقرير عن المتسوّقين؛ وإعدادات المتجر.",
+      ),
+      DELIVERED_STORE,
     ],
     applications: [
       both("English and Arabic", "عربي وإنجليزي"),
@@ -104,21 +120,23 @@ export const SITES: CaseStudy[] = [
       both("Product photo gallery", "معرض صور المنتج"),
       both("Order tracking", "تتبّع الطلبات"),
       both("Shipping, returns, privacy and terms pages", "صفحات الشحن والاسترجاع والخصوصية والشروط"),
+      both("Dashboard: orders, products, stock and shipping", "لوحة تحكم: الطلبات والمنتجات والمخزون والشحن"),
+      both("Analytics with Excel export", "تحليلات مع التصدير إلى Excel"),
     ],
     services: ["Website design", "Website development"],
     externalUrl: "https://www.luwjje.com",
     ...gallery("LUWJJE", "LUWJJE", [
       [
-        "walkthrough on desktop: home, shop and product",
-        "جولة على الكمبيوتر: الرئيسية والمتجر والمنتج",
-        "Home page, all products and a product page.",
-        "الرئيسية، وكل المنتجات، وصفحة منتج.",
+        "walkthrough on desktop: every page of the dashboard",
+        "جولة على الكمبيوتر: كل صفحات لوحة التحكم",
+        "Sign-in, then every page of the dashboard: orders, unconfirmed orders, products, categories, stock, offers, shipping, free shipping, shop filters, promo codes, analytics, shoppers and settings.",
+        "تسجيل الدخول، ثم كل صفحات لوحة التحكم: الطلبات، والطلبات غير المؤكدة، والمنتجات، والفئات، والمخزون، والعروض، والشحن، والشحن المجاني، وفلاتر المتجر، وأكواد الخصم، والتحليلات، والمتسوّقين، والإعدادات.",
       ],
       [
-        "walkthrough on a phone: home and product",
-        "جولة على الموبايل: الرئيسية والمنتج",
-        "The home page and a product page on a phone.",
-        "الرئيسية وصفحة منتج على الموبايل.",
+        "walkthrough on a phone: the dashboard",
+        "جولة على الموبايل: لوحة التحكم",
+        "The same tour of the dashboard on a phone.",
+        "نفس جولة لوحة التحكم على الموبايل.",
       ],
     ]),
   },

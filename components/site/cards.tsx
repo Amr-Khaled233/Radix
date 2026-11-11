@@ -32,8 +32,8 @@ export function ProjectCard({
 }) {
   const client = t(project.clientName, locale);
   return (
-    <Link href={href} className="group block">
-      <div className="lift-card bg-inverse relative aspect-[16/10] overflow-hidden">
+    <Link href={href} className="frame-card group block p-fib-13">
+      <div className="bg-inverse relative aspect-[16/10] overflow-hidden">
         {project.cover ? (
           <SiteImage
             image={project.cover}
@@ -46,7 +46,7 @@ export function ProjectCard({
       </div>
       <div className="border-line mt-fib-13 flex items-start justify-between gap-4 border-t pt-fib-13">
         <div className="min-w-0">
-          <h3 className="type-h4 text-foreground group-hover:text-muted transition-colors">
+          <h3 className="type-h4 text-foreground group-hover:text-focus transition-colors">
             {t(project.title, locale)}
           </h3>
           <p className="text-muted mt-1 text-sm">{[client, ...categoryNames].filter(Boolean).join(" · ")}</p>
@@ -57,7 +57,7 @@ export function ProjectCard({
               <bdi>{localizeDigits(project.year, locale, digits)}</bdi>
             </span>
           ) : null}
-          <span className="text-foreground group-hover:text-accent transition-transform duration-(--duration-hover) ease-brand group-hover:-translate-y-1 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 motion-reduce:transform-none">
+          <span className="text-foreground group-hover:text-focus transition-transform duration-(--duration-hover) ease-brand group-hover:-translate-y-1 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 motion-reduce:transform-none">
             <Icon name="arrow-up-right" size={20} />
           </span>
         </div>
@@ -68,13 +68,19 @@ export function ProjectCard({
 
 export function TeamCard({ member, locale }: { member: PublicTeamCard; locale: Locale }) {
   return (
-    <Link href={`/team/${member.slug}`} className="group block">
-      <div className="lift-card bg-inverse relative aspect-square overflow-hidden">
+    <Link href={`/team/${member.slug}`} className="frame-card group block p-fib-13">
+      <div className="bg-inverse relative aspect-square overflow-hidden">
         {member.photo ? (
-          <SiteImage image={member.photo} locale={locale} sizes="(min-width: 1024px) 25vw, 50vw" decorative />
+          <SiteImage
+            image={member.photo}
+            locale={locale}
+            sizes="(min-width: 1024px) 25vw, 50vw"
+            decorative
+            className="transition-transform duration-700 ease-brand group-hover:scale-[1.06] motion-reduce:group-hover:scale-100"
+          />
         ) : null}
       </div>
-      <h3 className="type-h4 text-foreground group-hover:text-muted mt-fib-13 transition-colors">
+      <h3 className="type-h4 text-foreground group-hover:text-focus mt-fib-13 transition-colors">
         {t(member.name, locale)}
       </h3>
       <p className="type-label text-label mt-1">{t(member.role, locale)}</p>

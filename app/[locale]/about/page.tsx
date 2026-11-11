@@ -205,7 +205,7 @@ export default async function AboutPage() {
       {team.length ? (
         <Reveal as="section" className="container-site">
           <SectionHeading label={tA("team")} />
-          <div className="mt-fib-34 grid grid-cols-2 gap-fib-21 lg:grid-cols-4">
+          <div className="dim-scope mt-fib-34 grid grid-cols-2 gap-fib-21 lg:grid-cols-4">
             {team.map((member) => (
               <TeamCard key={member.slug} member={member} locale={locale} />
             ))}
