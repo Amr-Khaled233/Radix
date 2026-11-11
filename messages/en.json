@@ -901,7 +901,13 @@
       "opensNewTab": "(opens in a new tab)",
       "walkthroughs": "Walkthroughs",
       "onDesktop": "On a desktop",
-      "onPhone": "On a phone"
+      "onPhone": "On a phone",
+      "zoom": {
+        "open": "Enlarge image",
+        "close": "Close",
+        "previous": "Previous image",
+        "next": "Next image"
+      }
     },
     "team": {
       "label": "Team",

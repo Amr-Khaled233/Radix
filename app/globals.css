@@ -397,8 +397,9 @@
   flex-direction: column;
   padding-top: 12px;
   margin-top: -12px;
-  isolation: isolate;
-  will-change: transform;
+  /* Paint is clipped to the slot (band included), so the browser repaints the whole band as the frame
+     moves and settles; no layer promotion that some browsers rasterise late. */
+  contain: paint;
 }
 .frame-slot > .frame-card {
   flex: 1;
@@ -410,8 +411,7 @@
     z-index: 1;
   }
   .dim-scope:has(.frame-card:hover) .frame-card:not(:hover) {
-    opacity: 0.5;
-    filter: grayscale(0.8);
+    opacity: 0.4;
     transform: scale(0.97);
   }
   .lift-button:hover {
@@ -423,8 +423,9 @@
   }
 }
 .frame-card:focus-visible {
+  /* Inside the frame: the slot clips anything painted outside it. */
   outline: 3px solid var(--focus);
-  outline-offset: 3px;
+  outline-offset: -9px;
 }
 
 /* Navigation: an accent line draws in under a link from the reading start, and stays under the current page. */

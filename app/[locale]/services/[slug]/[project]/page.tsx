@@ -8,6 +8,7 @@ import { SurfaceLine } from "@/components/brand/surface-line";
 import { JsonLd } from "@/components/site/json-ld";
 import { RichText } from "@/components/site/rich-text";
 import { SiteImage } from "@/components/site/site-image";
+import { ZoomGallery, ZoomTrigger, type ZoomImage } from "@/components/site/zoom-gallery";
 import { CtaLink, SectionHeading } from "@/components/site/ui";
 import { Link } from "@/lib/i18n/navigation";
 import type { Locale } from "@/lib/i18n/routing";
@@ -90,6 +91,24 @@ async function CaseStudy({ params }: { params: Params }) {
   );
   // Desktop + phone screen recordings side by side; other video-only galleries (for example
   // AI-produced shots) play full width, one under another.
+  // Every still image on the page (cover first) opens full screen when tapped.
+  const zoomable = [cover, ...gallery.map((item) => item.media)].filter(
+    (m): m is GalleryMedia => Boolean(m) && m!.kind === "image",
+  );
+  const zoomImages: ZoomImage[] = zoomable.map((m) => ({
+    src: m.url,
+    alt: t(m.alt, locale) || title,
+    width: m.width,
+    height: m.height,
+  }));
+  const zoomIndex = (id: string) => zoomable.findIndex((m) => m.id === id);
+  const zoomLabels = {
+    open: tW("zoom.open"),
+    close: tW("zoom.close"),
+    previous: tW("zoom.previous"),
+    next: tW("zoom.next"),
+  };
+
   const walkthroughs =
     gallery.length > 0 &&
     gallery.every((item) => item.media!.kind === "video") &&
@@ -114,197 +133,203 @@ async function CaseStudy({ params }: { params: Params }) {
   ].filter(Boolean) as { label: string; value: React.ReactNode }[];
 
   return (
-    <article className="space-y-fib-89">
-      {data.isDraft ? (
-        <div className="bg-inverse text-on-inverse">
-          <div className="container-site flex flex-wrap items-center justify-between gap-3 py-3 text-sm">
-            <span>{tW("draft")}</span>
-            <a href={`/api/draft/disable?to=/${locale}/services/${pillar}`} className="underline underline-offset-4">
-              {tW("exitPreview")}
-            </a>
-          </div>
-        </div>
-      ) : null}
-
-      <Reveal as="header" className="container-site pt-fib-55">
-        <SectionHeading as="h1" size="h1" label={client || pillarName} heading={title} />
-        {t(project.summary, locale) ? (
-          <p className="type-body-lg text-muted reveal-rise mt-fib-21 max-w-3xl">{t(project.summary, locale)}</p>
-        ) : null}
-        {project.externalUrl ? (
-          // The live site: the most useful thing on the page for a website case study.
-          <a
-            href={project.externalUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="lift-button type-button bg-accent text-on-accent hover:bg-inverse hover:text-on-inverse mt-fib-34 inline-flex min-h-12 items-center gap-2 px-6"
-          >
-            {tW("visit")}
-            <Icon name="arrow-up-right" size={18} />
-            <span className="sr-only">{tW("opensNewTab")}</span>
-          </a>
-        ) : null}
-        <SurfaceLine className="mt-fib-55" />
-        <dl className="grid gap-fib-21 pt-fib-21 sm:grid-cols-2 lg:grid-cols-4">
-          {facts.map((fact) => (
-            <div key={fact.label} className="reveal-settle">
-              <dt className="type-label text-label">{fact.label}</dt>
-              <dd className="type-body text-foreground mt-1">{fact.value}</dd>
+    <ZoomGallery images={zoomImages} labels={zoomLabels}>
+      <article className="space-y-fib-89">
+        {data.isDraft ? (
+          <div className="bg-inverse text-on-inverse">
+            <div className="container-site flex flex-wrap items-center justify-between gap-3 py-3 text-sm">
+              <span>{tW("draft")}</span>
+              <a href={`/api/draft/disable?to=/${locale}/services/${pillar}`} className="underline underline-offset-4">
+                {tW("exitPreview")}
+              </a>
             </div>
-          ))}
-        </dl>
-      </Reveal>
-
-      {cover ? (
-        <div className="container-site">
-          <div className="bg-inverse relative aspect-video overflow-hidden">
-            <SiteImage image={cover} locale={locale} priority sizes="(min-width: 1440px) 1248px, 100vw" />
           </div>
-        </div>
-      ) : null}
+        ) : null}
 
-      <section className="container-site grid gap-fib-55 lg:grid-cols-12">
-        <RichText value={project.body} locale={locale} className="lg:col-span-8" />
-      </section>
-
-      {walkthroughs ? (
-        // Screen recordings only: the desktop walkthrough and, beside it, the phone one.
-        <section className="container-site" aria-labelledby="walkthroughs">
-          <h2 id="walkthroughs" className="type-label text-label">
-            {tW("walkthroughs")}
-          </h2>
-          <ul className="mt-fib-34 grid items-start gap-fib-34 lg:grid-cols-[minmax(0,3fr)_minmax(0,1fr)]">
-            {gallery.map((item) => {
-              const upright = isUpright(item.media!);
-              return (
-                <li key={item.media!.id} className={upright ? "mx-auto w-full max-w-xs lg:max-w-none" : undefined}>
-                  <figure>
-                    <p className="type-label text-label mb-fib-13">{upright ? tW("onPhone") : tW("onDesktop")}</p>
-                    <div className="bg-inverse overflow-hidden">{videoOf(item.media!)}</div>
-                    {t(item.caption, locale) ? (
-                      <figcaption className="text-muted mt-fib-13 text-sm">{t(item.caption, locale)}</figcaption>
-                    ) : null}
-                  </figure>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      ) : gallery.length ? (
-        <section className="container-site" aria-label={tW("gallery")}>
-          {/* Natural aspect ratios (never cropped): wide images span the row, upright ones pair up
-              (dense flow lets a later upright image fill the gap beside an earlier one). */}
-          <ul className="grid items-start gap-fib-21 md:grid-flow-dense md:grid-cols-2">
-            {gallery.map((item) => {
-              // Phone recordings and screenshots (upright) pair up; desktop ones span the row.
-              const wide = !isUpright(item.media!);
-              return (
-                <li key={item.media!.id} className={wide ? "md:col-span-2" : undefined}>
-                  <figure>
-                    <div className="bg-inverse overflow-hidden">
-                      {item.media!.kind === "video" ? (
-                        videoOf(item.media!)
-                      ) : (
-                        <SiteImage
-                          image={item.media!}
-                          locale={locale}
-                          fill={false}
-                          className="h-auto w-full"
-                          sizes={wide ? "(min-width: 1440px) 1248px, 100vw" : "(min-width: 768px) 50vw, 100vw"}
-                        />
-                      )}
-                    </div>
-                    {t(item.caption, locale) ? (
-                      <figcaption className="text-muted mt-fib-8 max-w-2xl text-sm">
-                        {t(item.caption, locale)}
-                      </figcaption>
-                    ) : null}
-                  </figure>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
-      ) : null}
-
-      {results.length ? (
-        <Reveal as="section" className="container-site">
-          <SectionHeading label={tW("results")} />
-          <SurfaceLine className="mt-fib-21" />
-          <Strata count={2} />
-          <dl className="grid gap-fib-34 pt-fib-21 sm:grid-cols-2 lg:grid-cols-4">
-            {results.map((result, i) => (
-              <div key={i} className="reveal-settle flex flex-col-reverse gap-1">
-                <dt className="type-label text-label">{t(result.label, locale)}</dt>
-                <dd className="type-h1 text-foreground font-mono tabular-nums">
-                  <bdi>{localizeDigits(result.value, locale, digits)}</bdi>
-                </dd>
+        <Reveal as="header" className="container-site pt-fib-55">
+          <SectionHeading as="h1" size="h1" label={client || pillarName} heading={title} />
+          {t(project.summary, locale) ? (
+            <p className="type-body-lg text-muted reveal-rise mt-fib-21 max-w-3xl">{t(project.summary, locale)}</p>
+          ) : null}
+          {project.externalUrl ? (
+            // The live site: the most useful thing on the page for a website case study.
+            <a
+              href={project.externalUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="lift-button type-button bg-accent text-on-accent hover:bg-inverse hover:text-on-inverse mt-fib-34 inline-flex min-h-12 items-center gap-2 px-6"
+            >
+              {tW("visit")}
+              <Icon name="arrow-up-right" size={18} />
+              <span className="sr-only">{tW("opensNewTab")}</span>
+            </a>
+          ) : null}
+          <SurfaceLine className="mt-fib-55" />
+          <dl className="grid gap-fib-21 pt-fib-21 sm:grid-cols-2 lg:grid-cols-4">
+            {facts.map((fact) => (
+              <div key={fact.label} className="reveal-settle">
+                <dt className="type-label text-label">{fact.label}</dt>
+                <dd className="type-body text-foreground mt-1">{fact.value}</dd>
               </div>
             ))}
           </dl>
         </Reveal>
-      ) : null}
 
-      {credits.length ? (
-        <section className="container-site">
-          <SectionHeading label={tW("credits")} />
-          <ul className="border-line-strong mt-fib-21 border-t">
-            {credits.map((credit, i) => (
-              <li
-                key={i}
-                className="border-line flex flex-wrap items-baseline justify-between gap-2 border-b py-fib-13"
-              >
-                {credit.slug ? (
-                  <Link href={`/team/${credit.slug}`} className="type-h4 text-foreground hover:text-muted">
-                    {t(credit.name, locale)}
-                  </Link>
-                ) : (
-                  <span className="type-h4 text-foreground">{t(credit.name, locale)}</span>
-                )}
-                <span className="type-label text-label">{t(credit.role, locale)}</span>
-              </li>
-            ))}
-          </ul>
+        {cover ? (
+          <div className="container-site">
+            <ZoomTrigger index={zoomIndex(cover.id)} label={zoomLabels.open}>
+              <div className="bg-inverse relative aspect-video overflow-hidden">
+                <SiteImage image={cover} locale={locale} priority sizes="(min-width: 1440px) 1248px, 100vw" />
+              </div>
+            </ZoomTrigger>
+          </div>
+        ) : null}
+
+        <section className="container-site grid gap-fib-55 lg:grid-cols-12">
+          <RichText value={project.body} locale={locale} className="lg:col-span-8" />
         </section>
-      ) : null}
 
-      <section className="container-site flex flex-wrap items-center justify-between gap-fib-21">
-        {nextProject && nextProject.slug !== slug ? (
-          <Link href={projectPath(pillar, nextProject.slug)} className="group">
-            <span className="type-label text-label block">{tW("next")}</span>
-            <span className="type-h3 text-foreground group-hover:text-muted mt-1 inline-flex items-center gap-2">
-              {t(nextProject.title, locale)}
-              <Icon name="arrow-right" size={22} />
-            </span>
-          </Link>
-        ) : (
-          <Link href={`/services/${pillar}`} className="group">
-            <span className="type-label text-label block">{tW("backTo")}</span>
-            <span className="type-h3 text-foreground group-hover:text-muted mt-1 inline-flex items-center gap-2">
-              {pillarName}
-              <Icon name="arrow-right" size={22} />
-            </span>
-          </Link>
-        )}
-        <CtaLink href="/contact">{tNav("cta")}</CtaLink>
-      </section>
+        {walkthroughs ? (
+          // Screen recordings only: the desktop walkthrough and, beside it, the phone one.
+          <section className="container-site" aria-labelledby="walkthroughs">
+            <h2 id="walkthroughs" className="type-label text-label">
+              {tW("walkthroughs")}
+            </h2>
+            <ul className="mt-fib-34 grid items-start gap-fib-34 lg:grid-cols-[minmax(0,3fr)_minmax(0,1fr)]">
+              {gallery.map((item) => {
+                const upright = isUpright(item.media!);
+                return (
+                  <li key={item.media!.id} className={upright ? "mx-auto w-full max-w-xs lg:max-w-none" : undefined}>
+                    <figure>
+                      <p className="type-label text-label mb-fib-13">{upright ? tW("onPhone") : tW("onDesktop")}</p>
+                      <div className="bg-inverse overflow-hidden">{videoOf(item.media!)}</div>
+                      {t(item.caption, locale) ? (
+                        <figcaption className="text-muted mt-fib-13 text-sm">{t(item.caption, locale)}</figcaption>
+                      ) : null}
+                    </figure>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        ) : gallery.length ? (
+          <section className="container-site" aria-label={tW("gallery")}>
+            {/* Natural aspect ratios (never cropped): wide images span the row, upright ones pair up
+              (dense flow lets a later upright image fill the gap beside an earlier one). */}
+            <ul className="grid items-start gap-fib-21 md:grid-flow-dense md:grid-cols-2">
+              {gallery.map((item) => {
+                // Phone recordings and screenshots (upright) pair up; desktop ones span the row.
+                const wide = !isUpright(item.media!);
+                return (
+                  <li key={item.media!.id} className={wide ? "md:col-span-2" : undefined}>
+                    <figure>
+                      {item.media!.kind === "video" ? (
+                        <div className="bg-inverse overflow-hidden">{videoOf(item.media!)}</div>
+                      ) : (
+                        <ZoomTrigger index={zoomIndex(item.media!.id)} label={zoomLabels.open}>
+                          <div className="bg-inverse overflow-hidden">
+                            <SiteImage
+                              image={item.media!}
+                              locale={locale}
+                              fill={false}
+                              className="h-auto w-full"
+                              sizes={wide ? "(min-width: 1440px) 1248px, 100vw" : "(min-width: 768px) 50vw, 100vw"}
+                            />
+                          </div>
+                        </ZoomTrigger>
+                      )}
+                      {t(item.caption, locale) ? (
+                        <figcaption className="text-muted mt-fib-8 max-w-2xl text-sm">
+                          {t(item.caption, locale)}
+                        </figcaption>
+                      ) : null}
+                    </figure>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        ) : null}
 
-      <JsonLd
-        data={{
-          "@context": "https://schema.org",
-          "@type": "CreativeWork",
-          name: title,
-          description: t(project.summary, locale) || undefined,
-          url: localeUrl(locale, projectPath(categories[0].slug, project.slug)),
-          inLanguage: locale,
-          dateCreated: project.year ? String(project.year) : undefined,
-          image: cover?.url,
-          creator: { "@type": "Organization", "@id": `${siteOrigin()}/#organization`, name: "RADIX" },
-          ...(client ? { sourceOrganization: { "@type": "Organization", name: client } } : {}),
-          keywords: categories.map((c) => t(c.name, "en")).join(", ") || undefined,
-        }}
-      />
-    </article>
+        {results.length ? (
+          <Reveal as="section" className="container-site">
+            <SectionHeading label={tW("results")} />
+            <SurfaceLine className="mt-fib-21" />
+            <Strata count={2} />
+            <dl className="grid gap-fib-34 pt-fib-21 sm:grid-cols-2 lg:grid-cols-4">
+              {results.map((result, i) => (
+                <div key={i} className="reveal-settle flex flex-col-reverse gap-1">
+                  <dt className="type-label text-label">{t(result.label, locale)}</dt>
+                  <dd className="type-h1 text-foreground font-mono tabular-nums">
+                    <bdi>{localizeDigits(result.value, locale, digits)}</bdi>
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </Reveal>
+        ) : null}
+
+        {credits.length ? (
+          <section className="container-site">
+            <SectionHeading label={tW("credits")} />
+            <ul className="border-line-strong mt-fib-21 border-t">
+              {credits.map((credit, i) => (
+                <li
+                  key={i}
+                  className="border-line flex flex-wrap items-baseline justify-between gap-2 border-b py-fib-13"
+                >
+                  {credit.slug ? (
+                    <Link href={`/team/${credit.slug}`} className="type-h4 text-foreground hover:text-muted">
+                      {t(credit.name, locale)}
+                    </Link>
+                  ) : (
+                    <span className="type-h4 text-foreground">{t(credit.name, locale)}</span>
+                  )}
+                  <span className="type-label text-label">{t(credit.role, locale)}</span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        ) : null}
+
+        <section className="container-site flex flex-wrap items-center justify-between gap-fib-21">
+          {nextProject && nextProject.slug !== slug ? (
+            <Link href={projectPath(pillar, nextProject.slug)} className="group">
+              <span className="type-label text-label block">{tW("next")}</span>
+              <span className="type-h3 text-foreground group-hover:text-muted mt-1 inline-flex items-center gap-2">
+                {t(nextProject.title, locale)}
+                <Icon name="arrow-right" size={22} />
+              </span>
+            </Link>
+          ) : (
+            <Link href={`/services/${pillar}`} className="group">
+              <span className="type-label text-label block">{tW("backTo")}</span>
+              <span className="type-h3 text-foreground group-hover:text-muted mt-1 inline-flex items-center gap-2">
+                {pillarName}
+                <Icon name="arrow-right" size={22} />
+              </span>
+            </Link>
+          )}
+          <CtaLink href="/contact">{tNav("cta")}</CtaLink>
+        </section>
+
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@type": "CreativeWork",
+            name: title,
+            description: t(project.summary, locale) || undefined,
+            url: localeUrl(locale, projectPath(categories[0].slug, project.slug)),
+            inLanguage: locale,
+            dateCreated: project.year ? String(project.year) : undefined,
+            image: cover?.url,
+            creator: { "@type": "Organization", "@id": `${siteOrigin()}/#organization`, name: "RADIX" },
+            ...(client ? { sourceOrganization: { "@type": "Organization", name: client } } : {}),
+            keywords: categories.map((c) => t(c.name, "en")).join(", ") || undefined,
+          }}
+        />
+      </article>
+    </ZoomGallery>
   );
 }
 
