@@ -1,0 +1,21 @@
+{
+  "clinic-management:cover": "clinic-management-cover.webp",
+  "clinic-management": [
+    "walkthrough-1.mp4",
+    "clinic-management-new-booking.webp",
+    "clinic-management-calendar-week.webp",
+    "walkthrough-2.mp4",
+    "clinic-management-bookings.webp",
+    "clinic-management-invoice.webp",
+    "clinic-management-client-profile.webp",
+    "walkthrough-3.mp4",
+    "clinic-management-payments.webp",
+    "clinic-management-profit-loss.webp",
+    "clinic-management-outstanding.webp",
+    "clinic-management-calendar-day.webp",
+    "clinic-management-en-calendar.webp",
+    "clinic-management-en-bookings.webp",
+    "clinic-management-en-new-booking.webp",
+    "clinic-management-en-reports.webp"
+  ]
+}

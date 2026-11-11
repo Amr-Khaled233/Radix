@@ -16,29 +16,45 @@ const SITES = {
     slices: 3,
     pages: ["/shop", "/product/aurelia-pendant-necklace", "/gift-boxes/rose-keepsake-box"],
     mobile: ["/", "/product/aurelia-pendant-necklace"],
+    tour: {
+      desktop: [
+        ["/", "end", 16],
+        ["/shop", 900, 6],
+        ["/product/aurelia-pendant-necklace", 700, 6],
+        ["/gift-boxes/rose-keepsake-box", 500, 5],
+      ],
+      mobile: [
+        ["/", "end", 16],
+        ["/product/aurelia-pendant-necklace", "end", 8],
+      ],
+    },
   },
   luwjje: {
     base: "https://www.luwjje.com",
     slices: 1,
     pages: ["/shop", "/product/luwjje-hoodie"],
     mobile: ["/", "/product/luwjje-hoodie"],
+    tour: {
+      desktop: [
+        ["/", "end", 8],
+        ["/shop", "end", 5],
+        ["/product/luwjje-hoodie", "end", 7],
+      ],
+      mobile: [
+        ["/", "end", 8],
+        ["/product/luwjje-hoodie", "end", 9],
+      ],
+    },
   },
   eldeeb: {
     base: "https://eldeeb-flax.vercel.app",
     // A scroll-driven animation: content lives in the viewport, so capture it at scroll positions.
     slices: 0,
     scrollShots: [2400, 4000, 4800, 5600, 6400, 8000, 8800, 10400, 12000],
-    // Screen recording of the building animation (0 → 6400px of scroll).
-    video: { to: 6400, seconds: 16 },
     pages: [],
     mobile: ["/"],
-  },
-  sinemai: {
-    base: "https://sinemai-ai.vercel.app",
-    home: "/en",
-    slices: 3,
-    pages: [],
-    mobile: ["/en"],
+    // The building animation, then the rest of the page.
+    tour: { desktop: [["/", 12000, 30]], mobile: [["/", "end", 26]] },
   },
 };
 
@@ -100,41 +116,65 @@ async function settle(page) {
   await page.waitForTimeout(1500);
 }
 
-/** Records a smooth scroll through the page and converts it to H.264 MP4 (plays everywhere). */
-async function recordScroll(key, site) {
-  const dir = ".data/recordings";
-  const ctx = await browser.newContext({
-    viewport: { width: 1280, height: 720 },
-    recordVideo: { dir, size: { width: 1280, height: 720 } },
-  });
+const DEVICES = {
+  desktop: { viewport: { width: 1280, height: 720 }, video: { width: 1280, height: 720 } },
+  mobile: {
+    viewport: { width: 390, height: 844 },
+    deviceScaleFactor: 2,
+    isMobile: true,
+    hasTouch: true,
+    // Playwright records CSS pixels: record at the viewport size, then scale 2× in ffmpeg
+    // (a larger recordVideo size leaves the page in a corner of a gray frame).
+    video: { width: 390, height: 844 },
+    scale: "scale=780:1688:flags=lanczos",
+  },
+};
+
+/**
+ * Walkthrough video: opens each page of the tour and scrolls it smoothly
+ * (to "end" or a pixel offset) over the given seconds. View-only: no clicks on
+ * cart, forms or checkout. Converted to H.264 MP4 so it plays on every device.
+ */
+async function recordTour(key, site, device) {
+  const { video, scale, ...options } = DEVICES[device];
+  const ctx = await browser.newContext({ ...options, recordVideo: { dir: ".data/recordings", size: video } });
   const page = await ctx.newPage();
-  await page.goto(site.base + (site.home ?? "/"), { waitUntil: "networkidle", timeout: 90_000 });
-  await page.waitForTimeout(1500);
-  const steps = site.video.seconds * 30;
-  for (let i = 1; i <= steps; i++) {
-    await page.evaluate((y) => scrollTo(0, y), Math.round((site.video.to * i) / steps));
-    await page.waitForTimeout(1000 / 30);
+  for (const [path, to, seconds] of site.tour[device]) {
+    await page.goto(site.base + path, { waitUntil: "networkidle", timeout: 90_000 });
+    await page.waitForTimeout(1200);
+    const target = await page.evaluate(
+      (to) => (to === "end" ? document.documentElement.scrollHeight - innerHeight : to),
+      to,
+    );
+    const steps = Math.round(seconds * 30);
+    for (let i = 1; i <= steps; i++) {
+      // Ease in and out, like a person scrolling.
+      const t = i / steps;
+      const eased = t < 0.5 ? 2 * t * t : 1 - (-2 * t + 2) ** 2 / 2;
+      await page.evaluate((y) => scrollTo(0, y), Math.round(target * eased));
+      await page.waitForTimeout(1000 / 30);
+    }
+    await page.waitForTimeout(900);
   }
-  await page.waitForTimeout(1200);
   const webm = await page.video().path();
   await ctx.close();
-  const file = `${key}-scroll.mp4`;
-  // Trim the blank page-load start; no audio; web-friendly.
+  const file = `${key}-tour-${device}.mp4`;
   execFileSync(
     ffmpegPath,
     [
       "-y",
       "-ss",
-      "1.2",
+      "1.0",
       "-i",
       webm,
+      ...(scale ? ["-vf", scale] : []),
       "-an",
       "-c:v",
       "libx264",
       "-pix_fmt",
       "yuv420p",
       "-crf",
-      "26",
+      "27",
       "-preset",
       "slow",
       "-movflags",
@@ -194,6 +234,9 @@ for (const [key, site] of Object.entries(SITES)) {
       hasTouch: true,
     })
   ).newPage();
+  // Gallery order: desktop tour, desktop screens, phone tour, phone screens.
+  files.unshift(await recordTour(key, site, "desktop"));
+  files.push(await recordTour(key, site, "mobile"));
   for (const [i, path] of site.mobile.entries()) {
     await phone.goto(site.base + path, { waitUntil: "networkidle", timeout: 90_000 });
     await settle(phone);
@@ -202,7 +245,6 @@ for (const [key, site] of Object.entries(SITES)) {
     files.push(file);
   }
   await phone.context().close();
-  if (site.video) files.unshift(await recordScroll(key, site));
   capture[key] = files;
   console.log(key, files.length);
 }

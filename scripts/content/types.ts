@@ -20,4 +20,6 @@ export type CaseStudy = {
   externalUrl?: string;
   /** Alt text for the gallery files, in order. */
   alt: (index: number) => L;
+  /** Visible caption under each gallery file (what it shows), in order. */
+  caption?: (index: number) => L | undefined;
 };

@@ -1,0 +1,111 @@
+{
+  "key": "clinic-management",
+  "slug": "clinic-management",
+  "title": {
+    "en": "Clinic Session Management System",
+    "ar": "نظام إدارة جلسات العيادة"
+  },
+  "client": {
+    "en": "Private clinic",
+    "ar": "عيادة خاصة"
+  },
+  "year": 2026,
+  "summary": {
+    "en": "A bilingual Arabic/English dashboard that runs a clinic's day: patient records, conflict-free bookings by room and specialist, session packages, invoices, payments and financial reports in EGP.",
+    "ar": "لوحة تحكم ثنائية اللغة (عربي/إنجليزي) تدير يوم العيادة بالكامل: ملفات العملاء، حجوزات بلا تعارض حسب الغرفة والأخصائي، باقات الجلسات، الفواتير والمدفوعات والتقارير المالية بالجنيه المصري."
+  },
+  "body": [
+    {
+      "en": "Run on paper and spreadsheets, a clinic's week fills with double bookings, forgotten balances and untracked packages. We built one system the front desk, specialists and the manager share, Arabic-first and fully right-to-left, with an English toggle.",
+      "ar": "حين تُدار العيادة بالورق والجداول، يمتلئ أسبوعها بالحجوزات المتداخلة والمبالغ المنسية والباقات غير المتابَعة. بنينا نظامًا واحدًا يعمل عليه الاستقبال والأخصائيون والمدير، بالعربية أولًا وبواجهة من اليمين لليسار بالكامل، مع إمكانية التبديل إلى الإنجليزية."
+    },
+    {
+      "en": "Booking is built around availability: pick the client, the session type and the day, and the system shows only the time slots that are free for that room and specialist, priced automatically. If the client holds a package that covers the session, it is deducted on the spot and nothing is charged.",
+      "ar": "الحجز مبني على التوافر: اختر العميل ونوع الجلسة واليوم، فيعرض النظام فقط الأوقات المتاحة لتلك الغرفة والأخصائي مع السعر تلقائيًا. وإذا كان لدى العميل باقة تغطي الجلسة تُخصم منها فورًا دون أي رسوم."
+    },
+    {
+      "en": "Every booking moves through a clear status flow (new, confirmed, waiting, in session, completed or no-show) and carries its own invoice. Payments, partial payments and refunds update the balance immediately and print as receipts, and every change is recorded in an audit log.",
+      "ar": "يمر كل حجز بمسار حالات واضح (جديد، مؤكد، بالانتظار، في الجلسة، مكتمل أو لم يحضر) وله فاتورته الخاصة. الدفعات الكاملة والجزئية والاسترداد تحدّث الرصيد فورًا وتُطبع كإيصالات، وكل تعديل يُسجَّل في سجل النشاط."
+    },
+    {
+      "en": "For the manager, the calendar shows the month, week or day at a glance, and the reports cover revenue, expenses, profit and loss, outstanding balances, package usage and no-shows, with Excel export and printing. Staff accounts use two roles with per-user permission overrides.",
+      "ar": "يعرض التقويم للمدير الشهر أو الأسبوع أو اليوم بنظرة واحدة، وتغطي التقارير الإيرادات والمصروفات والأرباح والخسائر والمبالغ المتبقية واستخدام الباقات وعدم الحضور، مع التصدير إلى Excel والطباعة. حسابات الموظفين بدورين مع صلاحيات قابلة للتخصيص لكل مستخدم."
+    }
+  ],
+  "applications": [
+    {
+      "en": "Patient records with visit history, packages and a financial summary",
+      "ar": "ملفات العملاء مع سجل الزيارات والباقات والملخص المالي"
+    },
+    {
+      "en": "Conflict-free booking by room and specialist, showing only free time slots",
+      "ar": "حجز بلا تعارض حسب الغرفة والأخصائي مع عرض الأوقات المتاحة فقط"
+    },
+    {
+      "en": "Month, week and day calendar views colour-coded by session type",
+      "ar": "تقويم شهري وأسبوعي ويومي ملوّن حسب نوع الجلسة"
+    },
+    {
+      "en": "Session packages deducted automatically when a covered session is booked",
+      "ar": "باقات جلسات تُخصم تلقائيًا عند حجز جلسة مغطاة"
+    },
+    {
+      "en": "Invoices, partial payments, refunds and printable receipts in EGP",
+      "ar": "فواتير ودفعات جزئية واسترداد وإيصالات قابلة للطباعة بالجنيه المصري"
+    },
+    {
+      "en": "Financial reports with Excel export: revenue, expenses, profit and loss, outstanding balances",
+      "ar": "تقارير مالية مع تصدير Excel: الإيرادات والمصروفات والأرباح والخسائر والمبالغ المتبقية"
+    },
+    {
+      "en": "Arabic and English interface, sign-in with username or email, role-based permissions and an audit log",
+      "ar": "واجهة عربية وإنجليزية، تسجيل دخول باسم المستخدم أو البريد، صلاحيات حسب الدور وسجل نشاط"
+    }
+  ],
+  "services": ["SaaS solutions", "Digital tools and systems", "Website development"],
+  "externalUrl": null,
+  "publish": true,
+  "captionsFromAlt": true,
+  "alt": [
+    {
+      "en": "Walkthrough: adding a new patient and booking a physiotherapy session in a free time slot",
+      "ar": "جولة: إضافة عميل جديد وحجز جلسة علاج طبيعي في وقت متاح"
+    },
+    {
+      "en": "New booking dialog with the available time slots for the chosen room and day",
+      "ar": "نافذة الحجز الجديد مع الأوقات المتاحة للغرفة واليوم المختارين"
+    },
+    { "en": "Week calendar colour-coded by session type", "ar": "التقويم الأسبوعي ملوّنًا حسب نوع الجلسة" },
+    {
+      "en": "Walkthrough: the day's schedule, completing a session, recording a card payment and selling a package",
+      "ar": "جولة: جدول اليوم، إتمام جلسة، تسجيل دفعة بالبطاقة وبيع باقة"
+    },
+    {
+      "en": "Today's bookings with status, room and quick actions",
+      "ar": "حجوزات اليوم مع الحالة والغرفة والإجراءات السريعة"
+    },
+    { "en": "Invoice with its payment history", "ar": "الفاتورة مع سجل المدفوعات" },
+    {
+      "en": "Patient profile with visits, package balance and financial summary",
+      "ar": "ملف العميل مع الزيارات ورصيد الباقة والملخص المالي"
+    },
+    {
+      "en": "Walkthrough: calendar, payments, profit and loss and outstanding balances",
+      "ar": "جولة: التقويم والمدفوعات والأرباح والخسائر والمبالغ المتبقية"
+    },
+    {
+      "en": "Payments collected by method for the selected period",
+      "ar": "المدفوعات المحصّلة حسب طريقة الدفع للفترة المحددة"
+    },
+    {
+      "en": "Profit and loss report: revenue, expenses by category and net profit",
+      "ar": "التقرير المالي: الإيرادات والمصروفات حسب الفئة وصافي الربح"
+    },
+    { "en": "Outstanding balances report", "ar": "تقرير المبالغ المتبقية" },
+    { "en": "Day view of the clinic schedule", "ar": "عرض اليوم لجدول العيادة" },
+    { "en": "Month calendar in English", "ar": "التقويم الشهري بالإنجليزية" },
+    { "en": "Bookings list in English", "ar": "قائمة الحجوزات بالإنجليزية" },
+    { "en": "New booking dialog in English", "ar": "نافذة الحجز الجديد بالإنجليزية" },
+    { "en": "Reports catalogue in English", "ar": "قائمة التقارير بالإنجليزية" }
+  ]
+}

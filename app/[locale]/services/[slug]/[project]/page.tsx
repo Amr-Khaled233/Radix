@@ -152,7 +152,8 @@ async function CaseStudy({ params }: { params: Params }) {
           <ul className="grid items-start gap-fib-21 md:grid-flow-dense md:grid-cols-2">
             {gallery.map((item) => {
               const { width, height, kind } = item.media!;
-              const wide = kind === "video" || !width || !height || width / height >= 1.2;
+              // Phone recordings and screenshots (upright) pair up; desktop ones span the row.
+              const wide = !width || !height || width / height >= 1.2;
               return (
                 <li key={item.media!.id} className={wide ? "md:col-span-2" : undefined}>
                   <figure>
@@ -179,7 +180,9 @@ async function CaseStudy({ params }: { params: Params }) {
                       )}
                     </div>
                     {t(item.caption, locale) ? (
-                      <figcaption className="type-label text-label mt-fib-8">{t(item.caption, locale)}</figcaption>
+                      <figcaption className="text-muted mt-fib-8 max-w-2xl text-sm">
+                        {t(item.caption, locale)}
+                      </figcaption>
                     ) : null}
                   </figure>
                 </li>

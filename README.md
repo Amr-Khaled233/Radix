@@ -95,13 +95,13 @@ Content changes go live within seconds (tag revalidation); no redeploy is needed
 
 ## Importing the prepared case studies
 
-`pnpm db:import:case-studies` runs in every Vercel build (see `vercel.json`) and adds what isn't in the database yet (text in `projects.ts`, images and videos in `images/`, recaptured with each folder's `capture.mjs`):
+`pnpm db:import:case-studies` runs in every Vercel build (see `vercel.json`). It creates projects that don't exist yet, and refreshes an imported project when its files or text changed — **unless someone edited it in the dashboard**, in which case it is left alone. Text lives in `projects.ts` / `project.json`, images and videos in `images/`; each gallery file can carry a visible caption.
 
 - `scripts/content/portfolio/` → **Brand**, published: Mahmoud Hwary's brand identities (with his consent), credited to his team profile (created hidden).
-- `scripts/content/sites/` → **Sites & Systems**, published: websites we built, with screenshots (desktop and phone), a screen recording where it helps, and a **Visit the live site** button.
-- `scripts/content/systems/<slug>/` → **Sites & Systems**, as **drafts**: one folder per system (`project.json`, `capture.json`, `images/`, from the showcase prompt). Commit the folder and push; the next deploy imports it.
+- `scripts/content/sites/` → **Sites & Systems**, published: websites we built, with a desktop and a phone walkthrough video, captioned screenshots and a **Visit the live site** button (recaptured with `node scripts/content/sites/capture.mjs`).
+- `scripts/content/systems/<slug>/` → **Sites & Systems** and `scripts/content/growth/<slug>/` → **Growth**: one folder per project (`project.json`, `capture.json`, `images/`, from the showcase prompts). Drafts by default; `"publish": true` in `project.json` publishes on import, `"captions"` (or `"captionsFromAlt": true`) adds the captions.
 
-To add a new system: copy its `radix-case-study/` folder to `scripts/content/systems/<slug>/`, commit, push, then publish it from the dashboard after review.
+To add one: copy its `radix-case-study/` folder to `scripts/content/systems/<slug>/` (or `growth/<slug>/`), commit and push; the next deploy imports it.
 
 Files are uploaded to Vercel Blob when `BLOB_READ_WRITE_TOKEN` is set (local storage otherwise). Running it again skips what already exists. Then review each project in **Dashboard → Projects** and set it to **Published**; make Mahmoud visible in **Team** when his profile is ready. Project galleries accept images and videos (MP4/WebM), so a screen recording of a system can be added from the dashboard too.
 

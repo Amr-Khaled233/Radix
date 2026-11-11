@@ -2,18 +2,30 @@
  * Websites RADIX built and deployed, shown under Sites & Systems with a live
  * link. Text describes only what is visible on each live site (its own copy
  * and features); Arabic is a first draft, flagged "Needs review".
- * Images and the El Deeb screen recording come from ./capture.mjs.
+ * Screenshots and the desktop/phone walkthrough videos come from ./capture.mjs.
  *
- * Left out for now: ATREES (catalogue still empty), the hotel PMS (blank page),
- * and the systems behind a login (cafe, Sakary, Cupa, barber, clinic) until
- * there are screenshots or recordings from inside them.
+ * Left out for now: ATREES (catalogue still empty), the hotel PMS (blank page).
+ * Systems behind a login (and Sinemai AI, shown from the inside) are folders in ../systems.
  */
-import { both, type CaseStudy } from "../types";
+import { both, type CaseStudy, type L } from "../types";
 
-const views = (name: string, nameAr: string, labels: [string, string][]) => (i: number) => {
-  const [en, ar] = labels[i] ?? [`page ${i + 1}`, `صفحة ${i + 1}`];
-  return both(`${name} — ${en}`, `${nameAr} — ${ar}`);
-};
+/** [alt en, alt ar, caption en, caption ar] per gallery file, in capture.json order. */
+type Entry = [string, string, string, string];
+
+/** Alt text (for screen readers) and the visible caption (what the file shows) per gallery file. */
+const gallery = (name: string, nameAr: string, entries: Entry[]) => ({
+  alt: (i: number): L => {
+    const [en, ar] = entries[i] ?? [`page ${i + 1}`, `صفحة ${i + 1}`];
+    return both(`${name} — ${en}`, `${nameAr} — ${ar}`);
+  },
+  caption: (i: number): L | undefined => {
+    const entry = entries[i];
+    return entry && entry[2] ? both(entry[2], entry[3]) : undefined;
+  },
+});
+
+const TOUR_DESKTOP = ["Walkthrough on desktop.", "جولة على الكمبيوتر."] as const;
+const TOUR_PHONE = ["The same site on a phone.", "الموقع نفسه على الموبايل."] as const;
 
 export const SITES: CaseStudy[] = [
   {
@@ -46,15 +58,46 @@ export const SITES: CaseStudy[] = [
     ],
     services: ["Website design", "Website development"],
     externalUrl: "https://jexi-store.vercel.app",
-    alt: views("JEXI Accessories", "JEXI Accessories", [
-      ["home page, best sellers", "الرئيسية، الأكثر مبيعًا"],
-      ["home page, gift box", "الرئيسية، صندوق الهدايا"],
-      ["home page, new arrivals", "الرئيسية، الوصول الجديد"],
-      ["shop all", "كل المنتجات"],
-      ["product page", "صفحة منتج"],
-      ["gift box page", "صفحة صندوق الهدايا"],
-      ["home page on a phone", "الرئيسية على الموبايل"],
-      ["product page on a phone", "صفحة منتج على الموبايل"],
+    ...gallery("JEXI Accessories", "JEXI Accessories", [
+      [
+        "walkthrough on desktop: home, shop, product and gift box",
+        "جولة على الكمبيوتر: الرئيسية والمتجر والمنتج وصندوق الهدايا",
+        ...TOUR_DESKTOP,
+      ],
+      [
+        "home page, categories and best sellers",
+        "الرئيسية، الفئات والأكثر مبيعًا",
+        "Shop by category, with the best sellers up front.",
+        "التسوّق حسب الفئة، والأكثر مبيعًا في الواجهة.",
+      ],
+      [
+        "home page, gift box",
+        "الرئيسية، صندوق الهدايا",
+        "A ready-made gift box that shows the saving.",
+        "صندوق هدايا جاهز يوضّح قيمة التوفير.",
+      ],
+      [
+        "home page, new arrivals",
+        "الرئيسية، الوصول الجديد",
+        "New arrivals, with sale and sold-out labels.",
+        "الوصول الجديد، مع علامات التخفيض والنفاد.",
+      ],
+      ["shop all", "كل المنتجات", "The full catalogue in one place.", "الكتالوج كله في مكان واحد."],
+      [
+        "product page",
+        "صفحة منتج",
+        "Product page: photos, price and options.",
+        "صفحة المنتج: الصور والسعر والاختيارات.",
+      ],
+      [
+        "gift box page",
+        "صفحة صندوق الهدايا",
+        "Gift box page, with the pieces inside.",
+        "صفحة صندوق الهدايا والقطع اللي فيه.",
+      ],
+      ["walkthrough on a phone", "جولة على الموبايل", ...TOUR_PHONE],
+      ["home page on a phone", "الرئيسية على الموبايل", "Home page on a phone.", "الرئيسية على الموبايل."],
+      ["product page on a phone", "صفحة منتج على الموبايل", "Product page on a phone.", "صفحة المنتج على الموبايل."],
     ]),
   },
   {
@@ -86,12 +129,28 @@ export const SITES: CaseStudy[] = [
     ],
     services: ["Website design", "Website development"],
     externalUrl: "https://www.luwjje.com",
-    alt: views("LUWJJE", "LUWJJE", [
-      ["home page, best sellers", "الرئيسية، الأكثر مبيعًا"],
-      ["all products", "كل المنتجات"],
-      ["product page", "صفحة منتج"],
-      ["home page on a phone", "الرئيسية على الموبايل"],
-      ["product page on a phone", "صفحة منتج على الموبايل"],
+    ...gallery("LUWJJE", "LUWJJE", [
+      [
+        "walkthrough on desktop: home, shop and product",
+        "جولة على الكمبيوتر: الرئيسية والمتجر والمنتج",
+        ...TOUR_DESKTOP,
+      ],
+      [
+        "home page, best sellers",
+        "الرئيسية، الأكثر مبيعًا",
+        "Best sellers with sale prices and quick add.",
+        "الأكثر مبيعًا بأسعار التخفيض والإضافة السريعة.",
+      ],
+      ["all products", "كل المنتجات", "The full product list.", "قائمة المنتجات كاملة."],
+      [
+        "product page",
+        "صفحة منتج",
+        "Product page: photo gallery, sizes and add to cart.",
+        "صفحة المنتج: معرض الصور والمقاسات والإضافة للسلة.",
+      ],
+      ["walkthrough on a phone", "جولة على الموبايل", ...TOUR_PHONE],
+      ["home page on a phone", "الرئيسية على الموبايل", "Home page on a phone.", "الرئيسية على الموبايل."],
+      ["product page on a phone", "صفحة منتج على الموبايل", "Product page on a phone.", "صفحة المنتج على الموبايل."],
     ]),
   },
   {
@@ -126,53 +185,54 @@ export const SITES: CaseStudy[] = [
     ],
     services: ["Website design", "Website development"],
     externalUrl: "https://eldeeb-flax.vercel.app",
-    alt: views("El Deeb website", "موقع الديب", [
-      ["screen recording: the building rises as the page scrolls", "تسجيل شاشة: المبنى يرتفع مع التمرير"],
-      ["architectural design", "التصميم المعماري"],
-      ["projects we are proud of", "مشاريع نفخر بتوقيعنا عليها"],
-      ["engineering strength that builds trust", "قوة هندسية تبني الثقة"],
-      ["the finished tower at night", "البرج مكتملًا في الليل"],
-      ["we build your vision, floor by floor", "نبني رؤيتك طابقًا فوق طابق"],
-      ["sectors we work in", "القطاعات التي نعمل بها"],
-      ["services", "الخدمات"],
-      ["projects", "المشاريع"],
-      ["contact", "التواصل"],
-      ["home page on a phone", "الرئيسية على الموبايل"],
-    ]),
-  },
-  {
-    key: "sinemai",
-    slug: "sinemai-ai",
-    title: both("Sinemai AI — Production & Equipment Sheets", "Sinemai AI — جداول الإنتاج والمعدات"),
-    client: both("Sinemai AI", "Sinemai AI"),
-    year: 2026,
-    summary: both(
-      "Upload a screenplay or ad brief and get a scene breakdown, an equipment package, matched cinematographers and rental vendors, and a costed budget.",
-      "ارفع سيناريو أو بريف إعلان، واحصل على تفريغ للمشاهد، وباقة معدات، ومصوّرين وشركات تأجير مناسبين، وميزانية محسوبة.",
-    ),
-    body: [
-      both(
-        "An AI platform for film and ad production. Specialist agents read every scene — lighting complexity, camera movement, day or night, special requirements — then recommend the camera, lens, lighting and grip package from a curated catalogue.",
-        "منصة ذكاء اصطناعي لإنتاج الأفلام والإعلانات. وكلاء متخصصون يقرؤون كل مشهد — تعقيد الإضاءة، وحركة الكاميرا، والنهار أو الليل، والمتطلبات الخاصة — ثم يقترحون باقة الكاميرا والعدسات والإضاءة والمعدات من كتالوج مُنتقى.",
-      ),
-      both(
-        "Rental houses are matched by real stock, and the budget is built from real and estimated day rates. Scripts can be uploaded as Fountain, Final Draft, PDF or pasted scenes, in Arabic or English, with user accounts.",
-        "تُرشَّح شركات التأجير حسب المخزون الفعلي، وتُبنى الميزانية من أسعار يومية حقيقية وتقديرية. يمكن رفع السيناريو بصيغة Fountain أو Final Draft أو PDF أو لصق المشاهد، بالعربي أو الإنجليزي، مع حسابات للمستخدمين.",
-      ),
-    ],
-    applications: [
-      both("Script upload and scene breakdown", "رفع السيناريو وتفريغ المشاهد"),
-      both("AI agents for equipment recommendations", "وكلاء ذكاء اصطناعي لاقتراح المعدات"),
-      both("Rental vendors matched by stock", "ترشيح شركات التأجير حسب المخزون"),
-      both("Costed budget", "ميزانية محسوبة"),
-      both("Arabic and English, user accounts", "عربي وإنجليزي، وحسابات للمستخدمين"),
-    ],
-    services: ["SaaS solutions", "AI integration", "Website design", "Website development"],
-    externalUrl: "https://sinemai-ai.vercel.app",
-    alt: views("Sinemai AI", "Sinemai AI", [
-      ["how it works", "طريقة العمل"],
-      ["call to action", "ابدأ مشروعًا"],
-      ["landing page on a phone", "الصفحة الرئيسية على الموبايل"],
+    ...gallery("El Deeb website", "موقع الديب", [
+      [
+        "walkthrough on desktop: the building rises as the page scrolls",
+        "جولة على الكمبيوتر: المبنى يرتفع مع التمرير",
+        "Scroll the page and the building rises, floor by floor.",
+        "مع التمرير يرتفع المبنى طابقًا فوق طابق.",
+      ],
+      [
+        "architectural design",
+        "التصميم المعماري",
+        "Each stage of the building introduces a service: architectural design first.",
+        "كل مرحلة من المبنى تقدّم خدمة: البداية بالتصميم المعماري.",
+      ],
+      [
+        "projects we are proud of",
+        "مشاريع نفخر بتوقيعنا عليها",
+        "The floors go up as the story moves to their projects.",
+        "الطوابق ترتفع والقصة تنتقل إلى مشاريعهم.",
+      ],
+      [
+        "engineering strength that builds trust",
+        "قوة هندسية تبني الثقة",
+        "The tower takes shape.",
+        "البرج يكتمل شكله.",
+      ],
+      [
+        "the finished tower at night",
+        "البرج مكتملًا في الليل",
+        "The finished tower, lit at night.",
+        "البرج مكتملًا ومضاءً في الليل.",
+      ],
+      [
+        "we build your vision, floor by floor",
+        "نبني رؤيتك طابقًا فوق طابق",
+        "Then the company itself: “We build your vision, floor by floor.”",
+        "ثم الشركة نفسها: «نبني رؤيتك طابقًا فوق طابق».",
+      ],
+      [
+        "sectors we work in",
+        "القطاعات التي نعمل بها",
+        "The sectors they work in, one by one.",
+        "القطاعات اللي بيشتغلوا فيها، واحد ورا التاني.",
+      ],
+      ["services", "الخدمات", "Their services under one roof.", "خدماتهم تحت سقف واحد."],
+      ["projects", "المشاريع", "A gallery of their projects.", "معرض لمشاريعهم."],
+      ["contact", "التواصل", "Contact by phone, email and WhatsApp.", "التواصل بالهاتف والبريد وواتساب."],
+      ["walkthrough on a phone", "جولة على الموبايل", ...TOUR_PHONE],
+      ["home page on a phone", "الرئيسية على الموبايل", "Home page on a phone.", "الرئيسية على الموبايل."],
     ]),
   },
 ];
