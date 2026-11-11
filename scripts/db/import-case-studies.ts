@@ -4,6 +4,8 @@
  *   - scripts/content/portfolio → Brand (Mahmoud Hwary's work; his team
  *     profile is created hidden and credited on each project)
  *   - scripts/content/sites     → Sites & Systems (websites we built, with a live link)
+ *   - scripts/content/systems/* → Sites & Systems (one folder per system, from the
+ *     showcase prompt: project.json + capture.json + images/)
  *
  * Idempotent: projects and the team member that already exist (by slug) are
  * skipped. Files go to Vercel Blob when BLOB_READ_WRITE_TOKEN is set,
@@ -15,7 +17,7 @@ import { put } from "@vercel/blob";
 import ffmpegPath from "ffmpeg-static";
 import { eq, inArray } from "drizzle-orm";
 import { execFileSync } from "node:child_process";
-import { mkdir, readFile, writeFile } from "node:fs/promises";
+import { mkdir, readdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
 import sharp from "sharp";
@@ -34,6 +36,7 @@ import {
 import { MAHMOUD, PORTFOLIO } from "../content/portfolio/projects";
 import { SITES } from "../content/sites/projects";
 import type { CaseStudy, L } from "../content/types";
+import { z } from "../../lib/zod";
 import { scriptDb } from "./client";
 
 const CONTENT = path.join(process.cwd(), "scripts", "content");
@@ -59,6 +62,51 @@ const SETS: CaseStudySet[] = [
     coverAlt: (item) => ({ en: `${item.client.en} — home page`, ar: `${item.client.ar} — الصفحة الرئيسية` }),
   },
 ];
+
+const localized = z.object({ en: z.string().trim().min(1), ar: z.string().trim().min(1) });
+/** project.json written by the per-system showcase prompt (radix-case-study/). */
+const systemSchema = z.object({
+  key: z.string().min(1),
+  slug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/),
+  title: localized,
+  client: localized,
+  year: z.number().int().nullable(),
+  summary: localized,
+  body: z.array(localized).min(1),
+  applications: z.array(localized),
+  services: z.array(z.string()),
+  externalUrl: z.url().nullable().optional(),
+  alt: z.array(localized),
+});
+
+/**
+ * Systems dropped into scripts/content/systems/<slug>/ (each a copy of a
+ * radix-case-study/ folder: project.json, capture.json, images/) → Sites & Systems.
+ */
+async function systemSets(): Promise<CaseStudySet[]> {
+  const root = path.join(CONTENT, "systems");
+  const folders = await readdir(root, { withFileTypes: true }).catch(() => []);
+  const sets: CaseStudySet[] = [];
+  for (const folder of folders.filter((f) => f.isDirectory())) {
+    const file = path.join(root, folder.name, "project.json");
+    const data = systemSchema.parse(JSON.parse(await readFile(file, "utf8")));
+    sets.push({
+      dir: `systems/${folder.name}`,
+      pillar: "sites-and-systems",
+      credit: false,
+      items: [
+        {
+          ...data,
+          externalUrl: data.externalUrl ?? undefined,
+          alt: (i) =>
+            data.alt[i] ?? { en: `${data.title.en} — screen ${i + 1}`, ar: `${data.title.ar} — شاشة ${i + 1}` },
+        },
+      ],
+      coverAlt: (item) => ({ en: `${item.title.en} — overview`, ar: `${item.title.ar} — نظرة عامة` }),
+    });
+  }
+  return sets;
+}
 
 /** Tiptap document: paragraphs, then an optional bullet list. */
 function doc(paragraphs: string[], list: string[] = []) {
@@ -91,6 +139,7 @@ function videoInfo(file: string) {
 
 async function main() {
   const { db, close } = scriptDb();
+  const sets = [...SETS, ...(await systemSets())];
   const blob = Boolean(process.env.BLOB_READ_WRITE_TOKEN);
   console.log(`Files → ${blob ? "Vercel Blob" : "local storage (.data/uploads)"}`);
 
@@ -138,7 +187,7 @@ async function main() {
         .where(
           inArray(
             projects.slug,
-            SETS.flatMap((set) => set.items.map((p) => p.slug)),
+            sets.flatMap((set) => set.items.map((p) => p.slug)),
           ),
         )
     ).map((r) => r.slug),
@@ -146,7 +195,7 @@ async function main() {
 
   let member: { id: string } | undefined;
   let created = 0;
-  for (const set of SETS) {
+  for (const set of sets) {
     const pillar = await db.query.categories.findFirst({ where: eq(categories.slug, set.pillar) });
     if (!pillar) throw new Error(`The "${set.pillar}" pillar is missing. Run \`pnpm db:seed\` first.`);
     const pillarServices = await db
