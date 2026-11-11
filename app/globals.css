@@ -388,18 +388,23 @@
 .frame-card {
   border: 3px solid var(--accent);
   background-color: var(--card);
+  /* Its own compositing layer from the start (not only while hovered), so lifting and settling back
+     never leaves a trace of the frame behind. */
+  position: relative;
+  will-change: transform;
+  backface-visibility: hidden;
+  transform: translateZ(0);
 }
 @media (hover: hover) {
   /* The whole frame lifts, with the image inside it. */
   .frame-card:hover {
-    transform: translateY(-12px);
+    transform: translate3d(0, -12px, 0);
     z-index: 1;
-    position: relative;
   }
   .dim-scope:has(.frame-card:hover) .frame-card:not(:hover) {
     opacity: 0.5;
     filter: grayscale(0.8);
-    transform: scale(0.97);
+    transform: translateZ(0) scale(0.97);
   }
   .lift-button:hover {
     transform: translateY(-3px);
