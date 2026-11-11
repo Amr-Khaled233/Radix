@@ -384,20 +384,17 @@
 }
 /* The card is visible before any hover: a lavender-tinted panel with its own edge that holds the
    image and the text together. */
+/* The violet edge is the frame itself, all the way round, visible before any hover. */
 .frame-card {
-  border: 1px solid var(--card-line);
+  border: 3px solid var(--accent);
   background-color: var(--card);
 }
 @media (hover: hover) {
+  /* The whole frame lifts, with the image inside it. */
   .frame-card:hover {
-    transform: translateY(-10px);
-    border-color: var(--accent);
-    box-shadow: 10px 10px 0 0 var(--accent);
+    transform: translateY(-12px);
     z-index: 1;
     position: relative;
-  }
-  [dir="rtl"] .frame-card:hover {
-    box-shadow: -10px 10px 0 0 var(--accent);
   }
   .dim-scope:has(.frame-card:hover) .frame-card:not(:hover) {
     opacity: 0.5;
@@ -413,8 +410,8 @@
   }
 }
 .frame-card:focus-visible {
-  border-color: var(--accent);
-  box-shadow: 10px 10px 0 0 var(--accent);
+  outline: 3px solid var(--focus);
+  outline-offset: 3px;
 }
 
 /* Navigation: an accent line draws in under a link from the reading start, and stays under the current page. */
