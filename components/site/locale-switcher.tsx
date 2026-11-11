@@ -7,7 +7,8 @@ import { Link, usePathname } from "@/lib/i18n/navigation";
 import { routing, type Locale } from "@/lib/i18n/routing";
 import { cn } from "@/lib/cn";
 
-const SHORT: Record<Locale, string> = { en: "EN", ar: "عربي" };
+/** Short visible labels; the accessible name keeps the full language name. */
+const SHORT: Record<Locale, string> = { en: "EN", ar: "AR" };
 
 function Switcher({ query, className }: { query?: Record<string, string>; className?: string }) {
   const t = useTranslations("locale");
@@ -19,12 +20,10 @@ function Switcher({ query, className }: { query?: Record<string, string>; classN
     <Link
       href={{ pathname, query }}
       locale={other}
-      lang={other}
       hrefLang={other}
       aria-label={t("switchTo", { language: t(other) })}
       className={cn(
-        "text-label hover:text-foreground inline-flex min-h-11 items-center px-1 transition-colors duration-(--duration-hover)",
-        other === "ar" ? "font-sans text-sm font-medium" : "type-label",
+        "type-label text-label hover:text-foreground inline-flex min-h-11 items-center px-1 transition-colors duration-(--duration-hover)",
         className,
       )}
     >

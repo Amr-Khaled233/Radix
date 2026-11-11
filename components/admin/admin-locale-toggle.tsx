@@ -16,7 +16,6 @@ export function AdminLocaleToggle() {
     <button
       type="button"
       disabled={pending}
-      lang={next}
       aria-label={t("languageLabel")}
       onClick={() =>
         startTransition(async () => {
@@ -24,7 +23,7 @@ export function AdminLocaleToggle() {
           router.refresh();
         })
       }
-      className="text-label hover:text-foreground inline-flex min-h-11 items-center px-2 text-sm font-medium transition-colors disabled:opacity-60"
+      className="type-label text-label hover:text-foreground inline-flex min-h-11 items-center px-2 transition-colors disabled:opacity-60"
     >
       {t("language")}
     </button>
