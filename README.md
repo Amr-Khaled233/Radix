@@ -95,7 +95,7 @@ Content changes go live within seconds (tag revalidation); no redeploy is needed
 
 ## Importing the prepared case studies
 
-`pnpm db:import:case-studies` runs in every Vercel build (see `vercel.json`). It creates projects that don't exist yet, refreshes an imported project when its files or text changed, and removes an imported project whose folder was deleted — **unless someone edited it in the dashboard**, in which case it is left alone. Text lives in `projects.ts` / `project.json`, images and videos in `images/`; each gallery file can carry a visible caption.
+`pnpm db:import:case-studies` runs in every Vercel build (see `vercel.json`). It creates projects that don't exist yet, refreshes an imported project when its files or text changed, and removes an imported project whose folder was deleted — **unless someone edited it in the dashboard**: then its text, status and order are left alone, and only a change to its image files here replaces the cover, gallery and captions. Text lives in `projects.ts` / `project.json`, images and videos in `images/`; each gallery file can carry a visible caption.
 
 Each Sites & Systems case study shows a cover (the sign-in screen for a system, the first screen for a website), the write-up, then two full walkthroughs side by side: one recorded on a desktop and one on a phone. A gallery made only of videos gets that layout automatically.
 

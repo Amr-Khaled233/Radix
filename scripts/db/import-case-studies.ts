@@ -174,6 +174,19 @@ function videoInfo(file: string) {
   };
 }
 
+/** The images alone (files, alt text, captions): a change here reaches even a project edited in the dashboard. */
+async function mediaHash(set: CaseStudySet, item: CaseStudy, cover: string, files: string[]) {
+  const hash = createHash("sha256");
+  hash.update(
+    JSON.stringify({
+      coverAlt: set.coverAlt(item),
+      files: files.map((file, i) => ({ file, alt: item.alt(i), caption: item.caption?.(i) ?? null })),
+    }),
+  );
+  for (const file of [cover, ...files]) hash.update(await readFile(path.join(CONTENT, set.dir, "images", file)));
+  return hash.digest("hex");
+}
+
 /** Everything that ends up in the project, so a changed file or text triggers a refresh. */
 async function contentHash(set: CaseStudySet, item: CaseStudy, cover: string, files: string[]) {
   const hash = createHash("sha256");
@@ -303,6 +316,8 @@ async function main() {
       const files = capture[item.key] as string[];
       const cover = capture[`${item.key}:cover`] as string;
       const hash = await contentHash(set, item, cover, files);
+      const media = await mediaHash(set, item, cover, files);
+      const mediaKey = `media:${item.slug}`;
       const current = await db.query.projects.findFirst({ where: eq(projects.slug, item.slug) });
 
       if (current && state[item.slug] === hash) {
@@ -310,8 +325,39 @@ async function main() {
         continue;
       }
       if (current?.updatedBy) {
-        // Someone changed it in the dashboard: their version wins.
-        console.log(`Left as edited in the dashboard: ${item.slug}`);
+        // Someone changed it in the dashboard: their text, status and order win. Only when the image files
+        // themselves changed here are the cover, gallery and captions replaced.
+        if (state[mediaKey] !== media) {
+          const coverId = await upload(set.dir, cover, set.coverAlt(item));
+          const ids: string[] = [];
+          for (const [i, file] of files.entries()) ids.push(await upload(set.dir, file, item.alt(i)));
+          const oldGallery = await db
+            .select({ id: projectMedia.mediaId })
+            .from(projectMedia)
+            .where(eq(projectMedia.projectId, current.id));
+          await db.transaction(async (tx) => {
+            await tx.update(projects).set({ coverImageId: coverId }).where(eq(projects.id, current.id));
+            await tx.delete(projectMedia).where(eq(projectMedia.projectId, current.id));
+            if (ids.length) {
+              await tx.insert(projectMedia).values(
+                ids.map((mediaId, i) => ({
+                  projectId: current.id,
+                  mediaId,
+                  sortOrder: i,
+                  caption: item.caption?.(i) ?? EMPTY,
+                })),
+              );
+            }
+          });
+          const old = [current.coverImageId, ...oldGallery.map((g) => g.id)].filter(
+            (id): id is string => Boolean(id) && id !== coverId && !ids.includes(id as string),
+          );
+          await removeUnused(set.dir, old);
+          console.log(`Images refreshed, text kept as edited in the dashboard: ${item.slug} (${files.length} files)`);
+          state[mediaKey] = media;
+        } else {
+          console.log(`Left as edited in the dashboard: ${item.slug}`);
+        }
         state[item.slug] = hash;
         counts.edited += 1;
         continue;
@@ -394,13 +440,14 @@ async function main() {
         );
       }
       state[item.slug] = hash;
+      state[mediaKey] = media;
     }
   }
 
   // A case study whose files were removed from scripts/content is taken off the site too,
   // unless someone edited it in the dashboard (then it stays, and stops being managed here).
   const present = new Set(sets.flatMap((set) => set.items.map((item) => item.slug)));
-  for (const slug of Object.keys(state).filter((s) => !present.has(s))) {
+  for (const slug of Object.keys(state).filter((s) => !s.startsWith("media:") && !present.has(s))) {
     const project = await db.query.projects.findFirst({ where: eq(projects.slug, slug) });
     if (project && !project.updatedBy) {
       const gallery = await db
@@ -417,6 +464,7 @@ async function main() {
       console.log(`Kept (edited in the dashboard, files removed): ${slug}`);
     }
     delete state[slug];
+    delete state[`media:${slug}`];
   }
 
   await db
