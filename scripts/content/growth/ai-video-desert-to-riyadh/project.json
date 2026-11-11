@@ -1,0 +1,65 @@
+{
+  "key": "ai-video-desert-to-riyadh",
+  "slug": "ai-video-desert-to-riyadh",
+  "pillar": "growth",
+  "publish": true,
+  "title": {
+    "en": "AI Video — From the Desert to Riyadh",
+    "ar": "فيديو بالذكاء الاصطناعي — من الصحراء إلى الرياض"
+  },
+  "client": { "en": "RADIX", "ar": "RADIX" },
+  "year": 2026,
+  "summary": {
+    "en": "A short cinematic story produced with AI video: a drive across the desert, the city at rush hour, and a meeting with Riyadh's skyline behind it.",
+    "ar": "قصة سينمائية قصيرة منتَجة بالفيديو المولَّد بالذكاء الاصطناعي: رحلة بالسيارة عبر الصحراء، ثم المدينة في وقت الذروة، ثم اجتماع وخلفه أفق الرياض."
+  },
+  "body": [
+    {
+      "en": "Every shot in this piece is generated with AI video tools, then directed and cut into a story in three scenes. It opens on an aerial shot of a car on a desert road, meets a camel at the window and drives into a sandstorm; it moves into Riyadh at sunset, from the traffic to the road opening up towards the Kingdom Centre; and it ends in a boardroom overlooking the skyline.",
+      "ar": "كل لقطة في هذا العمل مولَّدة بأدوات الفيديو بالذكاء الاصطناعي، ثم أُخرجت ومُنتِجت في قصة من ثلاثة مشاهد. تبدأ بلقطة جوية لسيارة على طريق صحراوي، ثم جمل يطل من النافذة، ثم عاصفة رملية؛ وتنتقل إلى الرياض وقت الغروب، من الزحام حتى ينفتح الطريق نحو برج المملكة؛ وتنتهي في قاعة اجتماعات تطل على أفق المدينة."
+    },
+    {
+      "en": "We handled the whole production: the script and the shot list, generating each shot, keeping the look consistent from scene to scene — the light, the colour of the desert, the people — and the edit. The three scenes play below.",
+      "ar": "تولّينا الإنتاج بالكامل: السيناريو وقائمة اللقطات، وتوليد كل لقطة، والحفاظ على نفس الشكل من مشهد لمشهد — الإضاءة، ولون الصحراء، والشخصيات — والمونتاج. المشاهد الثلاثة بالأسفل."
+    }
+  ],
+  "applications": [
+    { "en": "Script and shot list", "ar": "السيناريو وقائمة اللقطات" },
+    { "en": "AI-generated shots", "ar": "لقطات مولَّدة بالذكاء الاصطناعي" },
+    { "en": "A consistent look across scenes", "ar": "شكل متّسق بين المشاهد" },
+    { "en": "Edit", "ar": "المونتاج" }
+  ],
+  "services": ["AI-powered video production", "Creative production"],
+  "coverAlt": {
+    "en": "A meeting room overlooking the Riyadh skyline at sunset",
+    "ar": "قاعة اجتماعات تطل على أفق الرياض وقت الغروب"
+  },
+  "alt": [
+    {
+      "en": "Scene one: a car on a desert road from above, a camel at the car window, then a sandstorm",
+      "ar": "المشهد الأول: سيارة على طريق صحراوي من أعلى، وجمل عند نافذة السيارة، ثم عاصفة رملية"
+    },
+    {
+      "en": "Scene two: Riyadh traffic at sunset, a traffic light turning green and the road opening up",
+      "ar": "المشهد الثاني: زحام الرياض وقت الغروب، وإشارة تتحول للأخضر، والطريق ينفتح"
+    },
+    {
+      "en": "Scene three: a meeting overlooking the skyline, and a man speaking to the camera",
+      "ar": "المشهد الثالث: اجتماع يطل على أفق المدينة، ورجل يتحدث إلى الكاميرا"
+    }
+  ],
+  "captions": [
+    {
+      "en": "The desert: an aerial shot of the road, a camel at the window, and the sandstorm.",
+      "ar": "الصحراء: لقطة جوية للطريق، وجمل عند النافذة، والعاصفة الرملية."
+    },
+    {
+      "en": "The city: rush hour in Riyadh at sunset, until the light turns green and the road opens up.",
+      "ar": "المدينة: وقت الذروة في الرياض عند الغروب، حتى تتحول الإشارة للأخضر وينفتح الطريق."
+    },
+    {
+      "en": "The meeting: a boardroom overlooking the skyline.",
+      "ar": "الاجتماع: قاعة تطل على أفق المدينة."
+    }
+  ]
+}

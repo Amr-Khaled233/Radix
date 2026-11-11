@@ -33,6 +33,8 @@
   --label: color-mix(in srgb, var(--palette-aubergine) 72%, var(--palette-ivory));
   --line: color-mix(in srgb, var(--palette-aubergine) 16%, var(--palette-ivory));
   --line-strong: var(--palette-aubergine);
+  --card: color-mix(in srgb, var(--palette-lavender) 16%, var(--palette-white));
+  --card-line: color-mix(in srgb, var(--palette-lavender) 70%, var(--palette-ivory));
   --accent: var(--palette-violet);
   --on-accent: var(--palette-white);
   --focus: var(--palette-violet);
@@ -56,6 +58,8 @@
   --label: var(--palette-lavender);
   --line: color-mix(in srgb, var(--palette-ivory) 14%, var(--palette-aubergine));
   --line-strong: var(--palette-ivory);
+  --card: var(--palette-graphite);
+  --card-line: color-mix(in srgb, var(--palette-lavender) 28%, var(--palette-graphite));
   --accent: var(--palette-violet);
   --on-accent: var(--palette-white);
   /* Violet fails 3:1 on Graphite surfaces, so focus rings use Lavender in dark. */
@@ -378,9 +382,11 @@
     filter var(--duration-hover) var(--ease-brand),
     color var(--duration-hover) var(--ease-brand);
 }
+/* The card is visible before any hover: a lavender-tinted panel with its own edge that holds the
+   image and the text together. */
 .frame-card {
-  border: 1px solid var(--line);
-  background-color: var(--surface);
+  border: 1px solid var(--card-line);
+  background-color: var(--card);
 }
 @media (hover: hover) {
   .frame-card:hover {
@@ -394,8 +400,8 @@
     box-shadow: -10px 10px 0 0 var(--accent);
   }
   .dim-scope:has(.frame-card:hover) .frame-card:not(:hover) {
-    opacity: 0.35;
-    filter: grayscale(1);
+    opacity: 0.5;
+    filter: grayscale(0.8);
     transform: scale(0.97);
   }
   .lift-button:hover {

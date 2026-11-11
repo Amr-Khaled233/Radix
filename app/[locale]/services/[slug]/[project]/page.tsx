@@ -88,7 +88,13 @@ async function CaseStudy({ params }: { params: Params }) {
       className="block h-auto w-full"
     />
   );
-  const walkthroughs = gallery.length > 0 && gallery.every((item) => item.media!.kind === "video");
+  // Desktop + phone screen recordings side by side; other video-only galleries (for example
+  // AI-produced shots) play full width, one under another.
+  const walkthroughs =
+    gallery.length > 0 &&
+    gallery.every((item) => item.media!.kind === "video") &&
+    gallery.some((item) => isUpright(item.media!)) &&
+    gallery.some((item) => !isUpright(item.media!));
 
   const facts = [
     client && { label: tW("client"), value: client },
