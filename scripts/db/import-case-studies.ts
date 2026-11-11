@@ -98,6 +98,8 @@ const folderSchema = z.object({
   /** Publish on import (owner-approved) instead of creating a draft. */
   publish: z.boolean().optional(),
   pillar: z.enum(["brand", "digital", "sites-and-systems", "growth"]).optional(),
+  /** What the cover shows (for example the sign-in screen); defaults to "<title> — overview". */
+  coverAlt: localized.optional(),
 });
 
 /** "Sinemai AI — scene breakdown" → "Scene breakdown" (the page already names the project). */
@@ -135,7 +137,8 @@ async function folderSets(): Promise<CaseStudySet[]> {
               data.captions?.[i] ?? (data.captionsFromAlt && data.alt[i] ? withoutName(data.alt[i]) : undefined),
           },
         ],
-        coverAlt: (item) => ({ en: `${item.title.en} — overview`, ar: `${item.title.ar} — نظرة عامة` }),
+        coverAlt: (item) =>
+          data.coverAlt ?? { en: `${item.title.en} — overview`, ar: `${item.title.ar} — نظرة عامة` },
       });
     }
   }
@@ -261,7 +264,7 @@ async function main() {
   }
 
   let member: { id: string } | undefined;
-  const counts = { created: 0, refreshed: 0, unchanged: 0, edited: 0 };
+  const counts = { created: 0, refreshed: 0, unchanged: 0, edited: 0, removed: 0 };
   for (const set of sets) {
     const pillar = await db.query.categories.findFirst({ where: eq(categories.slug, set.pillar) });
     if (!pillar) throw new Error(`The "${set.pillar}" pillar is missing. Run \`pnpm db:seed\` first.`);
@@ -394,13 +397,35 @@ async function main() {
     }
   }
 
+  // A case study whose files were removed from scripts/content is taken off the site too,
+  // unless someone edited it in the dashboard (then it stays, and stops being managed here).
+  const present = new Set(sets.flatMap((set) => set.items.map((item) => item.slug)));
+  for (const slug of Object.keys(state).filter((s) => !present.has(s))) {
+    const project = await db.query.projects.findFirst({ where: eq(projects.slug, slug) });
+    if (project && !project.updatedBy) {
+      const gallery = await db
+        .select({ id: projectMedia.mediaId })
+        .from(projectMedia)
+        .where(eq(projectMedia.projectId, project.id));
+      await db.delete(projects).where(eq(projects.id, project.id));
+      const ids = [project.coverImageId, project.ogImageId, ...gallery.map((g) => g.id)].filter(Boolean) as string[];
+      // Its files sit under the folder it was imported from; match them by id alone.
+      for (const dir of ["sites", "portfolio", "systems", "growth"]) await removeUnused(dir, ids);
+      counts.removed += 1;
+      console.log(`Removed (no longer in scripts/content): ${slug}`);
+    } else if (project) {
+      console.log(`Kept (edited in the dashboard, files removed): ${slug}`);
+    }
+    delete state[slug];
+  }
+
   await db
     .insert(settings)
     .values({ key: STATE_KEY, value: state })
     .onConflictDoUpdate({ target: settings.key, set: { value: state } });
   await close();
   console.log(
-    `Done: ${counts.created} created, ${counts.refreshed} refreshed, ${counts.unchanged} unchanged, ${counts.edited} kept as edited.`,
+    `Done: ${counts.created} created, ${counts.refreshed} refreshed, ${counts.unchanged} unchanged, ${counts.edited} kept as edited, ${counts.removed} removed.`,
   );
 }
 

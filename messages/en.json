@@ -898,7 +898,10 @@
       "draft": "Draft preview — not visible to the public.",
       "exitPreview": "Exit preview",
       "backTo": "Back to",
-      "opensNewTab": "(opens in a new tab)"
+      "opensNewTab": "(opens in a new tab)",
+      "walkthroughs": "Walkthroughs",
+      "onDesktop": "On a desktop",
+      "onPhone": "On a phone"
     },
     "team": {
       "label": "Team",

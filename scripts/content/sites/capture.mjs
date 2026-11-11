@@ -1,5 +1,6 @@
-// Capture screenshots of the live websites we built (read-only browsing: no forms, no cart actions).
-// Output: scripts/content/sites/images/*.webp + capture.json. Run: node scripts/content/sites/capture.mjs
+// Capture the live websites we built (read-only browsing: no forms, no cart actions): a cover
+// and a desktop + phone walkthrough video per site.
+// Output: scripts/content/sites/images/ + capture.json. Run: node scripts/content/sites/capture.mjs
 import { chromium } from "@playwright/test";
 import sharp from "sharp";
 import ffmpegPath from "ffmpeg-static";
@@ -9,13 +10,10 @@ import { mkdirSync, writeFileSync } from "node:fs";
 const OUT = "scripts/content/sites/images";
 mkdirSync(OUT, { recursive: true });
 
-/** home: cover + up to `slices` desktop sections; pages: one desktop view each; mobile: phone views. */
+/** tour: [path, scroll to ("end" or px), seconds] per page, for the desktop and the phone walkthrough. */
 const SITES = {
   jexi: {
     base: "https://jexi-store.vercel.app",
-    slices: 3,
-    pages: ["/shop", "/product/aurelia-pendant-necklace", "/gift-boxes/rose-keepsake-box"],
-    mobile: ["/", "/product/aurelia-pendant-necklace"],
     tour: {
       desktop: [
         ["/", "end", 16],
@@ -31,9 +29,6 @@ const SITES = {
   },
   luwjje: {
     base: "https://www.luwjje.com",
-    slices: 1,
-    pages: ["/shop", "/product/luwjje-hoodie"],
-    mobile: ["/", "/product/luwjje-hoodie"],
     tour: {
       desktop: [
         ["/", "end", 8],
@@ -48,11 +43,6 @@ const SITES = {
   },
   eldeeb: {
     base: "https://eldeeb-flax.vercel.app",
-    // A scroll-driven animation: content lives in the viewport, so capture it at scroll positions.
-    slices: 0,
-    scrollShots: [2400, 4000, 4800, 5600, 6400, 8000, 8800, 10400, 12000],
-    pages: [],
-    mobile: ["/"],
     // The building animation, then the rest of the page.
     tour: { desktop: [["/", 12000, 30]], mobile: [["/", "end", 26]] },
   },
@@ -186,67 +176,23 @@ async function recordTour(key, site, device) {
   return file;
 }
 
+// Each case study shows its cover (the first screen) and two full walkthroughs: desktop, then phone.
+// (Set SCREENSHOTS=1 to also save section screenshots into images/ for picking a different cover.)
 const capture = {};
 const browser = await chromium.launch();
 for (const [key, site] of Object.entries(SITES)) {
-  const files = [];
   const desktop = await (await browser.newContext({ viewport: { width: 1440, height: 900 } })).newPage();
   await desktop.goto(site.base + (site.home ?? "/"), { waitUntil: "networkidle", timeout: 90_000 });
   await settle(desktop);
-  // Cover: the first screen.
   await toWebp(await desktop.screenshot(), `${key}-cover.webp`);
   capture[`${key}:cover`] = `${key}-cover.webp`;
-  // Home sections (after the first screen).
-  const full = await desktop.screenshot({ fullPage: true });
-  const meta = await sharp(full).metadata();
-  if (site.slices && meta.height > 1100) {
-    const rest = await sharp(full)
-      .extract({ left: 0, top: 900, width: meta.width, height: meta.height - 900 })
-      .png()
-      .toBuffer();
-    for (const [i, part] of (await slice(rest)).slice(0, site.slices).entries()) {
-      const file = `${key}-home-${i + 1}.webp`;
-      await toWebp(part, file);
-      files.push(file);
-    }
-  }
-  for (const [i, y] of (site.scrollShots ?? []).entries()) {
-    await desktop.evaluate((y) => scrollTo(0, y), y);
-    await desktop.waitForTimeout(1000);
-    const file = `${key}-scene-${i + 1}.webp`;
-    await toWebp(await desktop.screenshot(), file);
-    files.push(file);
-  }
-  for (const [i, path] of site.pages.entries()) {
-    await desktop.goto(site.base + path, { waitUntil: "networkidle", timeout: 90_000 });
-    await settle(desktop);
-    const file = `${key}-page-${i + 1}.webp`;
-    await toWebp(await desktop.screenshot(), file);
-    files.push(file);
+  if (process.env.SCREENSHOTS) {
+    const full = await desktop.screenshot({ fullPage: true });
+    for (const [i, part] of (await slice(full)).entries()) await toWebp(part, `${key}-section-${i + 1}.webp`);
   }
   await desktop.context().close();
-
-  const phone = await (
-    await browser.newContext({
-      viewport: { width: 390, height: 844 },
-      deviceScaleFactor: 2,
-      isMobile: true,
-      hasTouch: true,
-    })
-  ).newPage();
-  // Gallery order: desktop tour, desktop screens, phone tour, phone screens.
-  files.unshift(await recordTour(key, site, "desktop"));
-  files.push(await recordTour(key, site, "mobile"));
-  for (const [i, path] of site.mobile.entries()) {
-    await phone.goto(site.base + path, { waitUntil: "networkidle", timeout: 90_000 });
-    await settle(phone);
-    const file = `${key}-mobile-${i + 1}.webp`;
-    await toWebp(await phone.screenshot(), file);
-    files.push(file);
-  }
-  await phone.context().close();
-  capture[key] = files;
-  console.log(key, files.length);
+  capture[key] = [await recordTour(key, site, "desktop"), await recordTour(key, site, "mobile")];
+  console.log(key, capture[key]);
 }
 writeFileSync("scripts/content/sites/capture.json", JSON.stringify(capture, null, 2) + "\n");
 await browser.close();

@@ -17,7 +17,7 @@ export function CtaLink({
     <Link
       {...props}
       className={cn(
-        "type-button inline-flex min-h-12 items-center gap-2 px-6 transition-colors duration-(--duration-hover) ease-brand",
+        "lift-button type-button inline-flex min-h-12 items-center gap-2 px-6",
         variant === "primary" && "bg-accent text-on-accent hover:bg-inverse hover:text-on-inverse",
         variant === "secondary" &&
           "border-line-strong text-foreground hover:bg-foreground hover:text-background border",

@@ -2,10 +2,10 @@
  * Websites RADIX built and deployed, shown under Sites & Systems with a live
  * link. Text describes only what is visible on each live site (its own copy
  * and features); Arabic is a first draft, flagged "Needs review".
- * Screenshots and the desktop/phone walkthrough videos come from ./capture.mjs.
+ * The cover and the desktop/phone walkthrough videos come from ./capture.mjs.
  *
  * Left out for now: ATREES (catalogue still empty), the hotel PMS (blank page).
- * Systems behind a login (and Sinemai AI, shown from the inside) are folders in ../systems.
+ * Systems behind a login are folders in ../systems.
  */
 import { both, type CaseStudy, type L } from "../types";
 
@@ -24,8 +24,11 @@ const gallery = (name: string, nameAr: string, entries: Entry[]) => ({
   },
 });
 
-const TOUR_DESKTOP = ["Walkthrough on desktop.", "جولة على الكمبيوتر."] as const;
-const TOUR_PHONE = ["The same site on a phone.", "الموقع نفسه على الموبايل."] as const;
+/** The last paragraph on every site: what RADIX did. */
+const DELIVERED = both(
+  "We handled the whole build: the layout and visual system, the code, and making every page work as well on a phone as on a desktop. The two walkthroughs below are recorded from the live site.",
+  "تولّينا العمل بالكامل: التخطيط والهوية البصرية للموقع، والبرمجة، وأن تعمل كل صفحة على الموبايل بنفس جودتها على الكمبيوتر. الجولتان بالأسفل مسجّلتان من الموقع الحقيقي.",
+);
 
 export const SITES: CaseStudy[] = [
   {
@@ -44,9 +47,10 @@ export const SITES: CaseStudy[] = [
         "صممنا المتجر وبنيناه بالكامل: كتالوج داكن بلمسات ذهبية يُبرز القطع، مقسّم حسب الفئة، مع مجموعات الأكثر مبيعًا والوصول الجديد، وعلامات واضحة للتخفيضات والقطع النافدة.",
       ),
       both(
-        "Curated gift boxes show the saving of the bundle, and every visitor can shop from a phone as easily as from a desktop.",
-        "صناديق الهدايا الجاهزة تُظهر قيمة التوفير في الباقة، والتسوّق من الموبايل سهل تمامًا مثل الكمبيوتر.",
+        "Every product has its own page with photos, price and options, and curated gift boxes show the pieces inside and the saving of the bundle. The cart runs on cash on delivery, and customers can track their orders.",
+        "لكل منتج صفحته بالصور والسعر والاختيارات، وصناديق الهدايا الجاهزة تعرض القطع التي بداخلها وقيمة التوفير في الباقة. السلة تعمل بالدفع عند الاستلام، ويستطيع العميل تتبّع طلبه.",
       ),
+      DELIVERED,
     ],
     applications: [
       both("Catalogue by category and collection", "كتالوج حسب الفئة والمجموعة"),
@@ -62,42 +66,15 @@ export const SITES: CaseStudy[] = [
       [
         "walkthrough on desktop: home, shop, product and gift box",
         "جولة على الكمبيوتر: الرئيسية والمتجر والمنتج وصندوق الهدايا",
-        ...TOUR_DESKTOP,
+        "Home page, the full catalogue, a product page and a gift box.",
+        "الرئيسية، والكتالوج كامل، وصفحة منتج، وصندوق هدايا.",
       ],
       [
-        "home page, categories and best sellers",
-        "الرئيسية، الفئات والأكثر مبيعًا",
-        "Shop by category, with the best sellers up front.",
-        "التسوّق حسب الفئة، والأكثر مبيعًا في الواجهة.",
+        "walkthrough on a phone: home and product",
+        "جولة على الموبايل: الرئيسية والمنتج",
+        "The home page and a product page on a phone.",
+        "الرئيسية وصفحة منتج على الموبايل.",
       ],
-      [
-        "home page, gift box",
-        "الرئيسية، صندوق الهدايا",
-        "A ready-made gift box that shows the saving.",
-        "صندوق هدايا جاهز يوضّح قيمة التوفير.",
-      ],
-      [
-        "home page, new arrivals",
-        "الرئيسية، الوصول الجديد",
-        "New arrivals, with sale and sold-out labels.",
-        "الوصول الجديد، مع علامات التخفيض والنفاد.",
-      ],
-      ["shop all", "كل المنتجات", "The full catalogue in one place.", "الكتالوج كله في مكان واحد."],
-      [
-        "product page",
-        "صفحة منتج",
-        "Product page: photos, price and options.",
-        "صفحة المنتج: الصور والسعر والاختيارات.",
-      ],
-      [
-        "gift box page",
-        "صفحة صندوق الهدايا",
-        "Gift box page, with the pieces inside.",
-        "صفحة صندوق الهدايا والقطع اللي فيه.",
-      ],
-      ["walkthrough on a phone", "جولة على الموبايل", ...TOUR_PHONE],
-      ["home page on a phone", "الرئيسية على الموبايل", "Home page on a phone.", "الرئيسية على الموبايل."],
-      ["product page on a phone", "صفحة منتج على الموبايل", "Product page on a phone.", "صفحة المنتج على الموبايل."],
     ]),
   },
   {
@@ -116,9 +93,10 @@ export const SITES: CaseStudy[] = [
         "واجهة متجر بلغتين (عربي وإنجليزي) تبدأ بصورة كبيرة بعرض الشاشة، ثم الأكثر مبيعًا بأسعار التخفيض والإضافة السريعة للسلة.",
       ),
       both(
-        "Product pages with a photo gallery, order tracking for customers, and the shipping, returns, privacy and terms pages a real store needs.",
-        "صفحات منتجات بمعرض صور، وتتبّع الطلبات للعملاء، وصفحات الشحن والاسترجاع والخصوصية والشروط اللي يحتاجها أي متجر حقيقي.",
+        "Product pages with a photo gallery and sizes, order tracking for customers, and the shipping, returns, privacy and terms pages a real store needs.",
+        "صفحات منتجات بمعرض صور ومقاسات، وتتبّع الطلبات للعملاء، وصفحات الشحن والاسترجاع والخصوصية والشروط اللي يحتاجها أي متجر حقيقي.",
       ),
+      DELIVERED,
     ],
     applications: [
       both("English and Arabic", "عربي وإنجليزي"),
@@ -133,24 +111,15 @@ export const SITES: CaseStudy[] = [
       [
         "walkthrough on desktop: home, shop and product",
         "جولة على الكمبيوتر: الرئيسية والمتجر والمنتج",
-        ...TOUR_DESKTOP,
+        "Home page, all products and a product page.",
+        "الرئيسية، وكل المنتجات، وصفحة منتج.",
       ],
       [
-        "home page, best sellers",
-        "الرئيسية، الأكثر مبيعًا",
-        "Best sellers with sale prices and quick add.",
-        "الأكثر مبيعًا بأسعار التخفيض والإضافة السريعة.",
+        "walkthrough on a phone: home and product",
+        "جولة على الموبايل: الرئيسية والمنتج",
+        "The home page and a product page on a phone.",
+        "الرئيسية وصفحة منتج على الموبايل.",
       ],
-      ["all products", "كل المنتجات", "The full product list.", "قائمة المنتجات كاملة."],
-      [
-        "product page",
-        "صفحة منتج",
-        "Product page: photo gallery, sizes and add to cart.",
-        "صفحة المنتج: معرض الصور والمقاسات والإضافة للسلة.",
-      ],
-      ["walkthrough on a phone", "جولة على الموبايل", ...TOUR_PHONE],
-      ["home page on a phone", "الرئيسية على الموبايل", "Home page on a phone.", "الرئيسية على الموبايل."],
-      ["product page on a phone", "صفحة منتج على الموبايل", "Product page on a phone.", "صفحة المنتج على الموبايل."],
     ]),
   },
   {
@@ -172,9 +141,10 @@ export const SITES: CaseStudy[] = [
         "قصة تتحرك مع التمرير: كلما نزل الزائر في الصفحة، يرتفع مبنى طابقًا فوق طابق — من الأساسات حتى برج مضاء في الليل — ترجمةً لشعار الشركة «نبني رؤيتك طابقًا فوق طابق».",
       ),
       both(
-        "Around it: the sectors they work in, their services, a projects gallery and direct contact by phone, email and WhatsApp — in Arabic and English.",
-        "وحولها: القطاعات التي تعمل بها الشركة، وخدماتها، ومعرض لمشاريعها، وتواصل مباشر بالهاتف والبريد وواتساب — بالعربي والإنجليزي.",
+        "Each stage of the building introduces part of the company — architectural design, the projects they are proud of, their engineering strength. Around it: the sectors they work in, their services, a projects gallery and direct contact by phone, email and WhatsApp — in Arabic and English.",
+        "كل مرحلة من المبنى تقدّم جزءًا من الشركة — التصميم المعماري، والمشاريع التي تفخر بها، وقوتها الهندسية. وحولها: القطاعات التي تعمل بها الشركة، وخدماتها، ومعرض لمشاريعها، وتواصل مباشر بالهاتف والبريد وواتساب — بالعربي والإنجليزي.",
       ),
+      DELIVERED,
     ],
     applications: [
       both("Scroll-driven building animation", "حركة بناء المبنى مع التمرير"),
@@ -189,50 +159,15 @@ export const SITES: CaseStudy[] = [
       [
         "walkthrough on desktop: the building rises as the page scrolls",
         "جولة على الكمبيوتر: المبنى يرتفع مع التمرير",
-        "Scroll the page and the building rises, floor by floor.",
-        "مع التمرير يرتفع المبنى طابقًا فوق طابق.",
+        "Scroll the page and the building rises, floor by floor, to the finished tower at night.",
+        "مع التمرير يرتفع المبنى طابقًا فوق طابق حتى البرج مكتملًا في الليل.",
       ],
       [
-        "architectural design",
-        "التصميم المعماري",
-        "Each stage of the building introduces a service: architectural design first.",
-        "كل مرحلة من المبنى تقدّم خدمة: البداية بالتصميم المعماري.",
+        "walkthrough on a phone: the whole page",
+        "جولة على الموبايل: الصفحة كاملة",
+        "The whole page on a phone, from the building to contact.",
+        "الصفحة كاملة على الموبايل، من المبنى حتى التواصل.",
       ],
-      [
-        "projects we are proud of",
-        "مشاريع نفخر بتوقيعنا عليها",
-        "The floors go up as the story moves to their projects.",
-        "الطوابق ترتفع والقصة تنتقل إلى مشاريعهم.",
-      ],
-      [
-        "engineering strength that builds trust",
-        "قوة هندسية تبني الثقة",
-        "The tower takes shape.",
-        "البرج يكتمل شكله.",
-      ],
-      [
-        "the finished tower at night",
-        "البرج مكتملًا في الليل",
-        "The finished tower, lit at night.",
-        "البرج مكتملًا ومضاءً في الليل.",
-      ],
-      [
-        "we build your vision, floor by floor",
-        "نبني رؤيتك طابقًا فوق طابق",
-        "Then the company itself: “We build your vision, floor by floor.”",
-        "ثم الشركة نفسها: «نبني رؤيتك طابقًا فوق طابق».",
-      ],
-      [
-        "sectors we work in",
-        "القطاعات التي نعمل بها",
-        "The sectors they work in, one by one.",
-        "القطاعات اللي بيشتغلوا فيها، واحد ورا التاني.",
-      ],
-      ["services", "الخدمات", "Their services under one roof.", "خدماتهم تحت سقف واحد."],
-      ["projects", "المشاريع", "A gallery of their projects.", "معرض لمشاريعهم."],
-      ["contact", "التواصل", "Contact by phone, email and WhatsApp.", "التواصل بالهاتف والبريد وواتساب."],
-      ["walkthrough on a phone", "جولة على الموبايل", ...TOUR_PHONE],
-      ["home page on a phone", "الرئيسية على الموبايل", "Home page on a phone.", "الرئيسية على الموبايل."],
     ]),
   },
 ];

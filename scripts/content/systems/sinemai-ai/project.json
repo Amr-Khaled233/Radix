@@ -19,6 +19,10 @@
     {
       "en": "The result is a full production sheet: the camera, lens, lighting and grip package from a curated catalogue, rental houses matched by what they actually stock, a shooting schedule, crew rates and a budget priced by code from real day rates. The assistant explains the choices and where to save, and every change re-prices the sheet. An admin area manages the catalogue, the rental companies and their stock. Arabic and English, with user accounts.",
       "ar": "والنتيجة جدول إنتاج كامل: باقة الكاميرا والعدسات والإضاءة والتثبيت من كتالوج مُنتقى، وشركات تأجير مرشّحة حسب ما تملكه فعلًا، وجدول تصوير، وأجور الطاقم، وميزانية تُحسب برمجيًا من أسعار يومية حقيقية. يشرح المساعد الاختيارات وأين يمكن التوفير، وكل تعديل يعيد تسعير الجدول. ولوحة إدارة للكتالوج وشركات التأجير ومخزونها. عربي وإنجليزي، مع حسابات للمستخدمين."
+    },
+    {
+      "en": "We designed and built the whole platform: the producer's workspace, the production sheet with PDF and spreadsheet export and share links, the assistant, the agents that read the script, and the admin side. It works on a phone as well as on a desktop, as the two walkthroughs below show.",
+      "ar": "صممنا المنصة وبنيناها بالكامل: مساحة عمل المنتج، وجدول الإنتاج مع التصدير إلى PDF وجداول البيانات وروابط المشاركة، والمساعد، والوكلاء الذين يقرأون السيناريو، وجانب الإدارة. وتعمل على الموبايل بنفس جودتها على الكمبيوتر، كما توضّح الجولتان بالأسفل."
     }
   ],
   "applications": [
@@ -36,45 +40,28 @@
   "services": ["SaaS solutions", "AI integration", "Website design", "Website development"],
   "externalUrl": "https://sinemai-ai.vercel.app",
   "publish": true,
-  "captionsFromAlt": true,
+  "coverAlt": {
+    "en": "Sinemai AI — the sign-in screen",
+    "ar": "Sinemai AI — شاشة تسجيل الدخول"
+  },
   "alt": [
     {
-      "en": "Sinemai AI — screen recording: sign in, upload a script, set type and budget, and run the breakdown",
-      "ar": "Sinemai AI — تسجيل شاشة: تسجيل الدخول ورفع السيناريو وتحديد النوع والميزانية وتشغيل التفريغ"
+      "en": "Sinemai AI — desktop walkthrough: signing in, uploading a script and running the breakdown, the production sheet from scenes to budget, and the admin catalogue, vendors and rental prices",
+      "ar": "Sinemai AI — جولة على الكمبيوتر: تسجيل الدخول، ورفع السيناريو وتشغيل التفريغ، وجدول الإنتاج من المشاهد حتى الميزانية، وإدارة الكتالوج وشركات التأجير والأسعار"
     },
     {
-      "en": "Sinemai AI — drop a script to start, with earlier scripts below",
-      "ar": "Sinemai AI — ارفع السيناريو للبدء، والسيناريوهات السابقة بالأسفل"
+      "en": "Sinemai AI — phone walkthrough: signing in, the producer's scripts, flagged scenes, the assistant, the full production sheet, the catalogue and insights",
+      "ar": "Sinemai AI — جولة على الموبايل: تسجيل الدخول، وسيناريوهات المنتج، والمشاهد المنبَّه عليها، والمساعد، وجدول الإنتاج كاملًا، والكتالوج، والتحليلات"
+    }
+  ],
+  "captions": [
+    {
+      "en": "On a desktop: sign in, upload a script, set the type and budget and run the breakdown; then the production sheet — scenes, equipment package, rental vendors and budget — and the admin side: catalogue, rental companies and their day rates.",
+      "ar": "على الكمبيوتر: تسجيل الدخول، ورفع السيناريو، وتحديد النوع والميزانية، وتشغيل التفريغ؛ ثم جدول الإنتاج — المشاهد وباقة المعدات وشركات التأجير والميزانية — وجانب الإدارة: الكتالوج وشركات التأجير وأسعارها اليومية."
     },
     {
-      "en": "Sinemai AI — the breakdown running, stage by stage",
-      "ar": "Sinemai AI — التفريغ أثناء التشغيل، مرحلة بمرحلة"
-    },
-    { "en": "Sinemai AI — scenes that need attention", "ar": "Sinemai AI — المشاهد التي تحتاج انتباهًا" },
-    { "en": "Sinemai AI — the assistant's briefing", "ar": "Sinemai AI — ملخص المساعد" },
-    {
-      "en": "Sinemai AI — screen recording: the production sheet from scenes to budget",
-      "ar": "Sinemai AI — تسجيل شاشة: جدول الإنتاج من المشاهد حتى الميزانية"
-    },
-    { "en": "Sinemai AI — scene breakdown", "ar": "Sinemai AI — تفريغ المشاهد" },
-    { "en": "Sinemai AI — recommended equipment package", "ar": "Sinemai AI — باقة المعدات المقترحة" },
-    { "en": "Sinemai AI — rental vendors matched by stock", "ar": "Sinemai AI — شركات التأجير المرشّحة حسب المخزون" },
-    {
-      "en": "Sinemai AI — estimated budget, low to high",
-      "ar": "Sinemai AI — الميزانية التقديرية من الأدنى إلى الأعلى"
-    },
-    {
-      "en": "Sinemai AI — screen recording: admin catalogue, vendors and rental prices",
-      "ar": "Sinemai AI — تسجيل شاشة: إدارة الكتالوج وشركات التأجير والأسعار"
-    },
-    { "en": "Sinemai AI — admin overview and agent runs", "ar": "Sinemai AI — نظرة عامة للإدارة وسجل الوكلاء" },
-    { "en": "Sinemai AI — equipment catalogue", "ar": "Sinemai AI — كتالوج المعدات" },
-    { "en": "Sinemai AI — rental companies", "ar": "Sinemai AI — شركات التأجير" },
-    {
-      "en": "Sinemai AI — a rental house's stock and day rates",
-      "ar": "Sinemai AI — مخزون شركة تأجير وأسعارها اليومية"
-    },
-    { "en": "Sinemai AI — the production sheet on a phone", "ar": "Sinemai AI — جدول الإنتاج على الموبايل" },
-    { "en": "Sinemai AI — the budget on a phone", "ar": "Sinemai AI — الميزانية على الموبايل" }
+      "en": "On a phone: the producer's scripts, the scenes that need attention, the assistant's briefing, the full production sheet, the equipment catalogue and insights.",
+      "ar": "على الموبايل: سيناريوهات المنتج، والمشاهد التي تحتاج انتباهًا، وملخص المساعد، وجدول الإنتاج كاملًا، وكتالوج المعدات، والتحليلات."
+    }
   ]
 }

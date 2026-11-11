@@ -1,22 +1,4 @@
 {
-  "sinemai-ai:cover": "sinemai-app-5-sheet.webp",
-  "sinemai-ai": [
-    "walkthrough-1.mp4",
-    "sinemai-app-1-dashboard.webp",
-    "sinemai-app-2-analysis.webp",
-    "sinemai-app-3-flags.webp",
-    "sinemai-app-4-briefing.webp",
-    "walkthrough-2.mp4",
-    "sinemai-app-6-scenes.webp",
-    "sinemai-app-7-package.webp",
-    "sinemai-app-8-vendors.webp",
-    "sinemai-app-9-budget.webp",
-    "walkthrough-3.mp4",
-    "sinemai-admin-1-overview.webp",
-    "sinemai-admin-2-catalogue.webp",
-    "sinemai-admin-3-vendors.webp",
-    "sinemai-admin-4-stock.webp",
-    "sinemai-app-mobile-1.webp",
-    "sinemai-app-mobile-2.webp"
-  ]
+  "sinemai-ai:cover": "cover-login.webp",
+  "sinemai-ai": ["tour-desktop.mp4", "tour-mobile.mp4"]
 }

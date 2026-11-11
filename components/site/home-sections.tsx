@@ -74,8 +74,11 @@ export function PillarsSection({
           nodes={categories.map((category, i) => ({
             depth: [55, 89, 55, 89][i % 4],
             content: (
-              <Link href={`/services/${category.slug}`} className="group block">
-                <div className="text-foreground flex items-center justify-between">
+              <Link
+                href={`/services/${category.slug}`}
+                className="group ease-brand block transition-transform duration-(--duration-hover) hover:-translate-y-2 motion-reduce:transform-none"
+              >
+                <div className="text-foreground group-hover:[&_svg]:text-accent flex items-center justify-between [&_svg]:transition-colors">
                   <IndexMarker n={localizeDigits(formatIndex(category.index), locale, digits)} />
                   <Icon name={category.iconKey as IconName} />
                 </div>

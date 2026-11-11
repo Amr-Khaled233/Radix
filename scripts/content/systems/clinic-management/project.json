@@ -65,47 +65,28 @@
   "services": ["SaaS solutions", "Digital tools and systems", "Website development"],
   "externalUrl": null,
   "publish": true,
-  "captionsFromAlt": true,
+  "coverAlt": {
+    "en": "Clinic Session Management System — the sign-in screen",
+    "ar": "نظام إدارة جلسات العيادة — شاشة تسجيل الدخول"
+  },
   "alt": [
     {
-      "en": "Walkthrough: adding a new patient and booking a physiotherapy session in a free time slot",
-      "ar": "جولة: إضافة عميل جديد وحجز جلسة علاج طبيعي في وقت متاح"
+      "en": "Clinic Session Management System — desktop walkthrough: signing in, adding a patient and booking a session, completing it and taking payment, selling a package, then the calendar, payments, reports, invoices and the setup pages",
+      "ar": "نظام إدارة جلسات العيادة — جولة على الكمبيوتر: تسجيل الدخول، وإضافة عميل وحجز جلسة، وإتمامها وتحصيل الدفعة، وبيع باقة، ثم التقويم والمدفوعات والتقارير والفواتير وصفحات الإعداد"
     },
     {
-      "en": "New booking dialog with the available time slots for the chosen room and day",
-      "ar": "نافذة الحجز الجديد مع الأوقات المتاحة للغرفة واليوم المختارين"
-    },
-    { "en": "Week calendar colour-coded by session type", "ar": "التقويم الأسبوعي ملوّنًا حسب نوع الجلسة" },
+      "en": "Clinic Session Management System — phone walkthrough: signing in, bookings, calendar, a patient profile, invoices, payments, reports, packages and settings",
+      "ar": "نظام إدارة جلسات العيادة — جولة على الموبايل: تسجيل الدخول، والحجوزات، والتقويم، وملف عميل، والفواتير، والمدفوعات، والتقارير، والباقات، والإعدادات"
+    }
+  ],
+  "captions": [
     {
-      "en": "Walkthrough: the day's schedule, completing a session, recording a card payment and selling a package",
-      "ar": "جولة: جدول اليوم، إتمام جلسة، تسجيل دفعة بالبطاقة وبيع باقة"
-    },
-    {
-      "en": "Today's bookings with status, room and quick actions",
-      "ar": "حجوزات اليوم مع الحالة والغرفة والإجراءات السريعة"
-    },
-    { "en": "Invoice with its payment history", "ar": "الفاتورة مع سجل المدفوعات" },
-    {
-      "en": "Patient profile with visits, package balance and financial summary",
-      "ar": "ملف العميل مع الزيارات ورصيد الباقة والملخص المالي"
+      "en": "On a desktop: sign in, add a patient, book a free slot, complete the session, take a card payment and sell a package — then the calendar, payments, profit and loss, outstanding balances, invoices, rooms, session types, packages, expenses, staff and settings.",
+      "ar": "على الكمبيوتر: تسجيل الدخول، وإضافة عميل، وحجز وقت متاح، وإتمام الجلسة، وتحصيل دفعة بالبطاقة، وبيع باقة — ثم التقويم والمدفوعات والأرباح والخسائر والمبالغ المتبقية والفواتير والغرف وأنواع الجلسات والباقات والمصروفات والموظفين والإعدادات."
     },
     {
-      "en": "Walkthrough: calendar, payments, profit and loss and outstanding balances",
-      "ar": "جولة: التقويم والمدفوعات والأرباح والخسائر والمبالغ المتبقية"
-    },
-    {
-      "en": "Payments collected by method for the selected period",
-      "ar": "المدفوعات المحصّلة حسب طريقة الدفع للفترة المحددة"
-    },
-    {
-      "en": "Profit and loss report: revenue, expenses by category and net profit",
-      "ar": "التقرير المالي: الإيرادات والمصروفات حسب الفئة وصافي الربح"
-    },
-    { "en": "Outstanding balances report", "ar": "تقرير المبالغ المتبقية" },
-    { "en": "Day view of the clinic schedule", "ar": "عرض اليوم لجدول العيادة" },
-    { "en": "Month calendar in English", "ar": "التقويم الشهري بالإنجليزية" },
-    { "en": "Bookings list in English", "ar": "قائمة الحجوزات بالإنجليزية" },
-    { "en": "New booking dialog in English", "ar": "نافذة الحجز الجديد بالإنجليزية" },
-    { "en": "Reports catalogue in English", "ar": "قائمة التقارير بالإنجليزية" }
+      "en": "On a phone: the same dashboard from the menu — bookings, calendar, a patient profile, invoices, payments, reports, packages and settings.",
+      "ar": "على الموبايل: نفس لوحة التحكم من القائمة — الحجوزات، والتقويم، وملف العميل، والفواتير، والمدفوعات، والتقارير، والباقات، والإعدادات."
+    }
   ]
 }

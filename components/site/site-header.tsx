@@ -8,6 +8,7 @@ import { getVisibleCategories, getVisibleTeam } from "@/lib/site/data";
 import { HeaderShell } from "./header-shell";
 import { LocaleSwitcher } from "./locale-switcher";
 import { MobileMenu } from "./mobile-menu";
+import { HeaderLink } from "./nav-link";
 import { ServicesMenu } from "./services-menu";
 import { ThemeToggle } from "./theme-toggle";
 import type { NavCategory, NavLink } from "./nav-types";
@@ -76,27 +77,27 @@ export async function SiteHeader() {
       }
     >
       <nav aria-label={tA11y("primaryNav")} className="flex items-center gap-7">
-        <Link href="/about" className={navLinkClass}>
+        <HeaderLink href="/about" className={navLinkClass}>
           {t("about")}
-        </Link>
+        </HeaderLink>
         {listCategoriesInline ? (
           <>
             <span className="contents min-[90rem]:hidden">
               <ServicesMenu label={t("services")} categories={categories} />
             </span>
             {categories.map((category) => (
-              <Link key={category.href} href={category.href} className={`${navLinkClass} hidden min-[90rem]:inline`}>
+              <HeaderLink key={category.href} href={category.href} className={`${navLinkClass} hidden min-[90rem]:inline`}>
                 {category.label}
-              </Link>
+              </HeaderLink>
             ))}
           </>
         ) : (
           <ServicesMenu label={t("services")} categories={categories} />
         )}
         {hasTeam ? (
-          <Link href="/team" className={navLinkClass}>
+          <HeaderLink href="/team" className={navLinkClass}>
             {t("team")}
-          </Link>
+          </HeaderLink>
         ) : null}
       </nav>
       <div className="flex items-center gap-2">
@@ -105,7 +106,7 @@ export async function SiteHeader() {
       </div>
       <Link
         href={cta.href}
-        className="type-button bg-accent text-on-accent inline-flex min-h-11 items-center gap-2 px-5 whitespace-nowrap transition-colors duration-(--duration-hover) hover:bg-inverse hover:text-on-inverse"
+        className="lift-button type-button bg-accent text-on-accent inline-flex min-h-11 items-center gap-2 px-5 whitespace-nowrap hover:bg-inverse hover:text-on-inverse"
       >
         {cta.label}
         <Icon name="arrow-right" size={18} />

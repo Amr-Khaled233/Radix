@@ -33,14 +33,14 @@ export function ProjectCard({
   const client = t(project.clientName, locale);
   return (
     <Link href={href} className="group block">
-      <div className="bg-inverse relative aspect-[16/10] overflow-hidden">
+      <div className="lift-card bg-inverse relative aspect-[16/10] overflow-hidden">
         {project.cover ? (
           <SiteImage
             image={project.cover}
             locale={locale}
             priority={priority}
             sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-            className="transition-transform duration-(--duration-reveal) ease-brand group-hover:scale-[1.02]"
+            className="transition-transform duration-700 ease-brand group-hover:scale-[1.06] motion-reduce:group-hover:scale-100"
           />
         ) : null}
       </div>
@@ -57,7 +57,7 @@ export function ProjectCard({
               <bdi>{localizeDigits(project.year, locale, digits)}</bdi>
             </span>
           ) : null}
-          <span className="text-foreground">
+          <span className="text-foreground group-hover:text-accent transition-transform duration-(--duration-hover) ease-brand group-hover:-translate-y-1 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 motion-reduce:transform-none">
             <Icon name="arrow-up-right" size={20} />
           </span>
         </div>
@@ -69,7 +69,7 @@ export function ProjectCard({
 export function TeamCard({ member, locale }: { member: PublicTeamCard; locale: Locale }) {
   return (
     <Link href={`/team/${member.slug}`} className="group block">
-      <div className="bg-inverse relative aspect-square overflow-hidden">
+      <div className="lift-card bg-inverse relative aspect-square overflow-hidden">
         {member.photo ? (
           <SiteImage image={member.photo} locale={locale} sizes="(min-width: 1024px) 25vw, 50vw" decorative />
         ) : null}

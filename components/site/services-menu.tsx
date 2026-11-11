@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { Link } from "@/lib/i18n/navigation";
+import { Link, usePathname } from "@/lib/i18n/navigation";
 import { Icon } from "@/components/brand/icon";
 import { formatIndex } from "@/components/brand/index-marker";
 import { cn } from "@/lib/cn";
@@ -17,6 +17,7 @@ export function ServicesMenu({ label, categories }: ServicesMenuProps) {
   const [open, setOpen] = useState(false);
   const root = useRef<HTMLDivElement>(null);
   const panelId = useId();
+  const pathname = usePathname();
 
   useEffect(() => {
     if (!open) return;
@@ -44,7 +45,8 @@ export function ServicesMenu({ label, categories }: ServicesMenuProps) {
         aria-expanded={open}
         aria-controls={panelId}
         onClick={() => setOpen((v) => !v)}
-        className="type-button text-foreground hover:text-muted inline-flex items-center gap-1.5 py-2 transition-colors duration-(--duration-hover)"
+        data-active={pathname === "/services" || pathname.startsWith("/services/") || undefined}
+        className="nav-underline type-button text-foreground hover:text-muted inline-flex items-center gap-1.5 py-2 transition-colors duration-(--duration-hover)"
       >
         {label}
         <Icon

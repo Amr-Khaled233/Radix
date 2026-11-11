@@ -1,40 +1,8 @@
 {
   "jexi:cover": "jexi-cover.webp",
-  "jexi": [
-    "jexi-tour-desktop.mp4",
-    "jexi-home-1.webp",
-    "jexi-home-2.webp",
-    "jexi-home-3.webp",
-    "jexi-page-1.webp",
-    "jexi-page-2.webp",
-    "jexi-page-3.webp",
-    "jexi-tour-mobile.mp4",
-    "jexi-mobile-1.webp",
-    "jexi-mobile-2.webp"
-  ],
+  "jexi": ["jexi-tour-desktop.mp4", "jexi-tour-mobile.mp4"],
   "luwjje:cover": "luwjje-cover.webp",
-  "luwjje": [
-    "luwjje-tour-desktop.mp4",
-    "luwjje-home-1.webp",
-    "luwjje-page-1.webp",
-    "luwjje-page-2.webp",
-    "luwjje-tour-mobile.mp4",
-    "luwjje-mobile-1.webp",
-    "luwjje-mobile-2.webp"
-  ],
+  "luwjje": ["luwjje-tour-desktop.mp4", "luwjje-tour-mobile.mp4"],
   "eldeeb:cover": "eldeeb-cover.webp",
-  "eldeeb": [
-    "eldeeb-tour-desktop.mp4",
-    "eldeeb-scene-1.webp",
-    "eldeeb-scene-2.webp",
-    "eldeeb-scene-3.webp",
-    "eldeeb-scene-4.webp",
-    "eldeeb-scene-5.webp",
-    "eldeeb-scene-6.webp",
-    "eldeeb-scene-7.webp",
-    "eldeeb-scene-8.webp",
-    "eldeeb-scene-9.webp",
-    "eldeeb-tour-mobile.mp4",
-    "eldeeb-mobile-1.webp"
-  ]
+  "eldeeb": ["eldeeb-tour-desktop.mp4", "eldeeb-tour-mobile.mp4"]
 }

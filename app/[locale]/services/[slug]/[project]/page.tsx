@@ -74,6 +74,22 @@ async function CaseStudy({ params }: { params: Params }) {
   const title = t(project.title, locale);
   const client = t(project.clientName, locale);
 
+  type GalleryMedia = NonNullable<(typeof gallery)[number]["media"]>;
+  const isUpright = ({ width, height }: GalleryMedia) => Boolean(width && height && width / height < 1.2);
+  // Screen recordings: the visitor starts them (no autoplay). "#t=0.1" makes Safari show the first frame.
+  const videoOf = (m: GalleryMedia) => (
+    <video
+      src={`${m.url}#t=0.1`}
+      controls
+      muted
+      playsInline
+      preload="metadata"
+      aria-label={t(m.alt, locale) || title}
+      className="block h-auto w-full"
+    />
+  );
+  const walkthroughs = gallery.length > 0 && gallery.every((item) => item.media!.kind === "video");
+
   const facts = [
     client && { label: tW("client"), value: client },
     project.year && { label: tW("year"), value: <bdi>{localizeDigits(project.year, locale, digits)}</bdi> },
@@ -115,7 +131,7 @@ async function CaseStudy({ params }: { params: Params }) {
             href={project.externalUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="type-button bg-accent text-on-accent hover:bg-inverse hover:text-on-inverse mt-fib-34 inline-flex min-h-12 items-center gap-2 px-6 transition-colors duration-(--duration-hover) ease-brand"
+            className="lift-button type-button bg-accent text-on-accent hover:bg-inverse hover:text-on-inverse mt-fib-34 inline-flex min-h-12 items-center gap-2 px-6"
           >
             {tW("visit")}
             <Icon name="arrow-up-right" size={18} />
@@ -145,30 +161,43 @@ async function CaseStudy({ params }: { params: Params }) {
         <RichText value={project.body} locale={locale} className="lg:col-span-8" />
       </section>
 
-      {gallery.length ? (
+      {walkthroughs ? (
+        // Screen recordings only: the desktop walkthrough and, beside it, the phone one.
+        <section className="container-site" aria-labelledby="walkthroughs">
+          <h2 id="walkthroughs" className="type-label text-label">
+            {tW("walkthroughs")}
+          </h2>
+          <ul className="mt-fib-34 grid items-start gap-fib-34 lg:grid-cols-[minmax(0,3fr)_minmax(0,1fr)]">
+            {gallery.map((item) => {
+              const upright = isUpright(item.media!);
+              return (
+                <li key={item.media!.id} className={upright ? "mx-auto w-full max-w-xs lg:max-w-none" : undefined}>
+                  <figure>
+                    <p className="type-label text-label mb-fib-13">{upright ? tW("onPhone") : tW("onDesktop")}</p>
+                    <div className="bg-inverse overflow-hidden">{videoOf(item.media!)}</div>
+                    {t(item.caption, locale) ? (
+                      <figcaption className="text-muted mt-fib-13 text-sm">{t(item.caption, locale)}</figcaption>
+                    ) : null}
+                  </figure>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+      ) : gallery.length ? (
         <section className="container-site" aria-label={tW("gallery")}>
           {/* Natural aspect ratios (never cropped): wide images span the row, upright ones pair up
               (dense flow lets a later upright image fill the gap beside an earlier one). */}
           <ul className="grid items-start gap-fib-21 md:grid-flow-dense md:grid-cols-2">
             {gallery.map((item) => {
-              const { width, height, kind } = item.media!;
               // Phone recordings and screenshots (upright) pair up; desktop ones span the row.
-              const wide = !width || !height || width / height >= 1.2;
+              const wide = !isUpright(item.media!);
               return (
                 <li key={item.media!.id} className={wide ? "md:col-span-2" : undefined}>
                   <figure>
                     <div className="bg-inverse overflow-hidden">
-                      {kind === "video" ? (
-                        // Screen recordings of a system: the visitor starts them; no autoplay.
-                        <video
-                          src={item.media!.url}
-                          controls
-                          muted
-                          playsInline
-                          preload="metadata"
-                          aria-label={t(item.media!.alt, locale) || title}
-                          className="block h-auto w-full"
-                        />
+                      {item.media!.kind === "video" ? (
+                        videoOf(item.media!)
                       ) : (
                         <SiteImage
                           image={item.media!}

@@ -363,7 +363,69 @@
   animation: settle 300ms var(--ease-brand) calc(800ms + var(--stagger, 0ms)) both;
 }
 
+/* Hover: the surface lifts off its foundation. A hard, square offset in the accent colour
+   (a shifted plane — no blur, no glow) marks what is under the pointer. */
+.lift-card,
+.lift-button {
+  transition:
+    transform var(--duration-hover) var(--ease-brand),
+    box-shadow var(--duration-hover) var(--ease-brand),
+    background-color var(--duration-hover) var(--ease-brand),
+    color var(--duration-hover) var(--ease-brand);
+}
+@media (hover: hover) {
+  .group:hover .lift-card,
+  .lift-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 8px 8px 0 0 var(--accent);
+  }
+  [dir="rtl"] .group:hover .lift-card,
+  [dir="rtl"] .lift-card:hover {
+    box-shadow: -8px 8px 0 0 var(--accent);
+  }
+  .lift-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 4px 4px 0 0 var(--accent);
+  }
+  [dir="rtl"] .lift-button:hover {
+    box-shadow: -4px 4px 0 0 var(--accent);
+  }
+}
+.group:focus-visible .lift-card {
+  box-shadow: 8px 8px 0 0 var(--accent);
+}
+
+/* Navigation: an accent line draws in under a link from the reading start, and stays under the current page. */
+.nav-underline {
+  position: relative;
+}
+.nav-underline::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 2px;
+  background-color: var(--accent);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform var(--duration-reveal) var(--ease-brand);
+}
+[dir="rtl"] .nav-underline::after {
+  transform-origin: right center;
+}
+.nav-underline:hover::after,
+.nav-underline[aria-current="page"]::after,
+.nav-underline[data-active]::after {
+  transform: scaleX(1);
+}
+
 @media (prefers-reduced-motion: reduce) {
+  /* Hover states keep their accent offset, without movement. */
+  .group:hover .lift-card,
+  .lift-card:hover,
+  .lift-button:hover {
+    transform: none !important;
+  }
   *,
   *::before,
   *::after {
