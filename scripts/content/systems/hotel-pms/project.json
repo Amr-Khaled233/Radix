@@ -1,0 +1,104 @@
+{
+  "key": "hotel-pms",
+  "slug": "hotel-pms",
+  "title": {
+    "en": "Downtown Hotels PMS — Hotel Management System",
+    "ar": "نظام إدارة فنادق وسط البلد"
+  },
+  "client": {
+    "en": "Downtown Hotels",
+    "ar": "فنادق وسط البلد"
+  },
+  "year": 2026,
+  "summary": {
+    "en": "A property management system that runs several hotels from one place: room status, a booking calendar, the front desk, reservations, guest folios and payments, expenses, shift handover and reports, with a public booking page for direct bookings. Arabic first, with English.",
+    "ar": "نظام لإدارة الفنادق يدير أكثر من فندق من مكان واحد: حالة الغرف، وتقويم الحجوزات، والاستقبال، والحجوزات، وفوليو النزيل والمدفوعات، والمصروفات، وتسليم الوردية، والتقارير، مع صفحة حجز عامة للحجز المباشر. بالعربية أولًا، مع الإنجليزية."
+  },
+  "body": [
+    {
+      "en": "A small hotel's day is spread across booking sites, phone calls, a paper register and a cash box. We built one system the manager, the supervisor and reception share, with each hotel in its own workspace and each role seeing only the screens it is allowed to use.",
+      "ar": "يومُ الفندق الصغير موزّع بين مواقع الحجز والمكالمات ودفتر ورقي وخزنة. بنينا نظامًا واحدًا يعمل عليه المدير والمشرف والاستقبال، لكل فندق مساحة عمل خاصة به، وكل دور يرى فقط الشاشات المسموح له بها."
+    },
+    {
+      "en": "The overview shows every room at a glance: occupied, available, reserved, dirty or out of order, who is in it and until when, with today's arrivals and departures, and housekeeping status changed from the same card. The calendar lays out each room's bookings across the days with the occupancy of each night, and the front desk lists today's arrivals, in-house guests and departures, with check-in and check-out from there.",
+      "ar": "تعرض النظرة العامة كل الغرف بنظرة واحدة: مشغولة أو متاحة أو محجوزة أو تحتاج تنظيف أو خارج الخدمة، ومن فيها وحتى متى، مع الوصول والمغادرة اليوم، وتُغيَّر حالة التنظيف من نفس البطاقة. ويعرض التقويم حجوزات كل غرفة على الأيام مع نسبة الإشغال لكل ليلة، ويعرض الاستقبال الوصول اليوم والنزلاء الحاليين والمغادرة، مع تسجيل الدخول والخروج من هناك."
+    },
+    {
+      "en": "Every reservation records its source (direct, walk-in, phone, Booking.com, Expedia, Airbnb, Agoda, Trip.com, agencies or corporate) and carries a folio of room nights, extras and payments by cash, card, InstaPay, transfer or wallet. Each booking site's commission and payout days are set once, so the reports show what the hotel actually keeps and when the money arrives, and exchange rates let a folio and the totals be read in dollars, euros, riyals or pounds.",
+      "ar": "يسجّل كل حجز مصدره (مباشر، أو حضور شخصي، أو تليفون، أو Booking.com، أو Expedia، أو Airbnb، أو Agoda، أو Trip.com، أو الوكالات أو الشركات) وله فوليو بالليالي والإضافات والمدفوعات نقدًا أو بالبطاقة أو InstaPay أو التحويل أو المحفظة. وتُضبط عمولة كل موقع حجز ومدة تحويله مرة واحدة، فتعرض التقارير صافي ما يحصل عليه الفندق ومتى تصل الفلوس، وأسعار الصرف تتيح قراءة الفوليو والإجماليات بالدولار أو اليورو أو الريال أو الجنيه الإسترليني."
+    },
+    {
+      "en": "At the end of a shift, reception hands over a report of what it collected by payment method and currency. The manager gets reports on revenue, expenses, occupancy, bookings by source, booking sites, cancellations and no-shows for any period, with Excel export and printing, and sets up the hotel's buildings, floors and facilities, room types and rooms, and the staff accounts. Guests can also book directly from a public page that shows the rooms free for their dates with each rate.",
+      "ar": "وفي نهاية الوردية يسلّم الاستقبال تقريرًا بما حصّله حسب طريقة الدفع والعملة. ويحصل المدير على تقارير الإيرادات والمصروفات والإشغال والحجوزات حسب المصدر ومواقع الحجز والإلغاءات وعدم الحضور لأي فترة، مع التصدير إلى Excel والطباعة، ويضبط مباني الفندق وطوابقه ومرافقه وأنواع الغرف والغرف وحسابات الموظفين. ويستطيع النزيل أيضًا الحجز مباشرة من صفحة عامة تعرض الغرف المتاحة في تواريخه مع كل سعر."
+    },
+    {
+      "en": "The two walkthroughs below are recorded on a demo copy of the system filled with sample guests and bookings, so no real guest data is shown.",
+      "ar": "الجولتان بالأسفل مسجّلتان على نسخة تجريبية من النظام مليئة بنزلاء وحجوزات تجريبية، فلا تظهر أي بيانات حقيقية للنزلاء."
+    }
+  ],
+  "applications": [
+    {
+      "en": "Several hotels in one system, each in its own workspace",
+      "ar": "أكثر من فندق في نظام واحد، لكل فندق مساحة عمل خاصة"
+    },
+    {
+      "en": "Room status and housekeeping at a glance",
+      "ar": "حالة الغرف والتنظيف بنظرة واحدة"
+    },
+    {
+      "en": "Booking calendar per room with nightly occupancy",
+      "ar": "تقويم حجوزات لكل غرفة مع نسبة الإشغال لكل ليلة"
+    },
+    {
+      "en": "Front desk: arrivals, in-house guests and departures",
+      "ar": "الاستقبال: الوصول والنزلاء الحاليون والمغادرة"
+    },
+    {
+      "en": "Guest folios with payments in several methods and currencies",
+      "ar": "فوليو النزيل بمدفوعات بطرق وعملات متعددة"
+    },
+    {
+      "en": "Booking-site commissions and payout days",
+      "ar": "عمولات مواقع الحجز ومدد التحويل"
+    },
+    {
+      "en": "Shift handover, expenses and reports with Excel export",
+      "ar": "تسليم الوردية والمصروفات والتقارير مع التصدير إلى Excel"
+    },
+    {
+      "en": "Public booking page for direct bookings",
+      "ar": "صفحة حجز عامة للحجز المباشر"
+    },
+    {
+      "en": "Arabic and English, with role-based permissions for manager, supervisor and reception",
+      "ar": "عربي وإنجليزي، مع صلاحيات حسب الدور للمدير والمشرف والاستقبال"
+    }
+  ],
+  "services": ["SaaS solutions", "Digital tools and systems", "Website development"],
+  "externalUrl": null,
+  "publish": true,
+  "coverAlt": {
+    "en": "Downtown Hotels PMS — the room status overview of a hotel",
+    "ar": "نظام إدارة فنادق وسط البلد — النظرة العامة على حالة الغرف في فندق"
+  },
+  "alt": [
+    {
+      "en": "Downtown Hotels PMS — desktop walkthrough: signing in, the room status overview, calendar, front desk, reservations and a booking, folios, guests, shift handover, expenses, reports, staff, the setup pages, the English interface and the public booking page",
+      "ar": "نظام إدارة فنادق وسط البلد — جولة على الكمبيوتر: تسجيل الدخول، والنظرة العامة على الغرف، والتقويم، والاستقبال، والحجوزات وتفاصيل حجز، والفوليو، والنزلاء، وتسليم الوردية، والمصروفات، والتقارير، والموظفين، وصفحات الإعداد، والواجهة الإنجليزية، وصفحة الحجز العامة"
+    },
+    {
+      "en": "Downtown Hotels PMS — phone walkthrough: signing in, the room status overview, calendar, front desk, reservations and a booking, guests, expenses, reports and the public booking page",
+      "ar": "نظام إدارة فنادق وسط البلد — جولة على الموبايل: تسجيل الدخول، والنظرة العامة على الغرف، والتقويم، والاستقبال، والحجوزات وتفاصيل حجز، والنزلاء، والمصروفات، والتقارير، وصفحة الحجز العامة"
+    }
+  ],
+  "captions": [
+    {
+      "en": "On a desktop: sign in and open a hotel, then the room status overview, calendar, front desk, reservations and a booking, folios, guests, shift handover, expenses, reports and staff — then the setup pages (structure, exchange rates, commissions, room types and rooms), the English interface, and a search on the public booking page.",
+      "ar": "على الكمبيوتر: تسجيل الدخول وفتح فندق، ثم النظرة العامة على الغرف، والتقويم، والاستقبال، والحجوزات وتفاصيل حجز، والفوليو، والنزلاء، وتسليم الوردية، والمصروفات، والتقارير، والموظفين — ثم صفحات الإعداد (الهيكل، وأسعار الصرف، والعمولات، وأنواع الغرف، والغرف)، والواجهة الإنجليزية، وبحث في صفحة الحجز العامة."
+    },
+    {
+      "en": "On a phone: the same system from its menu — room status, calendar, front desk, reservations and a booking, guests, expenses, reports and the public booking page.",
+      "ar": "على الموبايل: نفس النظام من القائمة — حالة الغرف، والتقويم، والاستقبال، والحجوزات وتفاصيل حجز، والنزلاء، والمصروفات، والتقارير، وصفحة الحجز العامة."
+    }
+  ]
+}
