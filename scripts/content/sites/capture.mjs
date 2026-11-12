@@ -41,6 +41,20 @@ const SITES = {
       ],
     },
   },
+  atrees: {
+    base: "https://atress-store.vercel.app",
+    tour: {
+      desktop: [
+        ["/", "end", 10],
+        ["/about", "end", 6],
+        ["/contact", "end", 5],
+      ],
+      mobile: [
+        ["/", "end", 10],
+        ["/about", "end", 6],
+      ],
+    },
+  },
   eldeeb: {
     base: "https://eldeeb-flax.vercel.app",
     // The building animation, then the rest of the page.
@@ -178,7 +192,7 @@ async function recordTour(key, site, device) {
 
 // Each case study shows its cover (the first screen) and two full walkthroughs: desktop, then phone.
 // (Set SCREENSHOTS=1 to also save section screenshots into images/ for picking a different cover.)
-const DASHBOARD_TOURS = new Set(["jexi", "luwjje"]);
+const DASHBOARD_TOURS = new Set(["jexi", "luwjje", "atrees"]);
 const capture = {};
 const browser = await chromium.launch();
 for (const [key, site] of Object.entries(SITES)) {

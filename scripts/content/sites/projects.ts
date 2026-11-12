@@ -4,7 +4,8 @@
  * and features); Arabic is a first draft, flagged "Needs review".
  * The cover and the desktop/phone walkthrough videos come from ./capture.mjs.
  *
- * Left out for now: ATREES (catalogue still empty), the hotel PMS (blank page).
+ * The stores' walkthroughs show the live storefront, then their dashboard, recorded locally on demo data
+ * (ATREES: the live catalogue is still empty, so its dashboard runs on sample products).
  * Systems behind a login are folders in ../systems.
  */
 import { both, type CaseStudy, type L } from "../types";
@@ -137,6 +138,56 @@ export const SITES: CaseStudy[] = [
         "جولة على الموبايل: المتجر ولوحة التحكم",
         "The same tour on a phone: the store, then the whole dashboard.",
         "نفس الجولة على الموبايل: المتجر، ثم لوحة التحكم كاملة.",
+      ],
+    ]),
+  },
+  {
+    key: "atrees",
+    slug: "atrees",
+    title: both("ATREES — Menswear Catalogue Store", "ATREES — متجر كتالوج للأزياء الرجالي"),
+    client: both("ATREES", "ATREES"),
+    year: 2026,
+    summary: both(
+      "A catalogue store for menswear — shirts, trousers, jackets, shoes and accessories — where orders are completed over WhatsApp, run from its own bilingual dashboard.",
+      "متجر كتالوج للأزياء الرجالي — قمصان وبناطيل وجواكت وأحذية وإكسسوارات — والطلب يكتمل عبر واتساب، ويُدار من لوحة تحكم خاصة بلغتين.",
+    ),
+    body: [
+      both(
+        "The store is a catalogue, not a checkout: a customer browses the collection by category, opens a product, and sends it to the shop on WhatsApp with the product details already written into the message, so size, colour and delivery are confirmed in one chat. The storefront works in English and Arabic, in light and dark mode, with about and contact pages and a WhatsApp button on every page.",
+        "المتجر كتالوج وليس صفحة دفع: العميل يتصفّح المجموعة حسب القسم، ويفتح المنتج، ويرسله للمحل على واتساب وتفاصيل المنتج مكتوبة في الرسالة تلقائيًا، فيتأكد المقاس واللون والتوصيل في محادثة واحدة. واجهة المتجر بالعربي والإنجليزي، بالوضع الفاتح والداكن، مع صفحتي من نحن وتواصل معنا وزر واتساب في كل صفحة.",
+      ),
+      both(
+        "Everything on the storefront is edited from the dashboard: an overview of products, categories, featured and out-of-stock items, total views and today's views, with the most viewed and recently added products; products with search and filters by category and stock, in-stock and featured switches, and each product's English and Arabic name and description, price and old price, sizes, colours and photos; categories and which ones show on the home page; analytics that count every product page visit, with the last 14 days, visitors and each product's share; the home page hero and banners; the about and contact pages; the admin accounts; and the settings for the WhatsApp number and message, contact details and social links.",
+        "كل ما يظهر في المتجر يُعدَّل من لوحة التحكم: نظرة عامة على المنتجات والأقسام والمنتجات المميزة والنافدة وإجمالي المشاهدات ومشاهدات اليوم، مع الأكثر مشاهدة والمضاف حديثًا؛ والمنتجات بالبحث والفلترة حسب القسم والمخزون، ومفاتيح التوفر والتمييز، واسم كل منتج ووصفه بالعربي والإنجليزي وسعره وسعره قبل الخصم ومقاساته وألوانه وصوره؛ والأقسام وما يظهر منها في الصفحة الرئيسية؛ وتحليلات تحسب كل زيارة لصفحة منتج، مع آخر ١٤ يومًا والزوار ونصيب كل منتج؛ وواجهة الصفحة الرئيسية والبانرات؛ وصفحتي من نحن وتواصل معنا؛ وحسابات المشرفين؛ وإعدادات رقم واتساب ورسالته وبيانات التواصل وروابط السوشيال ميديا.",
+      ),
+      both(
+        "We handled the whole build: the storefront, the dashboard behind it, the code, and making every page work as well on a phone as on a desktop. The two walkthroughs below open on the live store, then go through every page of the dashboard; the dashboard is recorded on a demo copy filled with sample products and visits, since the live catalogue is still being stocked.",
+        "تولّينا العمل بالكامل: واجهة المتجر، ولوحة التحكم التي تديره، والبرمجة، وأن تعمل كل صفحة على الموبايل بنفس جودتها على الكمبيوتر. الجولتان بالأسفل تبدآن بالمتجر الحقيقي، ثم تمرّان على كل صفحات لوحة التحكم، ولوحة التحكم مسجّلة على نسخة تجريبية فيها منتجات وزيارات تجريبية، لأن كتالوج المتجر الحقيقي لسه بيتملأ.",
+      ),
+    ],
+    applications: [
+      both("Catalogue by category", "كتالوج حسب القسم"),
+      both("Ordering over WhatsApp with the product in the message", "الطلب عبر واتساب والمنتج مكتوب في الرسالة"),
+      both("English and Arabic, light and dark mode", "عربي وإنجليزي، وضع فاتح وداكن"),
+      both("Dashboard: products, categories, stock and featured items", "لوحة تحكم: المنتجات والأقسام والمخزون والمنتجات المميزة"),
+      both("Product view analytics", "تحليلات مشاهدات المنتجات"),
+      both("Home page, about and contact edited from the dashboard", "الصفحة الرئيسية ومن نحن وتواصل معنا تُعدَّل من لوحة التحكم"),
+      both("Responsive design for phones", "تصميم متجاوب مع الموبايل"),
+    ],
+    services: ["Website design", "Website development"],
+    externalUrl: "https://atress-store.vercel.app",
+    ...gallery("ATREES", "ATREES", [
+      [
+        "walkthrough on desktop: the live store, then every page of the dashboard",
+        "جولة على الكمبيوتر: المتجر الحقيقي ثم كل صفحات لوحة التحكم",
+        "The live store in English, Arabic and dark mode, then sign-in and every page of the dashboard: overview, products and a product's editor, categories, analytics, home page, pages, admins and settings.",
+        "المتجر الحقيقي بالإنجليزي والعربي والوضع الداكن، ثم تسجيل الدخول وكل صفحات لوحة التحكم: النظرة العامة، والمنتجات وتعديل منتج، والأقسام، والتحليلات، والصفحة الرئيسية، والصفحات، والمشرفين، والإعدادات.",
+      ],
+      [
+        "walkthrough on a phone: the live store and the dashboard",
+        "جولة على الموبايل: المتجر الحقيقي ولوحة التحكم",
+        "The same tour on a phone: the live store, then the dashboard from its menu.",
+        "نفس الجولة على الموبايل: المتجر الحقيقي، ثم لوحة التحكم من قائمتها.",
       ],
     ]),
   },

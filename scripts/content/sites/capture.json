@@ -1,8 +1,22 @@
 {
   "jexi:cover": "jexi-cover.webp",
-  "jexi": ["jexi-tour-desktop.mp4", "jexi-tour-mobile.mp4"],
+  "jexi": [
+    "jexi-tour-desktop.mp4",
+    "jexi-tour-mobile.mp4"
+  ],
   "luwjje:cover": "luwjje-cover.webp",
-  "luwjje": ["luwjje-tour-desktop.mp4", "luwjje-tour-mobile.mp4"],
+  "luwjje": [
+    "luwjje-tour-desktop.mp4",
+    "luwjje-tour-mobile.mp4"
+  ],
+  "atrees:cover": "atrees-cover.webp",
+  "atrees": [
+    "atrees-tour-desktop.mp4",
+    "atrees-tour-mobile.mp4"
+  ],
   "eldeeb:cover": "eldeeb-cover.webp",
-  "eldeeb": ["eldeeb-tour-desktop.mp4", "eldeeb-tour-mobile.mp4"]
+  "eldeeb": [
+    "eldeeb-tour-desktop.mp4",
+    "eldeeb-tour-mobile.mp4"
+  ]
 }
