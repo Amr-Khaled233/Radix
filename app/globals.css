@@ -370,10 +370,11 @@
 /* Hover: the surface lifts off its foundation. A hard, square offset in the accent colour
    (a shifted plane — no blur, no glow) marks what is under the pointer. */
 /* A card is one framed panel: image and text lift together. While one is under the pointer,
-   the others in the same group step back (fade, desaturate, sink slightly). */
+   the others in the same group step back (fade). */
 .frame-card,
 .lift-button {
   transition:
+    top var(--duration-hover) var(--ease-brand),
     transform var(--duration-hover) var(--ease-brand),
     box-shadow var(--duration-hover) var(--ease-brand),
     border-color var(--duration-hover) var(--ease-brand),
@@ -389,30 +390,28 @@
   border: 3px solid var(--accent);
   background-color: var(--card);
   position: relative;
+  top: 0;
 }
-/* Each card sits in a slot that already includes the band it lifts into, so the card never paints outside
-   its own layer and nothing of the frame stays behind after the hover ends. */
+/* Each card sits in a slot that already includes the band it lifts into. */
 .frame-slot {
   display: flex;
   flex-direction: column;
   padding-top: 12px;
   margin-top: -12px;
-  /* Paint is clipped to the slot (band included), so the browser repaints the whole band as the frame
-     moves and settles; no layer promotion that some browsers rasterise late. */
-  contain: paint;
 }
 .frame-slot > .frame-card {
   flex: 1;
 }
 @media (hover: hover) {
-  /* The whole frame lifts, with the image inside it. */
+  /* The whole frame lifts, with the image inside it. It moves by `top`, not `transform`: the frame is
+     repainted in place on every step and never gets a GPU layer of its own, so no strip of the edge
+     can be left behind on screen when the hover ends (seen with transforms on some GPUs and scales). */
   .frame-card:hover {
-    transform: translateY(-12px);
+    top: -12px;
     z-index: 1;
   }
   .dim-scope:has(.frame-card:hover) .frame-card:not(:hover) {
     opacity: 0.4;
-    transform: scale(0.97);
   }
   .lift-button:hover {
     transform: translateY(-3px);
@@ -454,8 +453,9 @@
 
 @media (prefers-reduced-motion: reduce) {
   /* Hover states keep their accent offset, without movement. */
-  .frame-card:hover,
-  .dim-scope:has(.frame-card:hover) .frame-card:not(:hover),
+  .frame-card:hover {
+    top: 0 !important;
+  }
   .lift-button:hover {
     transform: none !important;
   }
