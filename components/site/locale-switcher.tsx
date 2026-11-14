@@ -23,7 +23,7 @@ function Switcher({ query, className }: { query?: Record<string, string>; classN
       locale={other}
       hrefLang={other}
       aria-label={t("switchTo", { language: t(other) })}
-      className={cn("type-label inline-flex min-h-11 min-w-11 items-center justify-center px-3", controlBoxClass, className)}
+      className={cn(controlBoxClass, className)}
     >
       {SHORT[other]}
     </Link>
@@ -36,7 +36,7 @@ function SwitcherWithQuery({ className }: { className?: string }) {
   return <Switcher query={query} className={className} />;
 }
 
-/** Shows only the other language (EN on Arabic pages, عربي on English ones); keeps the page and query string. */
+/** Shows only the other language (EN on Arabic pages, AR on English ones); keeps the page and query string. */
 export function LocaleSwitcher({ className }: { className?: string }) {
   return (
     <Suspense fallback={<Switcher className={className} />}>

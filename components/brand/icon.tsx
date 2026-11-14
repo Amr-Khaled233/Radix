@@ -7,7 +7,6 @@ export type { IconName };
 const DIRECTIONAL: ReadonlySet<IconName> = new Set<IconName>(["arrow-right", "arrow-up-right"]);
 
 export const ICON_NAMES = Object.keys(iconArtwork) as IconName[];
-export const PILLAR_ICONS = ["brand", "digital", "intelligence", "growth"] as const satisfies readonly IconName[];
 
 type IconProps = {
   name: IconName;

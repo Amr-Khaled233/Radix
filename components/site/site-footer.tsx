@@ -8,8 +8,7 @@ import { t as localized } from "@/lib/localized";
 import { getSetting, getVisibleCategories, getVisibleTeam } from "@/lib/site/data";
 import { localizeDigits } from "@/lib/site/digits";
 import { brandCopy } from "@/lib/content/brand";
-import { LocaleSwitcher } from "./locale-switcher";
-import { ThemeToggle } from "./theme-toggle";
+import { SiteControls } from "./site-controls";
 
 async function Copyright() {
   "use cache";
@@ -144,8 +143,7 @@ export async function SiteFooter() {
             <Link href="/privacy" className="type-label text-label hover:text-foreground">
               {t("privacy")}
             </Link>
-            <LocaleSwitcher />
-            <ThemeToggle />
+            <SiteControls />
           </div>
         </div>
       </div>

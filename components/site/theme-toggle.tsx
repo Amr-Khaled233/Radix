@@ -9,23 +9,22 @@ const subscribe = () => () => {};
 
 /** The framed control style shared by the theme and language switches, so both read as buttons. */
 export const controlBoxClass =
-  "border-line-strong text-foreground hover:bg-foreground hover:text-background border transition-colors duration-(--duration-hover)";
+  "type-label inline-flex min-h-11 min-w-11 items-center justify-center px-3 border border-line-strong text-foreground hover:bg-foreground hover:text-background transition-colors duration-(--duration-hover)";
 
 /**
- * Light ⇄ dark. Shows the mode it switches to (like the language switch shows the other language).
- * `compact` keeps only the mark (the phone header bar); the accessible name always says what it does.
+ * Light ⇄ dark, written as a word (LIGHT / DARK). Like the language switch (which shows the other
+ * language), it names the mode it switches to; the accessible name says so in full.
  */
-export function ThemeToggle({ className, compact = false }: { className?: string; compact?: boolean }) {
+export function ThemeToggle({ className }: { className?: string }) {
   const t = useTranslations("theme");
   const { resolvedTheme, setTheme } = useTheme();
+  // The saved theme is only known in the browser: render as dark (the default) until mounted.
   const mounted = useSyncExternalStore(
     subscribe,
     () => true,
     () => false,
   );
-
-  const current = mounted && resolvedTheme === "light" ? "light" : "dark";
-  const next = current === "dark" ? "light" : "dark";
+  const next = mounted && resolvedTheme === "light" ? "dark" : "light";
   const name = t(next);
 
   return (
@@ -34,18 +33,9 @@ export function ThemeToggle({ className, compact = false }: { className?: string
       onClick={() => setTheme(next)}
       aria-label={t("switchTo", { theme: name })}
       title={t("label")}
-      className={cn(
-        "type-label inline-flex min-h-11 min-w-11 items-center justify-center gap-2",
-        controlBoxClass,
-        !compact && "px-3",
-        className,
-      )}
+      className={cn(controlBoxClass, className)}
     >
-      {/* Half-filled square: the mark of the mode it switches to (filled = dark). */}
-      <span aria-hidden className="border-current relative inline-block size-4 overflow-hidden border-2">
-        <span className={cn("bg-current absolute inset-y-0 inset-s-0", next === "dark" ? "w-full" : "w-1/2")} />
-      </span>
-      {compact ? null : <span suppressHydrationWarning>{name}</span>}
+      {name}
     </button>
   );
 }

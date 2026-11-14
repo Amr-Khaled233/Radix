@@ -6,6 +6,7 @@ import { Link } from "@/lib/i18n/navigation";
 import { Icon } from "@/components/brand/icon";
 import { formatIndex } from "@/components/brand/index-marker";
 import type { NavCategory, NavLink } from "./nav-types";
+import { SiteControls } from "./site-controls";
 
 type MobileMenuProps = {
   logo: ReactNode;
@@ -13,11 +14,10 @@ type MobileMenuProps = {
   categories: NavCategory[];
   servicesLabel: string;
   cta: NavLink;
-  controls: ReactNode;
 };
 
 /** Full-screen menu (native modal <dialog>: focus trap, Esc and inert page for free). */
-export function MobileMenu({ logo, links, categories, servicesLabel, cta, controls }: MobileMenuProps) {
+export function MobileMenu({ logo, links, categories, servicesLabel, cta }: MobileMenuProps) {
   const t = useTranslations("nav");
   const dialog = useRef<HTMLDialogElement>(null);
   const [open, setOpen] = useState(false);
@@ -112,7 +112,7 @@ export function MobileMenu({ logo, links, categories, servicesLabel, cta, contro
               {cta.label}
               <Icon name="arrow-right" size={20} />
             </Link>
-            <div className="flex items-center justify-between">{controls}</div>
+            <SiteControls />
           </div>
         </div>
       </dialog>

@@ -32,7 +32,8 @@ export function ProjectCard({
 }) {
   const client = t(project.clientName, locale);
   return (
-    <div className="frame-slot">
+    // The id lets a case study send the visitor back to this card (see BackLink).
+    <div id={project.slug} className="frame-slot scroll-mt-28">
       <Link href={href} className="frame-card group block p-fib-13">
         <div className="bg-inverse relative aspect-[16/10] overflow-hidden">
           {project.cover ? (

@@ -69,11 +69,6 @@ export function assertCan(actor: Actor | null | undefined, action: Action, resou
   if (!can(actor, action, resource)) throw new ForbiddenError(action, resource);
 }
 
-/** Editors may only save projects/team as drafts. */
-export function canPublish(actor: Actor | null | undefined, resource: "projects" | "team" | "pages") {
-  return can(actor, "publish", resource);
-}
-
 // ---------------------------------------------------------------------------
 // Admin-account safeguards (spec §6): nobody changes their own role/status or
 // deletes themselves, and the last active super admin is never demoted,

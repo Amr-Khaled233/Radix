@@ -3,9 +3,11 @@
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
+import { controlBoxClass } from "@/components/site/theme-toggle";
+import { cn } from "@/lib/cn";
 import { setAdminLocale } from "@/lib/admin/actions";
 
-export function AdminLocaleToggle() {
+export function AdminLocaleToggle({ className }: { className?: string }) {
   const t = useTranslations("admin.common");
   const locale = useLocale();
   const router = useRouter();
@@ -23,7 +25,7 @@ export function AdminLocaleToggle() {
           router.refresh();
         })
       }
-      className="type-label text-label hover:text-foreground inline-flex min-h-11 items-center px-2 transition-colors disabled:opacity-60"
+      className={cn(controlBoxClass, "disabled:opacity-60", className)}
     >
       {t("language")}
     </button>

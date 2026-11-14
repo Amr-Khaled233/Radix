@@ -9,6 +9,7 @@ import { getSetting } from "@/lib/site/data";
 import { siteOrigin } from "@/lib/site/seo";
 import { SiteAnalytics } from "@/components/site/analytics";
 import { ThemeProvider } from "@/components/site/theme-provider";
+import { RouteMemory } from "@/components/site/route-memory";
 import { TouchFocus } from "@/components/site/touch-focus";
 import { SiteHeader } from "@/components/site/site-header";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -65,6 +66,7 @@ export default async function LocaleLayout({ children }: LayoutProps<"/[locale]"
             </main>
             <SiteFooter />
             <TouchFocus />
+            <RouteMemory />
           </ThemeProvider>
           <SiteAnalytics />
         </NextIntlClientProvider>

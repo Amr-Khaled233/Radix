@@ -5,6 +5,7 @@ import { Icon } from "@/components/brand/icon";
 import { Reveal } from "@/components/brand/reveal";
 import { Strata } from "@/components/brand/strata";
 import { SurfaceLine } from "@/components/brand/surface-line";
+import { BackLink } from "@/components/site/back-link";
 import { JsonLd } from "@/components/site/json-ld";
 import { RichText } from "@/components/site/rich-text";
 import { SiteImage } from "@/components/site/site-image";
@@ -73,6 +74,12 @@ async function CaseStudy({ params }: { params: Params }) {
   const pillarName = t(pillarPage.category.name, locale);
   const digits = localeSettings.arabicDigits;
   const title = t(project.title, locale);
+  // Back to the pillar page, at this case study's card (or to wherever the visitor came from).
+  const back = (className?: string) => (
+    <BackLink href={`/services/${pillar}`} anchor={slug} className={className}>
+      {tW("backTo")} {pillarName}
+    </BackLink>
+  );
   const client = t(project.clientName, locale);
 
   type GalleryMedia = NonNullable<(typeof gallery)[number]["media"]>;
@@ -146,7 +153,8 @@ async function CaseStudy({ params }: { params: Params }) {
           </div>
         ) : null}
 
-        <Reveal as="header" className="container-site pt-fib-55">
+        <Reveal as="header" className="container-site pt-fib-21">
+          {back("mb-fib-21")}
           <SectionHeading as="h1" size="h1" label={client || pillarName} heading={title} />
           {t(project.summary, locale) ? (
             <p className="type-body-lg text-muted reveal-rise mt-fib-21 max-w-3xl">{t(project.summary, locale)}</p>
@@ -301,16 +309,11 @@ async function CaseStudy({ params }: { params: Params }) {
                 <Icon name="arrow-right" size={22} />
               </span>
             </Link>
-          ) : (
-            <Link href={`/services/${pillar}`} className="group">
-              <span className="type-label text-label block">{tW("backTo")}</span>
-              <span className="type-h3 text-foreground group-hover:text-muted mt-1 inline-flex items-center gap-2">
-                {pillarName}
-                <Icon name="arrow-right" size={22} />
-              </span>
-            </Link>
-          )}
-          <CtaLink href="/contact">{tNav("cta")}</CtaLink>
+          ) : null}
+          <div className="flex flex-wrap items-center gap-fib-21">
+            {back()}
+            <CtaLink href="/contact">{tNav("cta")}</CtaLink>
+          </div>
         </section>
 
         <JsonLd

@@ -59,9 +59,11 @@ export async function AdminShell({ user, locale, newMessages, hasInbox, children
             <MobileNav items={items} newMessages={newMessages} logo={logo} />
             <span className="type-label text-label hidden sm:inline">{t("nav.main")}</span>
           </div>
-          <div className="flex items-center gap-1">
-            <AdminLocaleToggle />
-            <ThemeToggle />
+          <div className="flex items-center gap-2">
+            <div className="flex items-center">
+              <AdminLocaleToggle />
+              <ThemeToggle className="-ms-px" />
+            </div>
             <UserMenu name={user.name} email={user.email} roleLabel={t(`roles.${user.role}`)} />
           </div>
         </header>

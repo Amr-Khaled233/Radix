@@ -6,11 +6,10 @@ import type { Locale } from "@/lib/i18n/routing";
 import { t as localized } from "@/lib/localized";
 import { getVisibleCategories, getVisibleTeam } from "@/lib/site/data";
 import { HeaderShell } from "./header-shell";
-import { LocaleSwitcher } from "./locale-switcher";
 import { MobileMenu } from "./mobile-menu";
 import { HeaderLink } from "./nav-link";
 import { ServicesMenu } from "./services-menu";
-import { ThemeToggle } from "./theme-toggle";
+import { SiteControls } from "./site-controls";
 import type { NavCategory, NavLink } from "./nav-types";
 
 /** Horizontal lockup at its 220 px minimum width → 74 px artwork height; clear space x ≈ 23 px. */
@@ -63,20 +62,13 @@ export async function SiteHeader() {
       mobileControls={
         <>
           {/* Language and theme stay one tap away on phones, beside the menu button. */}
-          <LocaleSwitcher />
-          <ThemeToggle compact />
+          <SiteControls />
           <MobileMenu
-          logo={homeLink(<Logo variant="icon" height={ICON_HEIGHT} title={null} />, ICON_CLEAR)}
-          links={links}
-          categories={categories}
-          servicesLabel={t("services")}
-          cta={cta}
-          controls={
-            <>
-              <LocaleSwitcher />
-              <ThemeToggle />
-            </>
-          }
+            logo={homeLink(<Logo variant="icon" height={ICON_HEIGHT} title={null} />, ICON_CLEAR)}
+            links={links}
+            categories={categories}
+            servicesLabel={t("services")}
+            cta={cta}
           />
         </>
       }
@@ -105,10 +97,7 @@ export async function SiteHeader() {
           </HeaderLink>
         ) : null}
       </nav>
-      <div className="flex items-center gap-2">
-        <LocaleSwitcher />
-        <ThemeToggle />
-      </div>
+      <SiteControls />
       <Link
         href={cta.href}
         className="lift-button type-button bg-accent text-on-accent inline-flex min-h-11 items-center gap-2 px-5 whitespace-nowrap hover:bg-inverse hover:text-on-inverse"

@@ -14,9 +14,9 @@ type AuthShellProps = {
 export function AuthShell({ label, title, intro, children }: AuthShellProps) {
   return (
     <div className="flex min-h-dvh flex-col">
-      <div className="container-site flex h-16 items-center justify-end gap-2">
+      <div className="container-site flex h-16 items-center justify-end">
         <AdminLocaleToggle />
-        <ThemeToggle />
+        <ThemeToggle className="-ms-px" />
       </div>
       <main className="container-site flex flex-1 items-start justify-center pt-fib-34 pb-fib-89 sm:items-center sm:pt-0">
         <div className="w-full max-w-[440px]">
