@@ -5,7 +5,7 @@
  * The cover and the desktop/phone walkthrough videos come from ./capture.mjs.
  *
  * The stores' walkthroughs show the live storefront, then their dashboard, recorded locally on demo data
- * (ATREES: the live catalogue is still empty, so its dashboard runs on sample products).
+ * (ATREES: the local copy holds the live store's public catalogue, read from its product pages).
  * Systems behind a login are folders in ../systems.
  */
 import { both, type CaseStudy, type L } from "../types";
@@ -148,8 +148,8 @@ export const SITES: CaseStudy[] = [
     client: both("ATREES", "ATREES"),
     year: 2026,
     summary: both(
-      "A catalogue store for menswear — shirts, trousers, jackets, shoes and accessories — where orders are completed over WhatsApp, run from its own bilingual dashboard.",
-      "متجر كتالوج للأزياء الرجالي — قمصان وبناطيل وجواكت وأحذية وإكسسوارات — والطلب يكتمل عبر واتساب، ويُدار من لوحة تحكم خاصة بلغتين.",
+      "A catalogue store for menswear — hoodies and sweatshirts, men's sets, outerwear, shoes and backpacks — where orders are completed over WhatsApp, run from its own bilingual dashboard.",
+      "متجر كتالوج للأزياء الرجالي — هوديز وسويت شيرتات، وأطقم رجالي، وملابس خارجية، وأحذية، وشنط ضهر — والطلب يكتمل عبر واتساب، ويُدار من لوحة تحكم خاصة بلغتين.",
     ),
     body: [
       both(
@@ -161,8 +161,8 @@ export const SITES: CaseStudy[] = [
         "كل ما يظهر في المتجر يُعدَّل من لوحة التحكم: نظرة عامة على المنتجات والأقسام والمنتجات المميزة والنافدة وإجمالي المشاهدات ومشاهدات اليوم، مع الأكثر مشاهدة والمضاف حديثًا؛ والمنتجات بالبحث والفلترة حسب القسم والمخزون، ومفاتيح التوفر والتمييز، واسم كل منتج ووصفه بالعربي والإنجليزي وسعره وسعره قبل الخصم ومقاساته وألوانه وصوره؛ والأقسام وما يظهر منها في الصفحة الرئيسية؛ وتحليلات تحسب كل زيارة لصفحة منتج، مع آخر ١٤ يومًا والزوار ونصيب كل منتج؛ وواجهة الصفحة الرئيسية والبانرات؛ وصفحتي من نحن وتواصل معنا؛ وحسابات المشرفين؛ وإعدادات رقم واتساب ورسالته وبيانات التواصل وروابط السوشيال ميديا.",
       ),
       both(
-        "We handled the whole build: the storefront, the dashboard behind it, the code, and making every page work as well on a phone as on a desktop. The two walkthroughs below open on the live store, then go through every page of the dashboard; the dashboard is recorded on a demo copy filled with sample products and visits, since the live catalogue is still being stocked.",
-        "تولّينا العمل بالكامل: واجهة المتجر، ولوحة التحكم التي تديره، والبرمجة، وأن تعمل كل صفحة على الموبايل بنفس جودتها على الكمبيوتر. الجولتان بالأسفل تبدآن بالمتجر الحقيقي، ثم تمرّان على كل صفحات لوحة التحكم، ولوحة التحكم مسجّلة على نسخة تجريبية فيها منتجات وزيارات تجريبية، لأن كتالوج المتجر الحقيقي لسه بيتملأ.",
+        "We handled the whole build: the storefront, the dashboard behind it, the code, and making every page work as well on a phone as on a desktop. The two walkthroughs below open on the live store — its categories, product pages with their photos, sizes and colours, and the full catalogue — then go through every page of the dashboard. The dashboard is recorded on a local copy loaded with the store's real catalogue, so the live site's data is never touched; the visit numbers in it are samples.",
+        "تولّينا العمل بالكامل: واجهة المتجر، ولوحة التحكم التي تديره، والبرمجة، وأن تعمل كل صفحة على الموبايل بنفس جودتها على الكمبيوتر. الجولتان بالأسفل تبدآن بالمتجر الحقيقي — أقسامه، وصفحات المنتجات بصورها ومقاساتها وألوانها، والكتالوج كاملًا — ثم تمرّان على كل صفحات لوحة التحكم. ولوحة التحكم مسجّلة على نسخة محلية فيها كتالوج المتجر الحقيقي، فلا تُمَس بيانات الموقع الحقيقي، وأرقام الزيارات فيها تجريبية.",
       ),
     ],
     applications: [
@@ -180,8 +180,8 @@ export const SITES: CaseStudy[] = [
       [
         "walkthrough on desktop: the live store, then every page of the dashboard",
         "جولة على الكمبيوتر: المتجر الحقيقي ثم كل صفحات لوحة التحكم",
-        "The live store in English, Arabic and dark mode, then sign-in and every page of the dashboard: overview, products and a product's editor, categories, analytics, home page, pages, admins and settings.",
-        "المتجر الحقيقي بالإنجليزي والعربي والوضع الداكن، ثم تسجيل الدخول وكل صفحات لوحة التحكم: النظرة العامة، والمنتجات وتعديل منتج، والأقسام، والتحليلات، والصفحة الرئيسية، والصفحات، والمشرفين، والإعدادات.",
+        "The live store: categories, a collection, product pages with their photo galleries, the full catalogue, about and contact, then Arabic and dark mode — then sign-in and every page of the dashboard: overview, products and a product's editor, categories, analytics, home page, pages, admins and settings.",
+        "المتجر الحقيقي: الأقسام، ومجموعة، وصفحات المنتجات بمعارض صورها، والكتالوج كاملًا، ومن نحن وتواصل معنا، ثم العربي والوضع الداكن — ثم تسجيل الدخول وكل صفحات لوحة التحكم: النظرة العامة، والمنتجات وتعديل منتج، والأقسام، والتحليلات، والصفحة الرئيسية، والصفحات، والمشرفين، والإعدادات.",
       ],
       [
         "walkthrough on a phone: the live store and the dashboard",
