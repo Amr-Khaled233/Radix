@@ -6,7 +6,6 @@ import { Link } from "@/lib/i18n/navigation";
 import { Icon } from "@/components/brand/icon";
 import { formatIndex } from "@/components/brand/index-marker";
 import type { NavCategory, NavLink } from "./nav-types";
-import { SiteControls } from "./site-controls";
 
 type MobileMenuProps = {
   logo: ReactNode;
@@ -104,7 +103,8 @@ export function MobileMenu({ logo, links, categories, servicesLabel, cta }: Mobi
             </ul>
           </nav>
 
-          <div className="border-line space-y-fib-21 border-t py-fib-34">
+          {/* Language and theme live in the header bar only (beside the menu button), not in here. */}
+          <div className="border-line border-t py-fib-34">
             <Link
               href={cta.href}
               className="type-button bg-accent text-on-accent inline-flex min-h-12 w-full items-center justify-center gap-2 px-6"
@@ -112,7 +112,6 @@ export function MobileMenu({ logo, links, categories, servicesLabel, cta }: Mobi
               {cta.label}
               <Icon name="arrow-right" size={20} />
             </Link>
-            <SiteControls />
           </div>
         </div>
       </dialog>
