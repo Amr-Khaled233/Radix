@@ -1,13 +1,13 @@
 // Capture the live websites we built (read-only browsing: no forms, no cart actions): a cover
 // and a desktop + phone walkthrough video per site.
-// Output: scripts/content/sites/images/ + capture.json. Run: node scripts/content/sites/capture.mjs
+// Output: content/sites/images/ + capture.json. Run: node content/sites/capture.mjs
 import { chromium } from "@playwright/test";
 import sharp from "sharp";
 import ffmpegPath from "ffmpeg-static";
 import { execFileSync } from "node:child_process";
 import { mkdirSync, writeFileSync } from "node:fs";
 
-const OUT = "scripts/content/sites/images";
+const OUT = "content/sites/images";
 mkdirSync(OUT, { recursive: true });
 
 /** tour: [path, scroll to ("end" or px), seconds] per page, for the desktop and the phone walkthrough. */
@@ -213,5 +213,5 @@ for (const [key, site] of Object.entries(SITES)) {
     : [await recordTour(key, site, "desktop"), await recordTour(key, site, "mobile")];
   console.log(key, capture[key]);
 }
-writeFileSync("scripts/content/sites/capture.json", JSON.stringify(capture, null, 2) + "\n");
+writeFileSync("content/sites/capture.json", JSON.stringify(capture, null, 2) + "\n");
 await browser.close();

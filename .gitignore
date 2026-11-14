@@ -51,5 +51,3 @@ next-env.d.ts
 .vercel
 .env*
 
-# Source material for the Brand case studies (Mahmoud Hwary's portfolio repository; see scripts/content/portfolio/build.mjs)
-/hwary_portfolio/

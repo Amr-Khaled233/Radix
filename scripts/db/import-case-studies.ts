@@ -1,11 +1,11 @@
 /**
  * Imports the prepared case studies as projects, with their images, videos,
  * captions, services, live links and credits:
- *   - scripts/content/portfolio → Brand (Mahmoud Hwary's work; his team
+ *   - content/portfolio → Brand (Mahmoud Hwary's work; his team
  *     profile is created hidden and credited on each project)
- *   - scripts/content/sites     → Sites & Systems (websites we built, with a live link)
- *   - scripts/content/systems/* → Sites & Systems ┐ one folder per project
- *   - scripts/content/growth/*  → Growth          ┘ (project.json + capture.json + images/)
+ *   - content/sites     → Sites & Systems (websites we built, with a live link)
+ *   - content/systems/* → Sites & Systems ┐ one folder per project
+ *   - content/growth/*  → Growth          ┘ (project.json + capture.json + images/)
  *
  * Runs in every Vercel build (vercel.json). New projects are created; a project
  * that was imported before is refreshed when its files changed, unless someone
@@ -36,12 +36,12 @@ import {
   teamMembers,
 } from "../../lib/db/schema";
 import { z } from "../../lib/zod";
-import { MAHMOUD, PORTFOLIO } from "../content/portfolio/projects";
-import { SITES } from "../content/sites/projects";
-import type { CaseStudy, L } from "../content/types";
+import { MAHMOUD, PORTFOLIO } from "../../content/portfolio/projects";
+import { SITES } from "../../content/sites/projects";
+import type { CaseStudy, L } from "../../content/types";
 import { scriptDb } from "./client";
 
-const CONTENT = path.join(process.cwd(), "scripts", "content");
+const CONTENT = path.join(process.cwd(), "content");
 const LOCAL_DIR = path.join(process.cwd(), ".data", "uploads");
 const LOCAL_PREFIX = "/api/media/local/";
 /** settings row holding a content hash per imported slug (to notice changed files). */
@@ -111,7 +111,7 @@ function withoutName(text: L): L {
   return { en: strip(text.en), ar: text.ar.includes(" — ") ? text.ar.slice(text.ar.indexOf(" — ") + 3) : text.ar };
 }
 
-/** One set per folder under scripts/content/{systems,growth}/. */
+/** One set per folder under content/{systems,growth}/. */
 async function folderSets(): Promise<CaseStudySet[]> {
   const sets: CaseStudySet[] = [];
   for (const [group, defaultPillar] of [
@@ -444,7 +444,7 @@ async function main() {
     }
   }
 
-  // A case study whose files were removed from scripts/content is taken off the site too,
+  // A case study whose files were removed from content is taken off the site too,
   // unless someone edited it in the dashboard (then it stays, and stops being managed here).
   const present = new Set(sets.flatMap((set) => set.items.map((item) => item.slug)));
   for (const slug of Object.keys(state).filter((s) => !s.startsWith("media:") && !present.has(s))) {
@@ -459,7 +459,7 @@ async function main() {
       // Its files sit under the folder it was imported from; match them by id alone.
       for (const dir of ["sites", "portfolio", "systems", "growth"]) await removeUnused(dir, ids);
       counts.removed += 1;
-      console.log(`Removed (no longer in scripts/content): ${slug}`);
+      console.log(`Removed (no longer in content): ${slug}`);
     } else if (project) {
       console.log(`Kept (edited in the dashboard, files removed): ${slug}`);
     }

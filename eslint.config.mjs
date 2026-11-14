@@ -32,8 +32,6 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    // Source material for the Brand case studies (a separate repository, not part of the site).
-    "hwary_portfolio/**",
     // Local scratch: embedded database, recordings and throwaway scripts (git-ignored).
     ".data/**",
     "test-results/**",

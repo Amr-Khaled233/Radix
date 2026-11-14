@@ -5,7 +5,7 @@
  * competition entry are deliberately left out.
  *
  * Text is as written on the portfolio (no added results or links). Arabic is a
- * first draft, flagged "Needs review". Images come from ./build.mjs (his original files).
+ * first draft, flagged "Needs review". Images were prepared from his original files.
  * Imported as drafts by `pnpm db:import:case-studies`.
  */
 import { both, type CaseStudy } from "../types";
