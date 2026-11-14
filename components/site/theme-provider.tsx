@@ -13,8 +13,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       enableSystem={false}
       enableColorScheme
       disableTransitionOnChange
-      // New key so choices saved as "system" by the earlier three-way toggle don't carry over.
-      storageKey="radix-theme"
+      // A new key starts every visitor on dark again (choices saved under the earlier keys don't carry over).
+      storageKey="radix-theme-v2"
     >
       {children}
     </NextThemesProvider>

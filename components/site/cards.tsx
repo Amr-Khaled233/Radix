@@ -41,13 +41,13 @@ export function ProjectCard({
               locale={locale}
               priority={priority}
               sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
-              className="transition-transform duration-700 ease-brand group-hover:scale-[1.06] motion-reduce:group-hover:scale-100"
+              className="transition-transform duration-700 ease-brand group-hover:scale-[1.06] group-data-[in-focus]:scale-[1.06] motion-reduce:group-hover:scale-100 motion-reduce:group-data-[in-focus]:scale-100"
             />
           ) : null}
         </div>
         <div className="border-line mt-fib-13 flex items-start justify-between gap-4 border-t pt-fib-13">
           <div className="min-w-0">
-            <h3 className="type-h4 text-foreground group-hover:text-focus transition-colors">
+            <h3 className="type-h4 text-foreground group-hover:text-focus group-data-[in-focus]:text-focus transition-colors">
               {t(project.title, locale)}
             </h3>
             <p className="text-muted mt-1 text-sm">{[client, ...categoryNames].filter(Boolean).join(" · ")}</p>
@@ -58,7 +58,7 @@ export function ProjectCard({
                 <bdi>{localizeDigits(project.year, locale, digits)}</bdi>
               </span>
             ) : null}
-            <span className="text-foreground group-hover:text-focus transition-transform duration-(--duration-hover) ease-brand group-hover:-translate-y-1 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 motion-reduce:transform-none">
+            <span className="text-foreground group-hover:text-focus transition-transform duration-(--duration-hover) ease-brand group-hover:-translate-y-1 group-hover:translate-x-1 rtl:group-hover:-translate-x-1 group-data-[in-focus]:text-focus group-data-[in-focus]:-translate-y-1 group-data-[in-focus]:translate-x-1 rtl:group-data-[in-focus]:-translate-x-1 motion-reduce:transform-none">
               <Icon name="arrow-up-right" size={20} />
             </span>
           </div>
@@ -79,11 +79,11 @@ export function TeamCard({ member, locale }: { member: PublicTeamCard; locale: L
               locale={locale}
               sizes="(min-width: 1024px) 25vw, 50vw"
               decorative
-              className="transition-transform duration-700 ease-brand group-hover:scale-[1.06] motion-reduce:group-hover:scale-100"
+              className="transition-transform duration-700 ease-brand group-hover:scale-[1.06] group-data-[in-focus]:scale-[1.06] motion-reduce:group-hover:scale-100 motion-reduce:group-data-[in-focus]:scale-100"
             />
           ) : null}
         </div>
-        <h3 className="type-h4 text-foreground group-hover:text-focus mt-fib-13 transition-colors">
+        <h3 className="type-h4 text-foreground group-hover:text-focus group-data-[in-focus]:text-focus mt-fib-13 transition-colors">
           {t(member.name, locale)}
         </h3>
         <p className="type-label text-label mt-1">{t(member.role, locale)}</p>

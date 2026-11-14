@@ -7,8 +7,15 @@ import { cn } from "@/lib/cn";
 
 const subscribe = () => () => {};
 
-/** Light ⇄ dark. Shows the mode it switches to (like the language switch shows the other language). */
-export function ThemeToggle({ className }: { className?: string }) {
+/** The framed control style shared by the theme and language switches, so both read as buttons. */
+export const controlBoxClass =
+  "border-line-strong text-foreground hover:bg-foreground hover:text-background border transition-colors duration-(--duration-hover)";
+
+/**
+ * Light ⇄ dark. Shows the mode it switches to (like the language switch shows the other language).
+ * `compact` keeps only the mark (the phone header bar); the accessible name always says what it does.
+ */
+export function ThemeToggle({ className, compact = false }: { className?: string; compact?: boolean }) {
   const t = useTranslations("theme");
   const { resolvedTheme, setTheme } = useTheme();
   const mounted = useSyncExternalStore(
@@ -28,14 +35,17 @@ export function ThemeToggle({ className }: { className?: string }) {
       aria-label={t("switchTo", { theme: name })}
       title={t("label")}
       className={cn(
-        "type-label text-label hover:text-foreground inline-flex min-h-11 min-w-11 items-center justify-center gap-2 transition-colors duration-(--duration-hover)",
+        "type-label inline-flex min-h-11 min-w-11 items-center justify-center gap-2",
+        controlBoxClass,
+        !compact && "px-3",
         className,
       )}
     >
-      <span aria-hidden className="border-current relative inline-block size-3 overflow-hidden border">
-        <span className={cn("bg-current absolute inset-y-0 inset-s-0", next === "dark" ? "w-full" : "w-0")} />
+      {/* Half-filled square: the mark of the mode it switches to (filled = dark). */}
+      <span aria-hidden className="border-current relative inline-block size-4 overflow-hidden border-2">
+        <span className={cn("bg-current absolute inset-y-0 inset-s-0", next === "dark" ? "w-full" : "w-1/2")} />
       </span>
-      <span suppressHydrationWarning>{name}</span>
+      {compact ? null : <span suppressHydrationWarning>{name}</span>}
     </button>
   );
 }

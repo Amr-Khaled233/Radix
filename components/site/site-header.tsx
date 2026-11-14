@@ -61,7 +61,11 @@ export async function SiteHeader() {
       logoFull={homeLink(<Logo variant="horizontal" height={FULL_LOGO_HEIGHT} title={null} />, FULL_LOGO_CLEAR)}
       logoCompact={homeLink(<Logo variant="icon" height={ICON_HEIGHT} title={null} />, ICON_CLEAR)}
       mobileControls={
-        <MobileMenu
+        <>
+          {/* Language and theme stay one tap away on phones, beside the menu button. */}
+          <LocaleSwitcher />
+          <ThemeToggle compact />
+          <MobileMenu
           logo={homeLink(<Logo variant="icon" height={ICON_HEIGHT} title={null} />, ICON_CLEAR)}
           links={links}
           categories={categories}
@@ -73,7 +77,8 @@ export async function SiteHeader() {
               <ThemeToggle />
             </>
           }
-        />
+          />
+        </>
       }
     >
       <nav aria-label={tA11y("primaryNav")} className="flex items-center gap-7">

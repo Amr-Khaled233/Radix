@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import { Link, usePathname } from "@/lib/i18n/navigation";
 import { routing, type Locale } from "@/lib/i18n/routing";
 import { cn } from "@/lib/cn";
+import { controlBoxClass } from "./theme-toggle";
 
 /** Short visible labels; the accessible name keeps the full language name. */
 const SHORT: Record<Locale, string> = { en: "EN", ar: "AR" };
@@ -22,10 +23,7 @@ function Switcher({ query, className }: { query?: Record<string, string>; classN
       locale={other}
       hrefLang={other}
       aria-label={t("switchTo", { language: t(other) })}
-      className={cn(
-        "type-label text-label hover:text-foreground inline-flex min-h-11 items-center px-1 transition-colors duration-(--duration-hover)",
-        className,
-      )}
+      className={cn("type-label inline-flex min-h-11 min-w-11 items-center justify-center px-3", controlBoxClass, className)}
     >
       {SHORT[other]}
     </Link>

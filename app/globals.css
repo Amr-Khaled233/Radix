@@ -421,6 +421,34 @@
     box-shadow: -4px 4px 0 0 var(--accent);
   }
 }
+/* Phones (no hover): the card crossing the middle of the screen takes the hover look, the others in
+   its group step back, and a press gives way slightly under the finger. Set by <TouchFocus>. */
+@media (hover: none) {
+  .frame-card[data-in-focus] {
+    top: -12px;
+    z-index: 1;
+  }
+  .dim-scope:has(.frame-card[data-in-focus]) .frame-card:not([data-in-focus]) {
+    opacity: 0.45;
+  }
+  .frame-card:active {
+    transform: scale(0.98);
+  }
+}
+/* Entrance: each card rises into place the first time it reaches the screen (only once the script
+   runs, so cards are never hidden without it). */
+html[data-touch-cards] .frame-card {
+  transition:
+    top 600ms var(--ease-brand),
+    opacity 600ms var(--ease-brand),
+    transform 150ms var(--ease-brand),
+    border-color var(--duration-hover) var(--ease-brand),
+    background-color var(--duration-hover) var(--ease-brand);
+}
+html[data-touch-cards] .frame-card:not([data-seen]) {
+  top: 32px;
+  opacity: 0;
+}
 .frame-card:focus-visible {
   /* Inside the frame: the slot clips anything painted outside it. */
   outline: 3px solid var(--focus);
@@ -453,8 +481,12 @@
 
 @media (prefers-reduced-motion: reduce) {
   /* Hover states keep their accent offset, without movement. */
-  .frame-card:hover {
+  .frame-card:hover,
+  .frame-card[data-in-focus] {
     top: 0 !important;
+  }
+  .frame-card:active {
+    transform: none !important;
   }
   .lift-button:hover {
     transform: none !important;

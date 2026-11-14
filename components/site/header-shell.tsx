@@ -60,7 +60,7 @@ export function HeaderShell({ logoFull, logoCompact, children, mobileControls }:
             </div>
           </div>
           <div className="hidden items-center gap-6 nav:flex">{children}</div>
-          <div className="flex items-center nav:hidden">{mobileControls}</div>
+          <div className="flex items-center gap-2 nav:hidden">{mobileControls}</div>
         </div>
       </header>
     </>
